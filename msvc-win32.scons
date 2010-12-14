@@ -1,0 +1,50 @@
+
+import os
+import sys
+import re
+
+Import('env')
+
+if env['topdir'] != '':
+  env.Tool('msvc', topdir = env['topdir'])
+else:
+  env.Tool('msvc')
+
+if env['profile']:
+  env.Append(CPPFLAGS='/EHsc /Ox /Zi -D_CRT_SECURE_NO_DEPRECATE /MD -DNDEBUG  -DWIN32')
+  env.Append(LINKFLAGS='/DEBUG /Profile')
+elif env['optimized']:
+  env.Append(CPPFLAGS='/EHsc /Ox /Oi /Ot /W2 /MD -D_CRT_SECURE_NO_DEPRECATE -DNDEBUG -DWIN32')
+elif env['debug']:
+  env.Append(CPPFLAGS='/EHsc /GS /Wall /Zi /MDd -DWIN32 -D_CRT_SECURE_NO_DEPRECATE /analyze')
+  env.Append(LINKFLAGS='/DEBUG')
+
+env.Append(LIBPATH=os.environ['PATH'].split(';'))
+if 'INCLUDE' in os.environ:
+  env.Append(CPPPATH=os.environ['INCLUDE'].split(';'))
+
+env['boost'] = 'vc'
+
+Export('env')
+env = SConscript('boost-win32.scons')
+
+if env['MSVS_VERSION'] >= '8.0':
+  # Override the original SharedLibrary so that the manifest is embedded in the DLL
+  def MSVCSharedLibrary(env, library, sources, **args):
+    cat=env.OriginalSharedLibrary(library, sources, **args)
+    env.AddPostAction(cat, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
+    return cat
+
+  env['BUILDERS']['OriginalSharedLibrary'] = env['BUILDERS']['SharedLibrary']
+  env['BUILDERS']['SharedLibrary'] = MSVCSharedLibrary
+  def MSVCProgram(env, library, sources, **args):
+    cat=env.OriginalProgram(library, sources, **args)
+    env.AddPostAction(cat, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;1')
+    return cat
+
+  env['BUILDERS']['OriginalProgram'] = env['BUILDERS']['Program']
+  env['BUILDERS']['Program'] = MSVCProgram
+
+Export('env')
+env = SConscript('common.scons')
+Return('env')

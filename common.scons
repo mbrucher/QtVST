@@ -1,0 +1,85 @@
+
+import os
+import sys
+import re
+
+Import('env')
+
+def SWIGSharedLibrary(env, library, sources, **args):
+  swigre = re.compile('(.*).i')
+  if env.WhereIs('swig') is None:
+    sourcesbis = []
+    for source in sources:
+      cName = swigre.sub(r'\1_wrap.c', source)
+      cppName = swigre.sub(r'\1_wrap.cc', source)
+      if os.path.exists(cName):
+        sourcesbis.append(cName)
+      elif os.path.exists(cppName):
+        sourcesbis.append(cppName)
+      else:
+        sourcesbis.append(source)
+  else:
+    sourcesbis = sources
+
+  if 'SWIGFLAGS' in args:
+    args['SWIGFLAGS'] += ['-python']
+  else:
+    args['SWIGFLAGS'] = ['-python'] + env['SWIGFLAGS']
+  args['SHLIBPREFIX']=""
+  if sys.platform[:3] == "win":
+    if sys.version >= '2.5':
+      args['SHLIBSUFFIX']=".pyd"
+
+  cat=env.SharedLibrary(library, sourcesbis, **args)
+  return cat
+
+env['BUILDERS']['PythonModule'] = SWIGSharedLibrary
+
+if env['optimized']:
+    env.Append(CFLAGS='-DNDEBUG')
+    env.Append(CPPDEFINES=['NDEBUG', ])
+
+def AddProgram(env, name, sources, CFLAGS=[], CCFLAGS=[], CXXFLAGS=[], CPPDEFINES=[], CPATH=[], LIBPATH=[], LIBS=[], **kwargs):
+  return env.Program(name, sources,
+    CFLAGS = CFLAGS + env['CFLAGS'],
+    CCFLAGS = CCFLAGS + env['CCFLAGS'],
+    CXXFLAGS = CXXFLAGS + env['CXXFLAGS'],
+    CPPDEFINES = CPPDEFINES + env['CPPDEFINES'],
+    CPATH = CPATH + env['CPATH'],
+    CPPPATH = CPPPATH + env['CPPPATH'],
+    LIBPATH = LIBPATH + env['LIBPATH'],
+    **kwargs
+    )
+
+env['BUILDERS']['AddProgram'] = AddProgram
+
+def AddSharedLibrary(env, name, sources, CFLAGS=[], CCFLAGS=[], CXXFLAGS=[], CPPDEFINES=[], CPATH=[], LIBPATH=[], LIBS=[], **kwargs):
+  return env.SharedLibrary(name, sources,
+    CFLAGS = CFLAGS + env['CFLAGS'],
+    CCFLAGS = CCFLAGS + env['CCFLAGS'],
+    CXXFLAGS = CXXFLAGS + env['CXXFLAGS'],
+    CPPDEFINES = CPPDEFINES + env['CPPDEFINES'],
+    CPATH = CPATH + env['CPATH'],
+    CPPPATH = CPPPATH + env['CPPPATH'],
+    LIBPATH = LIBPATH + env['LIBPATH'],
+    **kwargs
+    )
+
+env['BUILDERS']['AddSharedLibrary'] = AddSharedLibrary
+
+def AddStaticLibrary(env, name, sources, CFLAGS=[], CCFLAGS=[], CXXFLAGS=[], CPPDEFINES=[], CPATH=[], LIBPATH=[], LIBS=[], **kwargs):
+  return env.StaticLibrary(name, sources,
+    CFLAGS = CFLAGS + env['CFLAGS'],
+    CCFLAGS = CCFLAGS + env['CCFLAGS'],
+    CXXFLAGS = CXXFLAGS + env['CXXFLAGS'],
+    CPPDEFINES = CPPDEFINES + env['CPPDEFINES'],
+    CPATH = CPATH + env['CPATH'],
+    CPPPATH = CPPPATH + env['CPPPATH'],
+    LIBPATH = LIBPATH + env['LIBPATH'],
+    **kwargs
+    )
+
+env['BUILDERS']['AddStaticLibrary'] = AddStaticLibrary
+
+Export('env')
+Return('env')

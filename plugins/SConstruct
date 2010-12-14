@@ -1,0 +1,6 @@
+
+Import('env')
+
+env.SConscript([
+     "variable filter\SConstruct",
+         ])

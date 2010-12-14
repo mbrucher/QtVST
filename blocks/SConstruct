@@ -1,0 +1,5 @@
+
+Import('env')
+
+libmain = env.Program('blocks', Glob("*.cpp"))
+libmain = env.Install('$BINDIR', libmain)

@@ -1,0 +1,55 @@
+
+import os
+import re
+
+Import('env')
+
+env.Append(CPPFLAGS='-DWIN32 /EHs ')
+
+if env['debug']:
+  env.Append(CPPFLAGS='/Wall ')
+if env['optimized']:
+  env.Append(CPPFLAGS='/fast /Wall -DNDEBUG /Qansi-alias /Qalias-const /Qalias-args /fp:fast -D_CRT_SECURE_NO_DEPRECATE ')
+
+if env['profile']:
+  env.Append(CPPFLAGS='/Ox /Zi /MD -DNDEBUG  -DWIN32 ')
+  env.Append(LINKFLAGS='/DEBUG /Profile')
+elif env['optimized']:
+  env.Append(CPPFLAGS='/Ox /MD -DNDEBUG -DWIN32 ')
+elif env['debug']:
+  env.Append(CPPFLAGS='/GS /Wall /Zi /MDd -DWIN32 ')
+  env.Append(LINKFLAGS='/DEBUG')
+
+env.Append(LIBPATH=os.environ['PATH'].split(';'))
+if 'INCLUDE' in os.environ:
+  env.Append(CPPPATH=os.environ['INCLUDE'].split(';'))
+
+env['boost'] = 'iw'
+env['SWIG'] = r'c:\swig\swig.exe'
+
+Export('env')
+env = SConscript('boost-win32.scons')
+
+if env['topdir'] != '':
+  env.Tool('icl', topdir = env['topdir'])
+else:
+  env.Tool('icl')
+
+# Override the original SharedLibrary so that the manifest is embedded in the DLL
+def MSVCSharedLibrary(env, library, sources, **args):
+  cat=env.OriginalSharedLibrary(library, sources, **args)
+  env.AddPostAction(cat, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
+  return cat
+
+env['BUILDERS']['OriginalSharedLibrary'] = env['BUILDERS']['SharedLibrary']
+env['BUILDERS']['SharedLibrary'] = MSVCSharedLibrary
+
+env['SWIGCFILESUFFIX'] = '_wrap.msvc$CFILESUFFIX'
+env['SWIGCXXFILESUFFIX'] = '_wrap.msvc$CXXFILESUFFIX'
+
+env['SWIGCFILESUFFIX'] = '_wrap.icl$CFILESUFFIX'
+env['SWIGCXXFILESUFFIX'] = '_wrap.icl$CXXFILESUFFIX'
+
+Export('env')
+env = SConscript('common.scons')
+Return('env')
