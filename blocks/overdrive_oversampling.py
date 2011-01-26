@@ -21,13 +21,13 @@ oversampled_signal = oversampling.oversample2_6point_5_order(signal)
 
 oversampling.plot_me(signal, 0, 2)
 print "Overdrive"
-overdriven_signal = (simple_overdrive.overdrive(signal[0], fs = SampleRate), simple_overdrive.overdrive(signal[1], fs = SampleRate))
-oversampling.plot_me(overdriven_signal, 1, 2)
+#overdriven_signal = (simple_overdrive.overdrive(signal[0], fs = SampleRate), simple_overdrive.overdrive(signal[1], fs = SampleRate))
+#oversampling.plot_me(overdriven_signal, 1, 2)
 
 plt.figure()
 oversampling.plot_me(signal, 0, 2)
 print "Overdrive oversampling"
 overdriven_oversampled_signal = (simple_overdrive.overdrive(oversampled_signal[0], fs = SampleRate * 2), simple_overdrive.overdrive(oversampled_signal[1], fs = SampleRate * 2))
-oversampling.plot_me(overdriven_oversampled_signal, 1, 2, SampleRate = SampleRate * 2)
+oversampling.plot_me(overdriven_oversampled_signal, 1, 2, MySampleRate = SampleRate * 2)
 
 plt.show()

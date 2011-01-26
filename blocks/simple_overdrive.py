@@ -39,7 +39,22 @@ def plot_fft(x, fs):
   angle = np.angle(x_fft)
   angle[np.abs(x_fft) < 0.001] = 0
   plt.plot(angle)
+
+def overdrive(signal, fs):
+  fun = Function(1./fs, 10000, 22e-9)
+  y = np.zeros(signal.shape)
+  x1 = signal[0]
+  y1 = y[0]
   
+  for i in range(1, signal.shape[0]):
+    x0 = x1
+    x1 = signal[i]
+    y0 = y1
+    y1 = optimize(fun, x0, x1, y0)
+    y[i] = y1
+
+  return y  
+
 if __name__ == "__main__":
   import matplotlib.pyplot as plt
   import numpy as np
@@ -50,20 +65,9 @@ if __name__ == "__main__":
   fsin = 200
   n_samples = fs + fs/fsin
   
-  fun = Function(1./fs, 10000, 22e-9)
-  
+
   x = 20 * np.sin(2 * np.pi * np.arange(n_samples)*fsin/fs)
-  y = np.zeros(n_samples)
-  
-  x1 = x[0]
-  y1 = y[0]
-  
-  for i in range(1, n_samples):
-    x0 = x1
-    x1 = x[i]
-    y0 = y1
-    y1 = optimize(fun, x0, x1, y0)
-    y[i] = y1
+  y = overdrive(x, fs = fs)
 
   plt.plot(x)
   plt.plot(y)
