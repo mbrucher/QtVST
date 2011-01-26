@@ -9,10 +9,10 @@ Samples = 2000000
 FreqMax = 20000
 
 def plot_me(signal, i, imax, MySampleRate = SampleRate, NFFT = 8192, noverlap = 1024):
-  a = pyplot.subplot(2, imax, 2 * i + 1)
+  a = pyplot.subplot(imax, 2, 2 * i + 1)
   pyplot.title("Left %i" % MySampleRate)
   pyplot.specgram(signal[0], NFFT = NFFT, Fs = MySampleRate, noverlap = noverlap )
-  a = pyplot.subplot(2, imax, 2 * (i + 1))
+  a = pyplot.subplot(imax, 2, 2 * (i + 1))
   pyplot.title("Right %i" % MySampleRate)
   pyplot.specgram(signal[1], NFFT = NFFT, Fs = MySampleRate, noverlap = noverlap )
 
@@ -24,11 +24,8 @@ signal = np.array((input1, input2))
 
 plot_me(signal, 0, 2)
 
-def oversample_6point_5_order(signal):
-  over = np.zeros((signal.shape[0], signal.shape[1] * 2))
-
-  z = 0.
-  signal_ex = np.hstack((np.zeros((signal.shape[0], 2)), signal, np.zeros((signal.shape[0], 3))))
+def oversample2_6point_5_order(signal):
+  signal_ex = np.hstack((np.zeros((signal.shape[0], 2)), signal, np.zeros((signal.shape[0], 3))))[:,:,None]
 
   even1 = signal_ex[:,2:-3] + signal_ex[:,3:-2]
   even2 = signal_ex[:,1:-4] + signal_ex[:,4:-1]
@@ -44,11 +41,10 @@ def oversample_6point_5_order(signal):
   c4 = even1 * 0.03845798729588149 - even2 * 0.05712936104242644 + even3 * 0.01866750929921070
   c5 = odd1 * 0.04317950185225609 - odd2 * 0.01802814255926417 + odd3 * 0.00152170021558204
 
-  over[:,::2] = signal
-  over[:,1::2] = ((((c5 * z + c4) * z + c3) * z + c2) * z + c1) * z + c0
-  print over
-  return over
+  z = np.array((-1./2, 0), dtype = np.float32)[None,None,:]
+  
+  return (((((c5 * z + c4) * z + c3) * z + c2) * z + c1) * z + c0).reshape(2, -1)
 
-plot_me(oversample_6point_5_order(signal), 1, 2, MySampleRate = 2 * SampleRate, NFFT = 8192 * 2, noverlap = 1024 * 2)
+plot_me(oversample2_6point_5_order(signal), 1, 2, MySampleRate = 2 * SampleRate, NFFT = 8192 * 2, noverlap = 1024 * 2)
 
 pyplot.show()
