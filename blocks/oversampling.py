@@ -16,14 +16,6 @@ def plot_me(signal, i, imax, MySampleRate = SampleRate, NFFT = 8192, noverlap = 
   pyplot.title("Right %i" % MySampleRate)
   pyplot.specgram(signal[1], NFFT = NFFT, Fs = MySampleRate, noverlap = noverlap )
 
-t = np.arange(Samples, dtype=np.float64) / SampleRate
-input1 = np.sin(np.pi * (SampleRate * FreqMax / Samples * (t + .1)) * t)
-input2 = input1[::-1].flatten()
-
-signal = np.array((input1, input2))
-
-plot_me(signal, 0, 2)
-
 def oversample2_6point_5_order(signal):
   signal_ex = np.hstack((np.zeros((signal.shape[0], 2)), signal, np.zeros((signal.shape[0], 3))))[:,:,None]
 
@@ -45,6 +37,14 @@ def oversample2_6point_5_order(signal):
   
   return (((((c5 * z + c4) * z + c3) * z + c2) * z + c1) * z + c0).reshape(2, -1)
 
-plot_me(oversample2_6point_5_order(signal), 1, 2, MySampleRate = 2 * SampleRate, NFFT = 8192 * 2, noverlap = 1024 * 2)
+if __name__ == "__main__":
+  t = np.arange(Samples, dtype=np.float64) / SampleRate
+  input1 = np.sin(np.pi * (SampleRate * FreqMax / Samples * (t + .1)) * t)
+  input2 = input1[::-1].flatten()
 
-pyplot.show()
+  signal = np.array((input1, input2))
+
+  plot_me(signal, 0, 2)
+  plot_me(oversample2_6point_5_order(signal), 1, 2, MySampleRate = 2 * SampleRate, NFFT = 8192 * 2, noverlap = 1024 * 2)
+
+  pyplot.show()

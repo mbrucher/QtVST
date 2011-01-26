@@ -59,7 +59,6 @@ if __name__ == "__main__":
   y1 = y[0]
   
   for i in range(1, n_samples):
-    print i
     x0 = x1
     x1 = x[i]
     y0 = y1
