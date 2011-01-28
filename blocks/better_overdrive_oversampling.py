@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import oversampling
 import simple_overdrive
 
-SampleRate = 48000
-Samples = 1000000
+SampleRate = 88200
+Samples = 2000000
 FreqMax = 20000
 
 t = np.arange(Samples, dtype=np.float64) / SampleRate
