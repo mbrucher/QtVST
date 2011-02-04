@@ -12,6 +12,9 @@
 #define M_PI 3.14159265
 #endif
 
+namespace DSP
+{
+
 template<class Data_Type>
 class VariableFilter
 {
@@ -110,4 +113,5 @@ private:
   int selected;
 };
 
+}
 #endif

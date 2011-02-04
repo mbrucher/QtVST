@@ -1,0 +1,11 @@
+
+/build
+/custom.py
+/bin
+/lib
+*.pyc
+*.png
+.scon*
+*.wav
+*.db
+*.pdb

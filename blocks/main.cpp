@@ -10,7 +10,7 @@ float out[size];
 
 int main(int argc, char** argv)
 {
-  VariableFilter<float> filter;
+  DSP::VariableFilter<float> filter;
 
   filter.set_cutoff_frequency(48000);
   filter.set_attenuation(1);

@@ -43,7 +43,7 @@ public:
 	virtual VstInt32 getVendorVersion ();
 
 protected:
-	VariableFilter<float> filter[2];
+	DSP::VariableFilter<float> filter[2];
 	char programName[kVstMaxProgNameLen + 1];
   float sample_rate;
   
