@@ -5,6 +5,8 @@
 #ifndef DSP_DIODE
 #define DSP_DIODE
 
+#include <boost/math/special_functions/sign.hpp>
+
 namespace DSP
 {
 
@@ -19,14 +21,19 @@ class Diode
   DataType vt;
   
 public:
-  DataType operator()()
+  Diode(DataType is, DataType vt)
+  :is(is), vt(vt)
   {
-    //return np.sign(x) * is * (np.exp(np.abs(x) / vt) - 1);
+  }
+
+  DataType operator()(DataType x)
+  {
+    return boost::math::sign(x) * is * (std::exp(std::abs(x) / vt) - 1);
   }
   
-  DataType prime()
+  DataType prime(DataType x)
   {
-    // return is * np.exp(np.abs(x) / vt) / vt
+    return is * std::exp(std::abs(x) / vt) / vt;
   }
 };
 
