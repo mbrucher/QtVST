@@ -2,8 +2,8 @@
  * \file variable_filter.hpp
  */
 
-#ifndef VARIABLEFILTER
-#define VARIABLEFILTER
+#ifndef DSP_VARIABLEFILTER
+#define DSP_VARIABLEFILTER
 
 #include <iostream>
 
