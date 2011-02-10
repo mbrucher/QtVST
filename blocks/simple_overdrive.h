@@ -11,12 +11,13 @@ namespace DSP
 template<class DataType>
 class SimpleOverdrive
 {
+  DataType dt;
   DataType R;
   DataType C;
 
 public:
-  SimpleOverdrive(DataType R, DataType C)
-  :R(R), C(C)
+  SimpleOverdrive(DataType dt, DataType R, DataType C)
+  :dt(dt), R(R), C(C)
   {
   }
 
