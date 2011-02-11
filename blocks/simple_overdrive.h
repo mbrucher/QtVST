@@ -21,21 +21,29 @@ class SimpleOverdrive
   DataType B;
   
   Diode<DataType> diode;
+  
+  void recompute(DataType dt)
+  {
+    this->dt = dt;
+    A = dt / (2 * C) + R;
+    B = dt / (2 * C) - R;
+  }
 public:
   SimpleOverdrive(DataType dt, DataType R, DataType C, DataType is, DataType vt)
   :dt(dt), R(R), C(C), diode(is, vt)
   {
-    A = dt / (2 * C) + R;
-    B = dt / (2 * C) - R;
+    recompute(dt);
   }
 
   DataType operator()(DataType x0, DataType x1, DataType y0, DataType y1)
   {
-    //return self.f(y1) + 1/self.A * (y1 + (x0 - x1 + self.B * self.f(y0) - y0));
+    return diode(y1) + 1/A * (y1 + (x0 - x1 + B * diode(y0) - y0));
   }
-/*
-  def gradient(self, x0, x1, y0, y1):
-    return self.fprime(y1) + 1/self.A*/
+
+  DataType prime(DataType x0, DataType x1, DataType y0, DataType y1)
+  {
+    return diode.prime(y1) + 1/A;
+  }
     
 };
 
