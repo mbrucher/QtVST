@@ -1,9 +1,9 @@
 
-Import('env')
+Import('env_plugin')
 
-env.Prepend(LIBS = [env['QWinMigratelib'], "user32"])
-env.Append(CPPDEFINES = "QT_QTWINMIGRATE_IMPORT")
-env.Append(CPPPATH = env["vst"] + r"\public.sdk\source\vst2.x")
+env_plugin.Prepend(LIBS = [env_plugin['QWinMigratelib'], "user32"])
+env_plugin.Append(CPPDEFINES = "QT_QTWINMIGRATE_IMPORT")
+env_plugin.Append(CPPPATH = env_plugin["vst"] + r"\public.sdk\source\vst2.x")
 
-libmain = env.SharedLibrary('QtVariableFilter', Glob("*.cpp") + [r"..\vstplug.def", env["vst"] + r"\public.sdk\source\vst2.x\audioeffect.cpp", env["vst"] + r"\public.sdk\source\vst2.x\audioeffectx.cpp", ])
-libmain = env.Install('$LIBDIR', libmain)
+libmain = env_plugin.SharedLibrary('QtVariableFilter', Glob("*.cpp") + [r"..\vstplug.def", env_plugin["vst"] + r"\public.sdk\source\vst2.x\audioeffect.cpp", env_plugin["vst"] + r"\public.sdk\source\vst2.x\audioeffectx.cpp", ])
+libmain = env_plugin.Install('$LIBDIR', libmain)

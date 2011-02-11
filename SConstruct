@@ -50,12 +50,5 @@ env.Append(CPPPATH=env['vst'])
 env.Append(CPPPATH=env['qwinmigrate'] + os.sep + 'src')
 env.Append(LIBPATH=env['qwinmigrate'] + os.sep + 'lib')
 
-if env['debug']:
-  env.EnableQt4Modules(['QtCore', 'QtGui', ], debug=True)
-  env['QWinMigratelib'] = 'QtSolutions_MFCMigrationFramework-2.8d'
-else:
-  env.EnableQt4Modules(['QtCore', 'QtGui', ], debug=False)
-  env['QWinMigratelib'] = 'QtSolutions_MFCMigrationFramework-2.8'
-
 Export('env')
 env.SConscript(['SConscript', ], variant_dir='build')

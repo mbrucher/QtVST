@@ -1,0 +1,39 @@
+
+import os
+import re
+
+opts = {'1' : '',
+        '2' : '-xHost',
+        '3' : '-xSSSE3 -axSSE4.2',
+        }
+
+Import('env')
+
+env.Append(CCFLAGS='-g -sox -wd177,304,383,869,981,1418,1572,2196')
+env.Append(CXXFLAGS='-std=c++0x')
+
+if env['debug']:
+    env.Prepend(CCFLAGS='-DDEBUG -debug full -Wall -ftrapuv')
+if env['optimized']:
+    env.Append(CPPDEFINES = 'USE_RESTRICT')
+    env.Append(CPPDEFINES = 'x86_64')
+    env.Append(CCFLAGS='-Wall -O3 -no-prec-div -ansi-alias -ftz -DNDEBUG -restrict -fp-model fast=2 ') #-vec-report2
+
+if env['profile']:
+    env.Append(CCFLAGS='-g')
+
+env['boost'] = 'il'
+
+env.Tool('icl', topdir = os.environ['PATH'])
+
+env['SWIGCFILESUFFIX'] = '_wrap.icl$CFILESUFFIX'
+env['SWIGCXXFILESUFFIX'] = '_wrap.icl$CXXFILESUFFIX'
+
+env['no_exception_flag'] = ['-fno-exceptions', ]
+
+Export('env')
+env = SConscript('common.scons')
+Export('env')
+env = SConscript('boost-linux2.scons')
+
+Return('env')

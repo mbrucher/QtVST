@@ -1,0 +1,20 @@
+
+import os.path
+import glob
+
+Import('env')
+
+for libpath in os.environ['LD_LIBRARY_PATH'].split(':'):
+  l = list(glob.glob(libpath + '/libboost_thread-%s-mt*.so' % env['boost']))
+  if len(l) > 0:
+    env['boost_suffix'] = l[0][l[0].find("libboost_thread") + 15:-3]
+    env.Prepend(LIBPATH=[libpath])
+    break
+  if os.path.exists(libpath + '/libboost_thread.so'):
+    env['boost_suffix'] = ''
+    env.Prepend(LIBPATH=[libpath])
+    break
+
+env['boost_optimize_flags'] = ['BOOST_DISABLE_ASSERTS', ]
+
+Return('env')

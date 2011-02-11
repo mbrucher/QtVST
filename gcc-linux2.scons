@@ -1,0 +1,35 @@
+
+import os
+import re
+
+Import('env')
+
+env.Append(FORTRANFLAGS='')
+
+if env['debug']:
+    env.Append(CFLAGS='-g -Wall')
+    env.Append(CXXFLAGS='-g -Wall')
+if env['optimized']:
+    env.Append(CFLAGS='-O3')
+    env.Append(CXXFLAGS='-O3')
+
+if env['profile']:
+    env.Append(CFLAGS='-g')
+    env.Append(CXXFLAGS='-g')
+
+env['boost'] = 'gcc'
+
+env.Tool('gcc')
+
+env['SWIGCFILESUFFIX'] = '_wrap.gcc$CFILESUFFIX'
+env['SWIGCXXFILESUFFIX'] = '_wrap.gcc$CXXFILESUFFIX'
+env['LIBPATH'] = []
+
+env['no_exception_flag'] = ['-fno-exceptions', ]
+
+Export('env')
+env = SConscript('common.scons')
+Export('env')
+env = SConscript('boost-linux2.scons')
+
+Return('env')
