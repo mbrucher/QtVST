@@ -8,9 +8,9 @@ opts.Add(BoolVariable('debug', 'Set to build for debug', True))
 opts.Add(BoolVariable('optimized', 'Set to build for optimization', False))
 opts.Add(BoolVariable('profile', 'Set to build for profiling', False))
 opts.Add(PathVariable('prefix', 'Sets the path where the programs and libs will be installed', os.getcwd()))
-opts.Add('cflags', 'Set the C++ flags', '')
-opts.Add('ldflags', 'Set the linker flags', '')
 opts.Add('qwinmigrate', 'Set the QWinMigrate path', '.')
+opts.Add('qwinmigrate_suffix', 'Set the QWinMigrate suffix', 'head')
+opts.Add('boostdir', 'Set the Boost path', '.')
 opts.Add('tools', 'Set the tool set to use', '')
 opts.Add('topdir', 'Set the location of the tool set', '')
 opts.Add('vst', 'Set the VST path', '.')
@@ -40,15 +40,12 @@ env.Tool("nsis", toolpath=["."])
 
 Help(opts.GenerateHelpText(env))
 
-if env['cflags']:
-  env.Append(CCFLAGS=env['cflags'])
-if env['ldflags']:
-  env.Append(LINKFLAGS=env['ldflags'])
-
 env.Append(CPPPATH=os.getcwd())
 env.Append(CPPPATH=env['vst'])
 env.Append(CPPPATH=env['qwinmigrate'] + os.sep + 'src')
 env.Append(LIBPATH=env['qwinmigrate'] + os.sep + 'lib')
+env.Append(CPPPATH=env['boostdir'])
+env.Append(LIBPATH=env['boostdir'] + os.sep + 'lib')
 
 Export('env')
 env.SConscript(['SConscript', ], variant_dir='build')
