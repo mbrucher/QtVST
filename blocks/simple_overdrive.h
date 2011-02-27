@@ -10,9 +10,12 @@
 namespace DSP
 {
 
-template<class DataType>
+template<class Data_Type>
 class SimpleOverdrive
 {
+public:
+  typedef Data_Type DataType;
+private:
   DataType dt;
   DataType R;
   DataType C;

@@ -13,7 +13,9 @@ class NewtonRaphsonOptimizer
 {
 
 public:
-
+  void process(typename Function::DataType* in, typename Function::DataType* out, long size)
+  {
+  }
 
 };
 
