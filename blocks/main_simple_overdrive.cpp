@@ -16,7 +16,7 @@ float out[size];
 int main(int argc, char** argv)
 {
   DSP::SimpleOverdrive<float> overdrive(1./48000, 10000, 22e-9, 1e-12, 26e-3);
-  DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<float> > filter;
+  DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<float> > filter(overdrive);
 
   for(int i = 0; i < size; ++i)
   {

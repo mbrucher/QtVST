@@ -11,10 +11,19 @@ namespace DSP
 template<class Function>
 class NewtonRaphsonOptimizer
 {
-
+  Function& function;
 public:
-  void process(typename Function::DataType* in, typename Function::DataType* out, long size)
+  NewtonRaphsonOptimizer(Function& function)
+  :function(function)
   {
+  }
+
+  void process(const typename Function::DataType* in, typename Function::DataType* out, long size)
+  {
+    for(long i = 0; i < size; ++i)
+	{
+	  out[i] = in[i];
+	}
   }
 
 };
