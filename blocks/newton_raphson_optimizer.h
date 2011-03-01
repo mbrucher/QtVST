@@ -24,7 +24,7 @@ class NewtonRaphsonOptimizer
   {
     DataType y1 = y0;
 	
-	for(int i = 0; i < 1000; ++i)
+	for(int i = 0; i < 10000; ++i)
 	{
 	  DataType prime = function.prime(x0, x1, y0, y1);
 	  if(std::abs(prime) < std::numeric_limits<DataType>::epsilon() )

@@ -9,7 +9,9 @@
 #include "newton_raphson_optimizer.h"
 #include "simple_overdrive.h"
 
-const unsigned long size = 10000000;
+const unsigned long size = 40000;
+const unsigned int sample_rate = 96000;
+const unsigned int max_frequency = 2000;
 float in[size];
 float out[size];
 
@@ -20,12 +22,16 @@ int main(int argc, char** argv)
 
   for(int i = 0; i < size; ++i)
   {
-    in[i] = 20 * std::sin(2 * boost::math::constants::pi<float>() * i * 100 / 48000);
+    float j = static_cast<float>(i) / sample_rate;
+    in[i] = 20 * std::sin(boost::math::constants::pi<float>() * ((j + .1) * sample_rate * max_frequency / size) * j);
   }
 
   filter.process(in, out, size);
 
-  std::ofstream outfile("out_overdrive.raw");
+  std::ofstream infile("in_overdrive.raw", std::ofstream::binary);
+  infile.write(reinterpret_cast<const char*>(in), size * sizeof(float));
+
+  std::ofstream outfile("out_overdrive.raw", std::ofstream::binary);
   outfile.write(reinterpret_cast<const char*>(out), size * sizeof(float));
   
   return 0;
