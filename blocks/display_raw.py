@@ -9,11 +9,8 @@ def plot(x, y):
   pyplot.plot(x)
   pyplot.plot(y)
 
-fs = 48000
-fsin = 20000
-
-x = np.fromfile(sys.argv[1], dtype=np.float32)
-y = np.fromfile(sys.argv[2], dtype=np.float32)
-plot(x, y)
+x = np.fromfile(sys.argv[1], dtype=np.float64)
+y = np.fromfile(sys.argv[2], dtype=np.float64)
+plot(x[:100000], y[:100000])
 print y
 pyplot.show()
