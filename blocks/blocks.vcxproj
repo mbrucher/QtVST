@@ -41,6 +41,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -60,6 +61,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="diode.h" />
+    <ClInclude Include="newton_raphson_optimizer.h" />
+    <ClInclude Include="oversampling_filter.h" />
+    <ClInclude Include="simple_overdrive.h" />
+    <ClInclude Include="variable_filter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main_simple_overdrive.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

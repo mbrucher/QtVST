@@ -8,6 +8,7 @@
 
 #include "newton_raphson_optimizer.h"
 #include "simple_overdrive.h"
+#include "oversampling_filter.h"
 
 const unsigned long size = 400000;
 const unsigned int sample_rate = 96000;
@@ -17,6 +18,8 @@ double out[size];
 
 int main(int argc, char** argv)
 {
+  DSP::OversamplingFilter<double> oversampling_filter;
+
   DSP::SimpleOverdrive<double> overdrive(1./48000, 10000, 22e-9, 1e-12, 26e-3);
   DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> > filter(overdrive);
 
