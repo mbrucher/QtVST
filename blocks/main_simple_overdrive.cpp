@@ -10,6 +10,7 @@
 #include "simple_overdrive.h"
 #include "oversampling_filter.h"
 #include "first_order_filter.h"
+#include "decimation_filter.h"
 
 const unsigned long size = 400000;
 const unsigned int sample_rate = 96000;
@@ -27,7 +28,7 @@ int main(int argc, char** argv)
   DSP::SimpleOverdrive<double> overdrive(1./48000, 10000, 22e-9, 1e-12, 26e-3);
   DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> > filter(overdrive);
 
-  DSP::LowPassFilter<double> low_filter;
+  DSP::DecimationFilter<DSP::LowPassFilter<double>, double> low_filter;
 
   for(int i = 0; i < size; ++i)
   {
@@ -37,13 +38,13 @@ int main(int argc, char** argv)
 
   oversampling_filter.process(in, in_oversampled, size);
   filter.process(in_oversampled, out_oversampled, 2 * size);
-//low_filter.process();
+  low_filter.process(out_oversampled, out, 2 * size);
 
   std::ofstream infile("in_overdrive.raw", std::ofstream::binary);
   infile.write(reinterpret_cast<const char*>(in), size * sizeof(double));
 
   std::ofstream outfile("out_overdrive.raw", std::ofstream::binary);
-  outfile.write(reinterpret_cast<const char*>(out_oversampled), size * sizeof(double));
+  outfile.write(reinterpret_cast<const char*>(out), size * sizeof(double));
   
   return 0;
 }
