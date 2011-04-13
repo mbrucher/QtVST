@@ -7,6 +7,8 @@
 
 #include <boost/scoped_array.hpp>
 
+#include "config.h"
+
 namespace DSP
 {
 
@@ -29,7 +31,7 @@ public:
   }
 
   template<class DataTypeIn>
-  void process(const DataTypeIn* in, DataType* out, long size)
+  void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
   {
     if (size > temp_size)
     {

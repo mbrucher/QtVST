@@ -7,6 +7,8 @@
 
 #include <boost/math/constants/constants.hpp>
 
+#include "config.h"
+
 namespace DSP
 {
 
@@ -48,7 +50,7 @@ public:
   }
 
   template<class DataTypeIn>
-  void process(const DataTypeIn* in, DataType* out, long size)
+  void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
   {
     for(int i = 0; i < size; ++i)
     {
@@ -78,7 +80,7 @@ public:
   }
 
   template<class DataTypeIn>
-  void process(const DataTypeIn* in, DataType* out, long size)
+  void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
   {
     all_pass_filter.process(in, out, size);
 
@@ -107,7 +109,7 @@ public:
   }
 
   template<class DataTypeIn>
-  void process(const DataTypeIn* in, DataType* out, long size)
+  void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
   {
     all_pass_filter.process(in, out, size);
 

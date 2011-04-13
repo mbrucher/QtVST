@@ -8,6 +8,8 @@
 #include <iostream>
 #include <limits>
 
+#include "config.h"
+
 namespace DSP
 {
 
@@ -40,14 +42,14 @@ class NewtonRaphsonOptimizer
      }
     return y1;
   }
-  
+
 public:
   NewtonRaphsonOptimizer(Function& function)
   :function(function), x0(0), y0(0)
   {
   }
 
-  void process(const DataType* in, DataType* out, long size)
+  void process(const DataType* RESTRICT in, DataType* RESTRICT out, long size)
   {
     for(long i = 0; i < size; ++i)
      {

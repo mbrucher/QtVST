@@ -15,7 +15,7 @@ env.Append(CXXFLAGS='-std=c++0x')
 if env['debug']:
     env.Prepend(CCFLAGS='-DDEBUG -debug full -Wall -ftrapuv')
 if env['optimized']:
-    env.Append(CPPDEFINES = 'USE_RESTRICT')
+    env.Append(CPPDEFINES = {'USE_RESTRICT' : 'restrict'})
     env.Append(CPPDEFINES = 'x86_64')
     env.Append(CCFLAGS='-Wall -O3 -no-prec-div -ansi-alias -ftz -DNDEBUG -restrict -fp-model fast=2 ') #-vec-report2
 

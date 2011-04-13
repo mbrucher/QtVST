@@ -5,6 +5,8 @@
 #ifndef OVERSAMPLING_FILTER
 #define OVERSAMPLING_FILTER
 
+#include "config.h"
+
 namespace DSP
 {
 
@@ -23,7 +25,7 @@ public:
   }
 
   template<class DataTypeIn>
-  void process(const DataTypeIn* in, DataType* out, long size)
+  void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
   {
     for(int i = 0; i < size; ++i)
     {

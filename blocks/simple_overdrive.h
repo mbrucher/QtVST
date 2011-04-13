@@ -22,9 +22,9 @@ private:
 
   DataType A;
   DataType B;
-  
+
   Diode<DataType> diode;
-  
+
   void recompute(DataType dt)
   {
     this->dt = dt;
@@ -47,7 +47,6 @@ public:
   {
     return diode.prime(y1) + 1/A;
   }
-    
 };
 
 }
