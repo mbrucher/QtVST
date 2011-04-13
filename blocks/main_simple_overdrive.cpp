@@ -27,6 +27,8 @@ int main(int argc, char** argv)
   DSP::SimpleOverdrive<double> overdrive(1./48000, 10000, 22e-9, 1e-12, 26e-3);
   DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> > filter(overdrive);
 
+  DSP::LowPassFilter<double> low_filter;
+
   for(int i = 0; i < size; ++i)
   {
     double j = static_cast<double>(i) / sample_rate;
@@ -35,6 +37,7 @@ int main(int argc, char** argv)
 
   oversampling_filter.process(in, in_oversampled, size);
   filter.process(in_oversampled, out_oversampled, 2 * size);
+//low_filter.process();
 
   std::ofstream infile("in_overdrive.raw", std::ofstream::binary);
   infile.write(reinterpret_cast<const char*>(in), size * sizeof(double));

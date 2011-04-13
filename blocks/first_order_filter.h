@@ -1,9 +1,9 @@
 /**
- * \filter oversampling_filter.h
+ * \filter first_order_filter.h
  */
 
-#ifndef OVERSAMPLING_FILTER
-#define OVERSAMPLING_FILTER
+#ifndef FIRST_ORDER_FILTER
+#define FIRST_ORDER_FILTER
 
 #include <boost/math/constants/constants.hpp>
 
@@ -22,7 +22,7 @@ class AllPassFilter
 
   void compute_coeffs()
   {
-    c = (std::tan(boost::math::pi<Datatype>() * cut_frequency / sampling_frequency) - 1) / (std::tan(boost::math::pi<Datatype>() * cut_frequency / sampling_frequency) + 1);
+    c = (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) - 1) / (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) + 1);
   }
 
 public:
@@ -35,13 +35,13 @@ public:
     buffer_out[0] = 0;
   }
 
-  void set_sampling_frequency(Datatype sampling_frequency)
+  void set_sampling_frequency(DataType sampling_frequency)
   {
     this->sampling_frequency = sampling_frequency;
     compute_coeffs();
   }
 
-  void set_cut_frequency(Datatype cut_frequency)
+  void set_cut_frequency(DataType cut_frequency)
   {
     this->cut_frequency = cut_frequency;
     compute_coeffs();
@@ -61,20 +61,18 @@ public:
   }
 };
 
-}
-
 template<class DataType>
 class LowPassFilter
 {
   AllPassFilter<DataType> all_pass_filter;
 
 public:
-  void set_sampling_frequency(Datatype sampling_frequency)
+  void set_sampling_frequency(DataType sampling_frequency)
   {
     all_pass_filter.set_sampling_frequency(sampling_frequency);
   }
 
-  void set_cut_frequency(Datatype cut_frequency)
+  void set_cut_frequency(DataType cut_frequency)
   {
     all_pass_filter.set_cut_frequency(cut_frequency);
   }
@@ -91,5 +89,6 @@ public:
   }
 };
 
+}
 
 #endif
