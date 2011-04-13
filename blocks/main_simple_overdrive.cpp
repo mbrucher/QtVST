@@ -16,6 +16,9 @@ const unsigned int max_frequency = 2000;
 double in[size];
 double out[size];
 
+double in_oversampled[2 * size];
+double out_oversampled[2 * size];
+
 int main(int argc, char** argv)
 {
   DSP::OversamplingFilter<double> oversampling_filter;
@@ -29,13 +32,14 @@ int main(int argc, char** argv)
     in[i] = 20 * std::sin(boost::math::constants::pi<double>() * ((j + .1) * sample_rate * max_frequency / size) * j);
   }
 
-  filter.process(in, out, size);
+  oversampling_filter.process(in, in_oversampled, size);
+  filter.process(in_oversampled, out_oversampled, 2 * size);
 
   std::ofstream infile("in_overdrive.raw", std::ofstream::binary);
   infile.write(reinterpret_cast<const char*>(in), size * sizeof(double));
 
   std::ofstream outfile("out_overdrive.raw", std::ofstream::binary);
-  outfile.write(reinterpret_cast<const char*>(out), size * sizeof(double));
+  outfile.write(reinterpret_cast<const char*>(out_oversampled), size * sizeof(double));
   
   return 0;
 }
