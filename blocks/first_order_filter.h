@@ -89,6 +89,34 @@ public:
   }
 };
 
+
+template<class DataType>
+class HighPassFilter
+{
+  AllPassFilter<DataType> all_pass_filter;
+
+public:
+  void set_sampling_frequency(DataType sampling_frequency)
+  {
+    all_pass_filter.set_sampling_frequency(sampling_frequency);
+  }
+
+  void set_cut_frequency(DataType cut_frequency)
+  {
+    all_pass_filter.set_cut_frequency(cut_frequency);
+  }
+
+  template<class DataTypeIn>
+  void process(const DataTypeIn* in, DataType* out, long size)
+  {
+    all_pass_filter.process(in, out, size);
+
+    for(int i = 0; i < size; ++i)
+    {
+      out[i] = (out[i] - in[i]) / 2;
+    }
+  }
+};
 }
 
 #endif
