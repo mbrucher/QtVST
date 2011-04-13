@@ -9,3 +9,5 @@
 *.wav
 *.db
 *.pdb
+*~
+*.suo

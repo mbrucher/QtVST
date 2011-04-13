@@ -9,6 +9,7 @@
 #include "newton_raphson_optimizer.h"
 #include "simple_overdrive.h"
 #include "oversampling_filter.h"
+#include "first_order_filter.h"
 
 const unsigned long size = 400000;
 const unsigned int sample_rate = 96000;
