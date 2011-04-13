@@ -15,8 +15,7 @@ namespace DSP
 template<class DataType>
 class AllPassFilter
 {
-  DataType buffer_in[2];
-  DataType buffer_out[1];
+  DataType buffer_in;
 
   DataType sampling_frequency;
   DataType cut_frequency;
@@ -29,12 +28,8 @@ class AllPassFilter
 
 public:
   AllPassFilter()
+  :buffer_in(0)
   {
-    for(int i = 0; i < 2; ++i)
-    {
-      buffer_in[i] = 0;
-    }
-    buffer_out[0] = 0;
   }
 
   void set_sampling_frequency(DataType sampling_frequency)
@@ -54,11 +49,9 @@ public:
   {
     for(int i = 0; i < size; ++i)
     {
-      buffer_in[0] = buffer_in[1];
-      buffer_in[1] = in[i];
-
-      out[i] = c * buffer_in[0] + buffer_in[1] - c * buffer_out[0];
-      buffer_out[0] = out[i];
+      DataType xh = in[i] - c * buffer_in;
+      out[i] = c * xh + buffer_in;
+      buffer_in = xh;
     }
   }
 };
