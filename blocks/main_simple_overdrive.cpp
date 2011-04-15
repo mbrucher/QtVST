@@ -30,7 +30,7 @@ int main(int argc, char** argv)
   DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> > filter(overdrive);
 
 //  DSP::DecimationFilter<DSP::LowPassFilter<double>, double> low_filter;
-  DSP::DecimationFilter<DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double> low_filter;
+  DSP::DecimationFilter<2, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double> low_filter;
 
   for(int i = 0; i < size; ++i)
   {

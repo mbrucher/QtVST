@@ -12,7 +12,7 @@
 namespace DSP
 {
 
-template<class LowPassFilter, class DataType>
+template<int DecimationFactor, class LowPassFilter, class DataType>
 class DecimationFilter
 {
   LowPassFilter filter;
@@ -41,9 +41,9 @@ public:
 
     filter.process(in, temp_array.get(), size);
 
-    for(int i = 0; i < size / 2; ++i)
+    for(int i = 0; i < size / DecimationFactor; ++i)
     {
-      out[i] = temp_array[2 * i];
+      out[i] = temp_array[DecimationFactor * i];
     }
   }
 };
