@@ -19,18 +19,21 @@ const unsigned int max_frequency = 20000;
 double in[size];
 double out[size];
 
-double in_oversampled[2 * size];
-double out_oversampled[2 * size];
+const int oversampling = 8;
+
+double in_oversampled[oversampling * size];
+double out_oversampled[oversampling * size];
 
 int main(int argc, char** argv)
 {
-  DSP::OversamplingFilter<double> oversampling_filter;
+  DSP::OversamplingFilter<oversampling, double> oversampling_filter;
 
-  DSP::SimpleOverdrive<double> overdrive(1./sample_rate / 2, 10000, 22e-9, 1e-12, 26e-3);
+  DSP::SimpleOverdrive<double> overdrive(1./sample_rate / oversampling, 10000, 22e-9, 1e-12, 26e-3);
   DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> > filter(overdrive);
 
 //  DSP::DecimationFilter<DSP::LowPassFilter<double>, double> low_filter;
-  DSP::DecimationFilter<2, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double> low_filter;
+  DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double> low_filter;
+  DSP::DecimationFilter<oversampling, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double> decimation_low_filter;
 
   for(int i = 0; i < size; ++i)
   {
@@ -38,12 +41,15 @@ int main(int argc, char** argv)
     in[i] = 20 * std::sin(boost::math::constants::pi<double>() * max_frequency * (1. / 1000 + 999. * i / (size * 1000)) * j);
   }
 
-  low_filter.get_filter().set_sampling_frequency(sample_rate * 2);
-  low_filter.get_filter().set_cut_frequency(max_frequency);
+  low_filter.set_sampling_frequency(sample_rate * oversampling);
+  low_filter.set_cut_frequency(max_frequency);
+  decimation_low_filter.get_filter().set_sampling_frequency(sample_rate * oversampling);
+  decimation_low_filter.get_filter().set_cut_frequency(max_frequency);
 
   oversampling_filter.process(in, in_oversampled, size);
-  filter.process(in_oversampled, out_oversampled, 2 * size);
-  low_filter.process(out_oversampled, out, 2 * size);
+  filter.process(in_oversampled, out_oversampled, oversampling * size);
+  low_filter.process(out_oversampled, in_oversampled, oversampling * size);
+  decimation_low_filter.process(in_oversampled, out, oversampling * size);
 
   std::ofstream infile("in_overdrive.raw", std::ofstream::binary);
   infile.write(reinterpret_cast<const char*>(in), size * sizeof(double));

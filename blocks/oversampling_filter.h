@@ -10,7 +10,7 @@
 namespace DSP
 {
 
-template<class DataType>
+template<int OversamplingFactor, class DataType>
 class OversamplingFilter
 {
   DataType buffer[6];
@@ -49,8 +49,11 @@ public:
       DataType c4 = even1 * 0.03845798729588149 - even2 * 0.05712936104242644 + even3 * 0.01866750929921070;
       DataType c5 = odd1 * 0.04317950185225609 - odd2 * 0.01802814255926417 + odd3 * 0.00152170021558204;
 
-      out[2 * i] = (-(-(-(-(- c5 / 2 + c4) / 2 + c3) / 2 + c2) / 2 + c1) / 2 + c0);
-      out[2 * i + 1] = c0;
+      for (int j = 0; j < OversamplingFactor; ++j)
+      {
+        DataType z = static_cast<DataType>(j) / OversamplingFactor - 1 / 2.;
+        out[OversamplingFactor * i + j] = (((((c5 * z + c4) * z + c3) * z + c2) * z + c1) * z + c0);
+      }
     }
   }
 };
