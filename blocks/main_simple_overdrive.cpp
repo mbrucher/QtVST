@@ -26,7 +26,7 @@ double out_oversampled[oversampling * size];
 
 int main(int argc, char** argv)
 {
-  DSP::OversamplingFilter<oversampling, double> oversampling_filter;
+  DSP::OversamplingFilter<oversampling, DSP::Oversampling6points5order<double>, double> oversampling_filter;
 
   DSP::SimpleOverdrive<double> overdrive(1./sample_rate / oversampling, 10000, 22e-9, 1e-12, 26e-3);
   DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> > filter(overdrive);
