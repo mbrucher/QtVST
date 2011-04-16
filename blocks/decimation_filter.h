@@ -12,9 +12,15 @@
 namespace DSP
 {
 
-template<class LowPassFilter, class DataType>
+/**
+ * A decimation filter based on a low pass filter
+ */
+template<class LowPassFilter>
 class DecimationFilter
 {
+public:
+  typedef typename LowPassFilter::DataType DataType;
+private:
   LowPassFilter filter;
 
   boost::scoped_array<DataType> temp_array;
@@ -25,6 +31,9 @@ public:
   {
   }
 
+  /**
+   * Returns the inner filter to modify its inner parameters
+   */
   LowPassFilter& get_filter()
   {
     return filter;

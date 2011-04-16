@@ -9,6 +9,7 @@
 #include "newton_raphson_optimizer.h"
 #include "simple_overdrive.h"
 #include "oversampling_filter.h"
+#include "gain_filter.h"
 #include "first_order_filter.h"
 #include "decimation_filter.h"
 
@@ -16,6 +17,7 @@ const unsigned long size = 400000;
 const unsigned int sample_rate = 96000;
 const unsigned int max_frequency = 2000;
 double in[size];
+double gain[size];
 double out[size];
 
 double in_oversampled[2 * size];
@@ -23,20 +25,25 @@ double out_oversampled[2 * size];
 
 int main(int argc, char** argv)
 {
+  DSP::GainFilter<double> gain_filter;
+
   DSP::OversamplingFilter<double> oversampling_filter;
 
   DSP::SimpleOverdrive<double> overdrive(1./48000, 10000, 22e-9, 1e-12, 26e-3);
   DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> > filter(overdrive);
 
-  DSP::DecimationFilter<DSP::LowPassFilter<double>, double> low_filter;
+  DSP::DecimationFilter<DSP::LowPassFilter<double> > low_filter;
 
   for(int i = 0; i < size; ++i)
   {
     double j = static_cast<double>(i) / sample_rate;
-    in[i] = 20 * std::sin(boost::math::constants::pi<double>() * ((j + .1) * sample_rate * max_frequency / size) * j);
+    in[i] = std::sin(boost::math::constants::pi<double>() * ((j + .1) * sample_rate * max_frequency / size) * j);
   }
 
-  oversampling_filter.process(in, in_oversampled, size);
+  gain_filter.set_gain(20);
+  
+  gain_filter.process(in, gain, size);
+  oversampling_filter.process(gain, in_oversampled, size);
   filter.process(in_oversampled, out_oversampled, 2 * size);
   low_filter.process(out_oversampled, out, 2 * size);
 

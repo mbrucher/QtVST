@@ -12,9 +12,15 @@
 namespace DSP
 {
 
-template<class DataType>
+/**
+ * A first order allpass filter
+ */
+template<class Data_Type>
 class AllPassFilter
 {
+public:
+  typedef Data_Type DataType;
+private:
   DataType buffer_in;
 
   DataType sampling_frequency;
@@ -56,9 +62,15 @@ public:
   }
 };
 
-template<class DataType>
+/**
+ * A first order lowpass filter
+ */
+template<class Data_Type>
 class LowPassFilter
 {
+public:
+  typedef Data_Type DataType;
+private:
   AllPassFilter<DataType> all_pass_filter;
 
 public:
@@ -84,10 +96,12 @@ public:
   }
 };
 
-
-template<class DataType>
+template<class Data_Type>
 class HighPassFilter
 {
+public:
+  typedef Data_Type DataType;
+private:
   AllPassFilter<DataType> all_pass_filter;
 
 public:
