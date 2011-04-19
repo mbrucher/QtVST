@@ -26,6 +26,7 @@ class NewtonRaphsonOptimizer: public MonoFilter<typename Function::DataType>
   Function function;
 
   DataType x0, y0;
+  Datatype precision;
 
   DataType optimize(DataType x1)
   {
@@ -39,7 +40,7 @@ class NewtonRaphsonOptimizer: public MonoFilter<typename Function::DataType>
         return y1;
       }
       DataType yk = y1 - function(x0, x1, y0, y1) / function.prime(x0, x1, y0, y1);
-      if( std::abs(yk - y1) < 0.00001 )
+      if( std::abs(yk - y1) < precision )
       {
         return yk;
       }
@@ -50,7 +51,7 @@ class NewtonRaphsonOptimizer: public MonoFilter<typename Function::DataType>
 
 public:
   NewtonRaphsonOptimizer(const Function& function)
-  :function(function), x0(0), y0(0)
+  :function(function), x0(0), y0(0), precision(0.00001)
   {
   }
 
