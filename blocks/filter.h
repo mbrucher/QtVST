@@ -11,11 +11,19 @@ namespace DSP
 {
 
 #define DSP_MONOFILTER_DECLARE()\
-void process(const float* RESTRICT in, DataType* RESTRICT out, long size)\
+void process(const float* RESTRICT in, float* RESTRICT out, long size)\
 {\
   process<float>(in, out, size);\
 }\
-void process(const double* RESTRICT in, DataType* RESTRICT out, long size)\
+void process(const double* RESTRICT in, float* RESTRICT out, long size)\
+{\
+  process<double>(in, out, size);\
+}\
+void process(const float* RESTRICT in, double* RESTRICT out, long size)\
+{\
+  process<float>(in, out, size);\
+}\
+void process(const double* RESTRICT in, double* RESTRICT out, long size)\
 {\
   process<double>(in, out, size);\
 }\
@@ -28,8 +36,10 @@ public:
 
   virtual ~MonoFilter();
 
-  virtual void process(const float* RESTRICT in, DataType* RESTRICT out, long size) = 0;
-  virtual void process(const double* RESTRICT in, DataType* RESTRICT out, long size) = 0;
+  virtual void process(const float* RESTRICT in, float* RESTRICT out, long size) = 0;
+  virtual void process(const double* RESTRICT in, float* RESTRICT out, long size) = 0;
+  virtual void process(const float* RESTRICT in, double* RESTRICT out, long size) = 0;
+  virtual void process(const double* RESTRICT in, double* RESTRICT out, long size) = 0;
 };
 
 }

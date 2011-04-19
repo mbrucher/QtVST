@@ -26,6 +26,8 @@ SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
 
   setEditor(simple_overdrive);
   connect(this, SIGNAL(update_gain(float)), simple_overdrive, SIGNAL(update_gain(float)));
+  
+  gain_filter.reset(new DSP::GainFilter<double>);
 }
 
 SimpleOverdriveEffect::~SimpleOverdriveEffect ()
@@ -58,6 +60,8 @@ void SimpleOverdriveEffect::setParameter (VstInt32 index, float value)
   {
     case 0:
     {
+	  gain_filter->set_gain(value);
+	  gain = value;
       emit update_gain(value);
       break;
     }
@@ -69,7 +73,7 @@ float SimpleOverdriveEffect::getParameter (VstInt32 index)
   switch(index)
   {
     case 0:
-      return 0;//filter[0].get_cutoff_frequency() * 2 / sample_rate;
+      return gain;
   }
 }
 
@@ -88,7 +92,7 @@ void SimpleOverdriveEffect::getParameterDisplay (VstInt32 index, char* text)
   switch(index)
   {
     case 0:
-//      float2string (filter[0].get_cutoff_frequency(), text, kVstMaxParamStrLen);
+      float2string (gain, text, kVstMaxParamStrLen);
       break;
   }
 }
@@ -128,4 +132,5 @@ VstInt32 SimpleOverdriveEffect::getVendorVersion ()
 
 void SimpleOverdriveEffect::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
 {
+  gain_filter->process(inputs[0], outputs[0], sampleFrames);
 }

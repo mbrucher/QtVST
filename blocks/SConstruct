@@ -1,10 +1,12 @@
 
 Import('env')
 
-lib = env.StaticLibrary("filter.cpp")
+env['filter'] = env.StaticLibrary('filter', "filter.cpp")
 
-main_variable_filter = env.Program('variable_filter', "main_variable_filter.cpp", LIBS=lib)
+main_variable_filter = env.Program('variable_filter', "main_variable_filter.cpp", LIBS=env['filter'])
 main_variable_filter = env.Install('$BINDIR', main_variable_filter)
 
-main_simple_overdrive = env.Program('simple_overdrive', "main_simple_overdrive.cpp", LIBS=lib)
+main_simple_overdrive = env.Program('simple_overdrive', "main_simple_overdrive.cpp", LIBS=env['filter'])
 main_simple_overdrive = env.Install('$BINDIR', main_simple_overdrive)
+
+Export('env')

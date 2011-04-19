@@ -29,8 +29,8 @@ public:
 
   DSP_MONOFILTER_DECLARE()
 
-  template<class DataTypeIn>
-  void process(const DataTypeIn* in, DataType* out, unsigned long nb_samples)
+  template<class DataTypeIn, class DataTypeOut>
+  void process(const DataTypeIn* RESTRICT in, DataTypeOut* RESTRICT out, unsigned long nb_samples)
   {
     for(unsigned long i = 0; i < nb_samples; ++i)
     {

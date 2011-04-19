@@ -10,6 +10,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
+#include "..\..\blocks\gain_filter.h"
 #include "..\..\blocks\filter.h"
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster);
@@ -44,9 +45,10 @@ public:
   virtual VstInt32 getVendorVersion ();
 
 protected:
-  boost::scoped_ptr<DSP::MonoFilter<double> > filter;
+  boost::scoped_ptr<DSP::GainFilter<double> > gain_filter;
   char programName[kVstMaxProgNameLen + 1];
   float sample_rate;
+  double gain;
   
 signals:
   void update_gain(float value);

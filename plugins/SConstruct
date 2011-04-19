@@ -4,6 +4,8 @@ import sys
 Import('env_plugin')
 
 if env_plugin['vst'] is not "" and sys.platform == "win32":
+  env_plugin['vst_lib'] = env_plugin.StaticLibrary('vst', [env_plugin["vst"] + r"\public.sdk\source\vst2.x\audioeffect.cpp", env_plugin["vst"] + r"\public.sdk\source\vst2.x\audioeffectx.cpp", ])
+
   env_plugin.SConscript([
      "variable_filter/SConstruct",
      "simple_overdrive/SConstruct",

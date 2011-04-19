@@ -41,8 +41,8 @@ public:
 
   DSP_MONOFILTER_DECLARE()
 
-  template<class DataTypeIn>
-  void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
+  template<class DataTypeIn, class DataTypeOut>
+  void process(const DataTypeIn* RESTRICT in, DataTypeOut* RESTRICT out, unsigned long size)
   {
     if (size > temp_size)
     {
