@@ -2,23 +2,26 @@
  * \file newton_raphson_optimizer
  */
 
-#ifndef NEWTONRAPHSONOPTMIZER
-#define NEWTONRAPHSONOPTMIZER
+#ifndef DSP_NEWTONRAPHSONOPTMIZER
+#define DSP_NEWTONRAPHSONOPTMIZER
 
 #include <iostream>
 #include <limits>
 
-#include "config.h"
+#include "filter.h"
 
 namespace DSP
 {
 
+/**
+ * A generic Newton Raphson optimization routine
+ */
 template<class Function>
-class NewtonRaphsonOptimizer
+class NewtonRaphsonOptimizer: public MonoFilter<typename Function::DataType>
 {
-  Function& function;
-
-  typedef typename Function::DataType DataType;
+  typedef MonoFilter<typename Function::DataType> Parent;
+  typedef typename Parent::DataType DataType;
+  Function function;
 
   DataType x0, y0;
 
@@ -44,12 +47,15 @@ class NewtonRaphsonOptimizer
   }
 
 public:
-  NewtonRaphsonOptimizer(Function& function)
+  NewtonRaphsonOptimizer(const Function& function)
   :function(function), x0(0), y0(0)
   {
   }
 
-  void process(const DataType* RESTRICT in, DataType* RESTRICT out, long size)
+  DSP_MONOFILTER_DECLARE()
+
+  template<class DataTypeIn>
+  void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
   {
     for(long i = 0; i < size; ++i)
      {

@@ -2,8 +2,8 @@
  * \filter first_order_filter.h
  */
 
-#ifndef FIRST_ORDER_FILTER
-#define FIRST_ORDER_FILTER
+#ifndef DSP_FIRST_ORDER_FILTER
+#define DSP_FIRST_ORDER_FILTER
 
 #include <boost/math/constants/constants.hpp>
 

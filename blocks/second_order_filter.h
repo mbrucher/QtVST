@@ -2,12 +2,12 @@
  * \filter second_order_filter.h
  */
 
-#ifndef SECOND_ORDER_FILTER
-#define SECOND_ORDER_FILTER
+#ifndef DSP_SECOND_ORDER_FILTER
+#define DSP_SECOND_ORDER_FILTER
 
 #include <boost/math/constants/constants.hpp>
 
-#include "config.h"
+#include "filter.h"
 
 namespace DSP
 {
@@ -91,7 +91,7 @@ public:
 };
 
 template<class Coefficients, class DataType>
-class SecondOrderFilter: public Coefficients
+class SecondOrderFilter: public Coefficients, public MonoFilter<DataType>
 {
   DataType buffer_in[2];
   DataType buffer_out[2];
@@ -109,6 +109,8 @@ public:
       buffer_out[i] = 0;
     }
   }
+
+  DSP_MONOFILTER_DECLARE()
 
   template<class DataTypeIn>
   void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)

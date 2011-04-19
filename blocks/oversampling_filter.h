@@ -2,10 +2,10 @@
  * \filter oversampling_filter.h
  */
 
-#ifndef OVERSAMPLING_FILTER
-#define OVERSAMPLING_FILTER
+#ifndef DSP_OVERSAMPLING_FILTER
+#define DSP_OVERSAMPLING_FILTER
 
-#include "config.h"
+#include "filter.h"
 
 namespace DSP
 {
@@ -45,7 +45,7 @@ public:
 };
 
 template<int OversamplingFactor, class OversamplingElements, class DataType>
-class OversamplingFilter: public OversamplingElements
+class OversamplingFilter: public OversamplingElements, public MonoFilter<DataType>
 {
   DataType buffer[OversamplingElements::points];
 
@@ -60,6 +60,8 @@ public:
       buffer[i] = 0;
     }
   }
+
+  DSP_MONOFILTER_DECLARE()
 
   template<class DataTypeIn>
   void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
