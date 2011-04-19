@@ -4,21 +4,20 @@
 
 #include <audioeffect.h>
 
-//#include "simple_overdrive_effect.h"
+#include "simple_overdrive_effect.h"
 
 #define VST_EXPORT _declspec(dllexport)
 
 VST_EXPORT AEffect* VSTPluginMain (audioMasterCallback audioMaster)
 {
-/*	if (!audioMaster (0, audioMasterVersion, 0, 0, 0, 0))
+	if (!audioMaster (0, audioMasterVersion, 0, 0, 0, 0))
 		return 0;  // old version
 
 	AudioEffect* effect = createEffectInstance (audioMaster);
 	if (!effect)
 		return 0;
 
-	return effect->getAeffect ();*/
-	return NULL;
+	return effect->getAeffect ();
 }
 
 #include <windows.h>
