@@ -7,13 +7,13 @@
 
 #include <boost/math/constants/constants.hpp>
 
-#include "config.h"
+#include "filter.h"
 
 namespace DSP
 {
 
 template<class DataType>
-class AllPassFilter
+class AllPassFilter: public MonoFilter<DataType>
 {
   DataType buffer_in;
 
@@ -44,6 +44,8 @@ public:
     compute_coeffs();
   }
 
+  DSP_MONOFILTER_DECLARE()
+
   template<class DataTypeIn>
   void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
   {
@@ -57,7 +59,7 @@ public:
 };
 
 template<class DataType>
-class LowPassFilter
+class LowPassFilter: public MonoFilter<DataType>
 {
   AllPassFilter<DataType> all_pass_filter;
 
@@ -71,6 +73,8 @@ public:
   {
     all_pass_filter.set_cut_frequency(cut_frequency);
   }
+
+  DSP_MONOFILTER_DECLARE()
 
   template<class DataTypeIn>
   void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
@@ -86,7 +90,7 @@ public:
 
 
 template<class DataType>
-class HighPassFilter
+class HighPassFilter: public MonoFilter<DataType>
 {
   AllPassFilter<DataType> all_pass_filter;
 
@@ -100,6 +104,8 @@ public:
   {
     all_pass_filter.set_cut_frequency(cut_frequency);
   }
+
+  DSP_MONOFILTER_DECLARE()
 
   template<class DataTypeIn>
   void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
