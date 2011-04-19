@@ -2,12 +2,12 @@
  * \filter first_order_filter.h
  */
 
-#ifndef FIRST_ORDER_FILTER
-#define FIRST_ORDER_FILTER
+#ifndef DSP_FIRST_ORDER_FILTER
+#define DSP_FIRST_ORDER_FILTER
 
 #include <boost/math/constants/constants.hpp>
 
-#include "config.h"
+#include "filter.h"
 
 namespace DSP
 {
@@ -16,7 +16,7 @@ namespace DSP
  * A first order allpass filter
  */
 template<class Data_Type>
-class AllPassFilter
+class AllPassFilter: public MonoFilter<Data_Type>
 {
 public:
   typedef Data_Type DataType;
@@ -50,6 +50,8 @@ public:
     compute_coeffs();
   }
 
+  DSP_MONOFILTER_DECLARE()
+
   template<class DataTypeIn>
   void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
   {
@@ -66,7 +68,7 @@ public:
  * A first order lowpass filter
  */
 template<class Data_Type>
-class LowPassFilter
+class LowPassFilter: public MonoFilter<Data_Type>
 {
 public:
   typedef Data_Type DataType;
@@ -83,6 +85,8 @@ public:
   {
     all_pass_filter.set_cut_frequency(cut_frequency);
   }
+
+  DSP_MONOFILTER_DECLARE()
 
   template<class DataTypeIn>
   void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
@@ -96,8 +100,11 @@ public:
   }
 };
 
+/**
+ * A first order highpass filter
+ */
 template<class Data_Type>
-class HighPassFilter
+class HighPassFilter: public MonoFilter<Data_Type>
 {
 public:
   typedef Data_Type DataType;
@@ -114,6 +121,8 @@ public:
   {
     all_pass_filter.set_cut_frequency(cut_frequency);
   }
+
+  DSP_MONOFILTER_DECLARE()
 
   template<class DataTypeIn>
   void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)

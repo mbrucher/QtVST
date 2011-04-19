@@ -5,7 +5,7 @@
 #ifndef DSP_GAINFILTER
 #define DSP_GAINFILTER
 
-#include <iostream>
+#include "filter.h"
 
 namespace DSP
 {
@@ -14,7 +14,7 @@ namespace DSP
  * Gain filter
  */
 template<class Data_Type>
-class GainFilter
+class GainFilter: public MonoFilter<Data_Type>
 {
 public:
   typedef Data_Type DataType;
@@ -27,7 +27,10 @@ public:
   {
   }
 
-  void process(const DataType* in, DataType* out, unsigned long nb_samples)
+  DSP_MONOFILTER_DECLARE()
+
+  template<class DataTypeIn>
+  void process(const DataTypeIn* in, DataType* out, unsigned long nb_samples)
   {
     for(unsigned long i = 0; i < nb_samples; ++i)
     {

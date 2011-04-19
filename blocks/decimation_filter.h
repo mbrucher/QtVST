@@ -2,12 +2,12 @@
  * \filter decimation_filter.h
  */
 
-#ifndef DECIMATION_FILTER
-#define DECIMATION_FILTER
+#ifndef DSP_DECIMATION_FILTER
+#define DSP_DECIMATION_FILTER
 
 #include <boost/scoped_array.hpp>
 
-#include "config.h"
+#include "filter.h"
 
 namespace DSP
 {
@@ -15,8 +15,8 @@ namespace DSP
 /**
  * A decimation filter based on a low pass filter
  */
-template<class LowPassFilter>
-class DecimationFilter
+template<int DecimationFactor, class LowPassFilter, class DataType>
+class DecimationFilter: public MonoFilter<DataType>
 {
 public:
   typedef typename LowPassFilter::DataType DataType;
@@ -39,6 +39,8 @@ public:
     return filter;
   }
 
+  DSP_MONOFILTER_DECLARE()
+
   template<class DataTypeIn>
   void process(const DataTypeIn* RESTRICT in, DataType* RESTRICT out, long size)
   {
@@ -50,9 +52,9 @@ public:
 
     filter.process(in, temp_array.get(), size);
 
-    for(int i = 0; i < size / 2; ++i)
+    for(int i = 0; i < size / DecimationFactor; ++i)
     {
-      out[i] = temp_array[2 * i];
+      out[i] = temp_array[DecimationFactor * i];
     }
   }
 };
