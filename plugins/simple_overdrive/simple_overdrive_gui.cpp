@@ -23,15 +23,13 @@ bool GUISimpleOverdrive::open(void* ptr)
   widget->show();
   clientResize(static_cast<HWND>(ptr), widget->width(), widget->height());
 
-  connect(this, SIGNAL(update_frequency(float)), widget, SLOT(update_frequency(float)));
-  connect(this, SIGNAL(update_q(float)), widget, SLOT(update_q(float)));
+  connect(this, SIGNAL(update_gain(float)), widget, SLOT(update_gain(float)));
   return true;
 }
 
 void GUISimpleOverdrive::close()
 {
-  disconnect(this, SIGNAL(update_frequency(float)), widget, SLOT(update_frequency(float)));
-  disconnect(this, SIGNAL(update_q(float)), widget, SLOT(update_q(float)));
+  disconnect(this, SIGNAL(update_gain(float)), widget, SLOT(update_gain(float)));
   delete widget;
 }
 
