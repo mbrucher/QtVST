@@ -7,13 +7,21 @@
 #include "simple_overdrive_effect.h"
 #include "simple_overdrive_gui.h"
 
+#include "..\..\blocks\newton_raphson_optimizer.h"
+#include "..\..\blocks\simple_overdrive.h"
+#include "..\..\blocks\oversampling_filter.h"
+#include "..\..\blocks\gain_filter.h"
+#include "..\..\blocks\first_order_filter.h"
+#include "..\..\blocks\second_order_filter.h"
+#include "..\..\blocks\decimation_filter.h"
+
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 {
 	return new SimpleOverdriveEffect (audioMaster);
 }
 
 SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
-: AudioEffectX (audioMaster, 1, 1)	// 1 program, 1 parameter only
+: AudioEffectX (audioMaster, 1, 1), gain(1), oversampling(2), size(0)	// 1 program, 1 parameter only
 {
   setNumInputs (1);		// mono in
   setNumOutputs (1);		// mono out
@@ -26,8 +34,17 @@ SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
 
   setEditor(simple_overdrive);
   connect(this, SIGNAL(update_gain(float)), simple_overdrive, SIGNAL(update_gain(float)));
-  
-  gain_filter.reset(new DSP::GainFilter<double>);
+
+  create_effects();  
+}
+
+void SimpleOverdriveEffect::create_effects ()
+{
+  gain_filter.reset(create_gain_filter());
+  oversampling_filter.reset(create_oversampling_filter());
+  overdrive_filter.reset(create_overdrive_filter());
+  low_filter.reset(create_low_filter());
+  decimation_low_filter.reset(create_decimation_low_filter());
 }
 
 SimpleOverdriveEffect::~SimpleOverdriveEffect ()
@@ -132,5 +149,61 @@ VstInt32 SimpleOverdriveEffect::getVendorVersion ()
 
 void SimpleOverdriveEffect::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
 {
-  gain_filter->process(inputs[0], outputs[0], sampleFrames);
+  gain_filter->process(inputs[0], gain_array.get(), sampleFrames);
+  oversampling_filter->process(gain_array.get(), in_oversampled_array.get(), sampleFrames);
+  overdrive_filter->process(in_oversampled_array.get(), out_oversampled_array.get(), sampleFrames * oversampling);
+  low_filter->process(out_oversampled_array.get(), in_oversampled_array.get(), sampleFrames * oversampling);
+  decimation_low_filter->process(in_oversampled_array.get(), outputs[0], sampleFrames * oversampling);
+}
+
+DSP::GainFilter<double>* SimpleOverdriveEffect::create_gain_filter()
+{
+  DSP::GainFilter<double>* gain_filter = new DSP::GainFilter<double>;
+  gain_filter->set_gain(gain);
+  return gain_filter;
+}
+
+DSP::MonoFilter<double>* SimpleOverdriveEffect::create_oversampling_filter()
+{
+  DSP::OversamplingFilter<2, DSP::Oversampling6points5order<double>, double>* oversampling_filter = new DSP::OversamplingFilter<2, DSP::Oversampling6points5order<double>, double>;
+
+  return oversampling_filter;
+}
+
+DSP::MonoFilter<double>* SimpleOverdriveEffect::create_overdrive_filter()
+{
+  DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> >* filter = new DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> >(DSP::SimpleOverdrive<double>(1./sample_rate / oversampling, 10000, 22e-9, 1e-12, 26e-3));
+
+  return filter;
+}
+
+DSP::MonoFilter<double>* SimpleOverdriveEffect::create_low_filter()
+{
+  DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>* low_filter = new DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>;
+
+  low_filter->set_sampling_frequency(sample_rate * oversampling);
+  low_filter->set_cut_frequency(max_frequency);
+
+  return low_filter;
+}
+
+DSP::MonoFilter<double>* SimpleOverdriveEffect::create_decimation_low_filter()
+{
+  DSP::DecimationFilter<2, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>* decimation_low_filter = new DSP::DecimationFilter<2, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>;
+
+  decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
+  decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
+
+  return decimation_low_filter;
+}
+
+void SimpleOverdriveEffect::resize(int new_size)
+{
+  if(size < new_size)
+  {
+    gain_array.reset(new double[new_size]);
+    in_oversampled_array.reset(new double[new_size * oversampling]);
+    out_oversampled_array.reset(new double[new_size * oversampling]);
+    size = new_size;
+  }
 }

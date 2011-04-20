@@ -8,6 +8,7 @@
 #include <QObject>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/scoped_array.hpp>
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
 #include "..\..\blocks\gain_filter.h"
@@ -45,11 +46,31 @@ public:
   virtual VstInt32 getVendorVersion ();
 
 protected:
+  static const int max_frequency = 22000;
+  DSP::GainFilter<double>* create_gain_filter();
+  DSP::MonoFilter<double>* create_oversampling_filter();
+  DSP::MonoFilter<double>* create_overdrive_filter();
+  DSP::MonoFilter<double>* create_low_filter();
+  DSP::MonoFilter<double>* create_decimation_low_filter();
+
   boost::scoped_ptr<DSP::GainFilter<double> > gain_filter;
+  boost::scoped_ptr<DSP::MonoFilter<double> > oversampling_filter;
+  boost::scoped_ptr<DSP::MonoFilter<double> > overdrive_filter;
+  boost::scoped_ptr<DSP::MonoFilter<double> > low_filter;
+  boost::scoped_ptr<DSP::MonoFilter<double> > decimation_low_filter;
   char programName[kVstMaxProgNameLen + 1];
   float sample_rate;
   double gain;
+  int oversampling;
+
+  int size;
+  boost::scoped_array<double> gain_array;
+  boost::scoped_array<double> in_oversampled_array;
+  boost::scoped_array<double> out_oversampled_array;
   
+  void resize(int new_size);
+  void create_effects ();
+
 signals:
   void update_gain(float value);
 };
