@@ -1,7 +1,7 @@
 /**
  * \file simple_overdrive_effect.cpp
  */
-#include <iostream>
+
 #include <QObject>
 
 #include "simple_overdrive_effect.h"
