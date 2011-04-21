@@ -3,17 +3,20 @@
  */
 
 #include <qwinwidget.h>
+
 #include "aeffeditor.h"
+
+class SimpleOverdriveEffect;
 
 class GUISimpleOverdrive : public QObject, public AEffEditor
 {
   Q_OBJECT
   
   QWinWidget* widget;
-  AudioEffectX* effect;
+  SimpleOverdriveEffect* effect;
 
 public:
-  GUISimpleOverdrive(AudioEffectX* effect)
+  GUISimpleOverdrive(SimpleOverdriveEffect* effect)
     :widget(NULL), effect(effect)
   {
   }

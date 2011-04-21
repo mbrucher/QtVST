@@ -46,6 +46,8 @@ public:
   virtual bool getProductString (char* text);
   virtual VstInt32 getVendorVersion ();
 
+  void set_oversampling(int value);
+  
 protected:
   static const int max_frequency = 22000;
   DSP::GainFilter<double>* create_gain_filter();
@@ -74,7 +76,6 @@ protected:
 
 signals:
   void update_gain(float value);
-  void update_oversampling(int oversampling);
 };
 
 #endif

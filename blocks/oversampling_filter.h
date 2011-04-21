@@ -59,6 +59,7 @@ public:
     {
       buffer[i] = 0;
     }
+    std::cout << OversamplingFactor << std::endl;
   }
 
   DSP_MONOFILTER_DECLARE()

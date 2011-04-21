@@ -2,6 +2,7 @@
  * \file QSimpleOverdrive.cpp
  */
 
+#include <iostream>
 #include <boost/lexical_cast.hpp>
 
 #include <QtGui/QGridLayout>
@@ -9,7 +10,7 @@
 #include "QSimpleOverdrive.h"
 #include "simple_overdrive_effect.h"
 
-QSimpleOverdrive::QSimpleOverdrive(AudioEffectX *simple_overdrive, HWND h_parent)
+QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND h_parent)
 :QWinWidget(h_parent, NULL), simple_overdrive(simple_overdrive), h_parent(h_parent), sample_rate(simple_overdrive->getSampleRate())
 {
   setAttribute(Qt::WA_DeleteOnClose);
@@ -37,7 +38,7 @@ QSimpleOverdrive::QSimpleOverdrive(AudioEffectX *simple_overdrive, HWND h_parent
   setLayout(layout);
   
   connect(gain_slider, SIGNAL(valueChanged(int)), this, SLOT(update_gain(int)));
-  connect(type_combo, SIGNAL(activated(int)), this, SLOT(update_type(int)));
+  connect(type_combo, SIGNAL(activated(int)), this, SLOT(update_oversampling(int)));
 }
 
 void QSimpleOverdrive::update_gain(int value)
@@ -54,4 +55,6 @@ void QSimpleOverdrive::update_gain(float value)
 
 void QSimpleOverdrive::update_oversampling(int value)
 {
+  std::cout << value << std::endl;
+  simple_overdrive->set_oversampling(1 << (value + 1));
 }

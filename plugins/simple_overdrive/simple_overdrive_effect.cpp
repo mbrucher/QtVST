@@ -178,7 +178,25 @@ DSP::GainFilter<double>* SimpleOverdriveEffect::create_gain_filter()
 
 DSP::MonoFilter<double>* SimpleOverdriveEffect::create_oversampling_filter()
 {
-  DSP::OversamplingFilter<2, DSP::Oversampling6points5order<double>, double>* oversampling_filter = new DSP::OversamplingFilter<2, DSP::Oversampling6points5order<double>, double>;
+  DSP::MonoFilter<double>* oversampling_filter;
+  switch (oversampling)
+  {
+    case 2:
+      oversampling_filter = new DSP::OversamplingFilter<2, DSP::Oversampling6points5order<double>, double>;
+      break;
+    case 4:
+      oversampling_filter = new DSP::OversamplingFilter<4, DSP::Oversampling6points5order<double>, double>;
+      break;
+    case 8:
+      oversampling_filter = new DSP::OversamplingFilter<8, DSP::Oversampling6points5order<double>, double>;
+      break;
+    case 16:
+      oversampling_filter = new DSP::OversamplingFilter<16, DSP::Oversampling6points5order<double>, double>;
+      break;
+    case 32:
+      oversampling_filter = new DSP::OversamplingFilter<32, DSP::Oversampling6points5order<double>, double>;
+      break;
+  }
 
   return oversampling_filter;
 }
@@ -202,12 +220,51 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_low_filter()
 
 DSP::MonoFilter<double>* SimpleOverdriveEffect::create_decimation_low_filter()
 {
-  DSP::DecimationFilter<2, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>* decimation_low_filter = new DSP::DecimationFilter<2, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>;
+  switch(oversampling)
+  {
+    case 2:
+    {
+      DSP::DecimationFilter<2, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>* decimation_low_filter = new DSP::DecimationFilter<2, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>;
 
-  decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
-  decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
+      decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
+      decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
+      return decimation_low_filter;
+    }
+    case 4:
+    {
+      DSP::DecimationFilter<4, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>* decimation_low_filter = new DSP::DecimationFilter<4, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>;
 
-  return decimation_low_filter;
+      decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
+      decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
+      return decimation_low_filter;
+    }
+    case 8:
+    {
+      DSP::DecimationFilter<8, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>* decimation_low_filter = new DSP::DecimationFilter<8, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>;
+
+      decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
+      decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
+      return decimation_low_filter;
+    }
+    case 16:
+    {
+      DSP::DecimationFilter<16, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>* decimation_low_filter = new DSP::DecimationFilter<16, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>;
+
+      decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
+      decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
+      return decimation_low_filter;
+    }
+    case 32:
+    {
+      DSP::DecimationFilter<32, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>* decimation_low_filter = new DSP::DecimationFilter<32, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>;
+
+      decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
+      decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
+      return decimation_low_filter;
+    }
+  }
+
+  return NULL;
 }
 
 void SimpleOverdriveEffect::resize(int new_size)
@@ -219,4 +276,10 @@ void SimpleOverdriveEffect::resize(int new_size)
     out_oversampled_array.reset(new double[new_size * oversampling]);
     size = new_size;
   }
+}
+
+void SimpleOverdriveEffect::set_oversampling(int value)
+{
+  this->oversampling = value;
+  create_effects();
 }

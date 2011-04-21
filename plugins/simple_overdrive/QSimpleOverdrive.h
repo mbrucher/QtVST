@@ -8,18 +8,18 @@
 #include <QtGui/QLabel>
 #include <QtGui/QSlider>
 
-class AudioEffectX;
+class SimpleOverdriveEffect;
 
 class QSimpleOverdrive : public QWinWidget
 {
   Q_OBJECT
   
   HWND h_parent;
-  AudioEffectX *simple_overdrive;
-  QLabel *gain_label;
-  QSlider *gain_slider;
-  QLabel *type_label;
-  QComboBox *type_combo;
+  SimpleOverdriveEffect* simple_overdrive;
+  QLabel* gain_label;
+  QSlider* gain_slider;
+  QLabel* type_label;
+  QComboBox* type_combo;
   float sample_rate;
 
   void clientResize(int width, int height);
@@ -30,5 +30,5 @@ public slots:
   void update_oversampling(int value);
   
 public:
-  QSimpleOverdrive(AudioEffectX *simple_overdrive, HWND h_parent = NULL);
+  QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND h_parent = NULL);
 };
