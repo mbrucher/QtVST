@@ -27,6 +27,7 @@ SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
   setNumOutputs (1);		// mono out
   setUniqueID ('SiOv');	// identify
   canProcessReplacing ();	// supports replacing output
+  canDoubleReplacing ();	// supports replacing output
 
   vst_strncpy (programName, "Default", kVstMaxProgNameLen);	// default program name
 
@@ -65,6 +66,7 @@ void SimpleOverdriveEffect::getProgramName (char* name)
 void SimpleOverdriveEffect::setSampleRate (float sample_rate)
 {
   this->sample_rate = sample_rate;
+  create_effects();
 }
 
 float SimpleOverdriveEffect::getSampleRate ()
@@ -77,8 +79,8 @@ void SimpleOverdriveEffect::setParameter (VstInt32 index, float value)
   {
     case 0:
     {
-	  gain_filter->set_gain(value);
-	  gain = value;
+      gain_filter->set_gain(value);
+      gain = value;
       emit update_gain(value);
       break;
     }
@@ -149,6 +151,17 @@ VstInt32 SimpleOverdriveEffect::getVendorVersion ()
 
 void SimpleOverdriveEffect::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
 {
+  resize(sampleFrames);
+  gain_filter->process(inputs[0], gain_array.get(), sampleFrames);
+  oversampling_filter->process(gain_array.get(), in_oversampled_array.get(), sampleFrames);
+  overdrive_filter->process(in_oversampled_array.get(), out_oversampled_array.get(), sampleFrames * oversampling);
+  low_filter->process(out_oversampled_array.get(), in_oversampled_array.get(), sampleFrames * oversampling);
+  decimation_low_filter->process(in_oversampled_array.get(), outputs[0], sampleFrames * oversampling);
+}
+
+void SimpleOverdriveEffect::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
+{
+  resize(sampleFrames);
   gain_filter->process(inputs[0], gain_array.get(), sampleFrames);
   oversampling_filter->process(gain_array.get(), in_oversampled_array.get(), sampleFrames);
   overdrive_filter->process(in_oversampled_array.get(), out_oversampled_array.get(), sampleFrames * oversampling);

@@ -11,6 +11,6 @@ def plot(x, y):
 
 x = np.fromfile(sys.argv[1], dtype=np.float64)
 y = np.fromfile(sys.argv[2], dtype=np.float64)
-plot(x[:100000], y[:100000])
+plot(x[10*100000:11*100000], y[10*100000:11*100000])
 print y
 pyplot.show()

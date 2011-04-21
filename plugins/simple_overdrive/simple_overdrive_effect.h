@@ -26,6 +26,7 @@ public:
 
   // Processing
   virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
+  virtual void processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames);
 
   // Program
   virtual void setProgramName (char* name);
@@ -73,6 +74,7 @@ protected:
 
 signals:
   void update_gain(float value);
+  void update_oversampling(int oversampling);
 };
 
 #endif
