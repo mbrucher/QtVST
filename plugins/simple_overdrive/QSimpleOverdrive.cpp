@@ -20,8 +20,8 @@ QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND
   gain_label->setMinimumWidth(50);
   gain_slider = new QSlider(Qt::Horizontal, this);
   gain_slider->setMinimumWidth(300);
-  gain_slider->setMinimum(-69);
-  gain_slider->setMaximum(20);
+  gain_slider->setMinimum(-40);
+  gain_slider->setMaximum(40);
   QLabel* type_label_1 = new QLabel("Oversampling", this);
   type_combo = new QComboBox(this);
   type_combo->addItem("2");
@@ -45,7 +45,6 @@ QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND
 
 void QSimpleOverdrive::update_gain(int value)
 {
-  std::cout << value << std::endl;
   simple_overdrive->setParameter(0, std::pow(10, value / 20.));
 }
 
