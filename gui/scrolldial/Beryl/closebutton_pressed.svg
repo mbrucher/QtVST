@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 13.0.2, SVG Export Plug-In  -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   x="0px"
+   y="0px"
+   width="36px"
+   height="36px"
+   viewBox="-1 -0.5 36 36"
+   enable-background="new -1 -0.5 36 36"
+   xml:space="preserve"
+   id="svg2271"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docname="closebutton_pressed.svg"
+   sodipodi:docbase="/basyskom/users/ajae/embeddedstories/skins/scrolldial/Beryl"><metadata
+   id="metadata2309"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   inkscape:window-height="641"
+   inkscape:window-width="937"
+   inkscape:pageshadow="2"
+   inkscape:pageopacity="0.0"
+   guidetolerance="10.0"
+   gridtolerance="10.0"
+   objecttolerance="10.0"
+   borderopacity="1.0"
+   bordercolor="#666666"
+   pagecolor="#ffffff"
+   id="base"
+   inkscape:zoom="12.083333"
+   inkscape:cx="18"
+   inkscape:cy="18"
+   inkscape:window-x="153"
+   inkscape:window-y="87"
+   inkscape:current-layer="svg2271" />
+<defs
+   id="defs2273">
+</defs>
+<path
+   id="path2415_1_"
+   d="M 35,17.5 C 35,27.443714 26.946285,35.5 17,35.5 C 7.0537143,35.5 -1,27.443714 -1,17.5 C -1,7.555 7.0537143,-0.5 17,-0.5 C 26.946285,-0.5 35,7.555 35,17.5 z "
+   style="fill:#b3e600" />
+<linearGradient
+   id="circle2422_2_"
+   gradientUnits="userSpaceOnUse"
+   x1="-413.2251"
+   y1="1611.5889"
+   x2="-381.6449"
+   y2="1644.5044"
+   gradientTransform="translate(411,-1614.5)">
+	<stop
+   offset="0"
+   style="stop-color:#FFFFFF"
+   id="stop2277" />
+	<stop
+   offset="1"
+   style="stop-color:#000000"
+   id="stop2279" />
+</linearGradient>
+<circle
+   id="circle2422_1_"
+   cx="14"
+   cy="14"
+   r="12"
+   style="fill:url(#circle2422_2_)"
+   sodipodi:cx="14"
+   sodipodi:cy="14"
+   sodipodi:rx="12"
+   sodipodi:ry="12"
+   transform="matrix(1.285715,0,0,1.285714,-1,-0.5)" />
+<radialGradient
+   id="path2441_2_"
+   cx="-396.0708"
+   cy="1633.3213"
+   r="14.2543"
+   fx="-395.6125"
+   fy="1631.0297"
+   gradientTransform="matrix(1.285715,0,0,1.285714,527.4285,-2076.286)"
+   gradientUnits="userSpaceOnUse">
+	<stop
+   offset="0.1374"
+   style="stop-color:#CDE800"
+   id="stop2283" />
+	<stop
+   offset="0.3017"
+   style="stop-color:#CAE500"
+   id="stop2285" />
+	<stop
+   offset="0.4464"
+   style="stop-color:#BFDB01"
+   id="stop2287" />
+	<stop
+   offset="0.5838"
+   style="stop-color:#ADCB02"
+   id="stop2289" />
+	<stop
+   offset="0.7167"
+   style="stop-color:#93B403"
+   id="stop2291" />
+	<stop
+   offset="0.8464"
+   style="stop-color:#739705"
+   id="stop2293" />
+	<stop
+   offset="0.9719"
+   style="stop-color:#4B7407"
+   id="stop2295" />
+	<stop
+   offset="1"
+   style="stop-color:#416B08"
+   id="stop2297" />
+</radialGradient>
+<path
+   id="path2441_1_"
+   d="M 16.998715,31.642857 C 9.1995715,31.642857 2.8571428,25.296571 2.8571428,17.498714 C 2.8571428,9.6995714 9.1995715,3.3571429 16.998715,3.3571429 C 24.796572,3.3571429 31.142857,9.6995714 31.142857,17.498714 C 31.142857,25.296571 24.796572,31.642857 16.998715,31.642857 L 16.998715,31.642857 z "
+   style="fill:url(#path2441_2_)" />
+<polygon
+   points="18.965,8 12.601,14.364 9.064,10.829 5.529,14.364 12.601,21.436 22.5,11.536 18.965,8 "
+   id="polygon2300"
+   transform="matrix(1.285715,0,0,1.285714,-1,-0.5)"
+   style="fill:#666" />
+<linearGradient
+   id="path2445_2_"
+   gradientUnits="userSpaceOnUse"
+   x1="-88.936"
+   y1="-90.731"
+   x2="-88.5023"
+   y2="-99.9843"
+   gradientTransform="matrix(1.285715,0,0,-1.285714,130.7857,-112.3571)">
+	<stop
+   offset="0"
+   style="stop-color:#FFFFFF"
+   id="stop2303" />
+	<stop
+   offset="1"
+   style="stop-color:#FFFFFF"
+   id="stop2305" />
+</linearGradient>
+<path
+   id="path2445_1_"
+   enable-background="new    "
+   d="M 17.149143,12.807143 C 22.452715,12.807143 27.302428,14.002857 31.056715,15.976429 C 30.298143,8.8844286 24.299,3.3571429 17,3.3571429 C 9.6405715,3.3571429 3.6041428,8.977 2.9252857,16.153857 C 6.722,14.076143 11.691285,12.807143 17.149143,12.807143 z "
+   style="opacity:0.8;fill:url(#path2445_2_)" />
+</svg>

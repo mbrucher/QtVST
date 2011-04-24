@@ -1,0 +1,8 @@
+
+Import('env_plugin')
+
+libs = env_plugin.SharedLibrary('filter_gui', Glob("*.cpp") + env_plugin.Qrc(Glob("*.qrc")), CPPDEFINES="FILTERGUIEXPORT")
+files = env_plugin.Install('$LIBDIR', libs)
+env_plugin['filter_gui'] = ('$LIBDIR\\filter_gui', files)
+
+Export('env_plugin')

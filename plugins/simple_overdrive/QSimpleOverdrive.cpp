@@ -15,14 +15,13 @@ QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND
 {
   setAttribute(Qt::WA_DeleteOnClose);
 
-  QLabel *gain_label_1 = new QLabel("Gain", this);
-  gain_label = new QLabel("0", this);
-  gain_label->setMinimumWidth(50);
-  gain_slider = new QSlider(Qt::Horizontal, this);
-  gain_slider->setMinimumWidth(300);
+  QLabel *gain_label = new QLabel("Gain", this);
+  gain_slider = new QtScrollDial(this);
+  gain_slider->setSkin("Beryl");
+  gain_slider->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   gain_slider->setMinimum(-40);
   gain_slider->setMaximum(40);
-  QLabel* type_label_1 = new QLabel("Oversampling", this);
+  QLabel* type_label = new QLabel("Oversampling", this);
   type_combo = new QComboBox(this);
   type_combo->addItem("2");
   type_combo->addItem("4");
@@ -31,11 +30,10 @@ QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND
   type_combo->addItem("32");
 
   QGridLayout *layout = new QGridLayout(this);
-  layout->addWidget(gain_label_1, 0, 0);
-  layout->addWidget(gain_label, 0, 1);
-  layout->addWidget(gain_slider, 0, 2);
-  layout->addWidget(type_label_1, 1, 0);
-  layout->addWidget(type_combo, 1, 1, 1, 2);
+  layout->addWidget(gain_label, 0, 0);
+  layout->addWidget(gain_slider, 0, 1);
+  layout->addWidget(type_label, 1, 0);
+  layout->addWidget(type_combo, 1, 1);
 
   setLayout(layout);
   

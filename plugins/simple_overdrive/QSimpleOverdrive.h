@@ -6,7 +6,7 @@
 #include <QtGui/QComboBox>
 #include <QtGui/QFrame>
 #include <QtGui/QLabel>
-#include <QtGui/QSlider>
+#include "../../gui/QtScrollDial"
 
 class SimpleOverdriveEffect;
 
@@ -16,9 +16,7 @@ class QSimpleOverdrive : public QWinWidget
   
   HWND h_parent;
   SimpleOverdriveEffect* simple_overdrive;
-  QLabel* gain_label;
-  QSlider* gain_slider;
-  QLabel* type_label;
+  QtScrollDial* gain_slider;
   QComboBox* type_combo;
   float sample_rate;
 

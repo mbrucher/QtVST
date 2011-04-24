@@ -1,0 +1,14 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>scrolldial/Beryl/background.svg</file>
+    <file>scrolldial/Beryl/background_hover.svg</file>
+    <file>scrolldial/Beryl/label.svg</file>
+    <file>scrolldial/Beryl/popup_background.svg</file>
+    <file>scrolldial/Beryl/closebutton_hovered.svg</file>
+    <file>scrolldial/Beryl/closebutton_normal.svg</file>
+    <file>scrolldial/Beryl/closebutton_pressed.svg</file>
+    <file>scrollwheel/Beryl/wheel_1.svg</file>
+    <file>scrollwheel/Beryl/wheel_2.svg</file>
+    <file>scrollwheel/Beryl/wheel_3.svg</file>
+</qresource>
+</RCC>
