@@ -14,17 +14,11 @@
 #include <QPicture>
 #include <QtCore/QString>
 
-#ifdef FILTERGUIEXPORT
-# define FILTERGUIEXPORT_ __declspec(dllexport)
-#else
-# define FILTERGUIEXPORT_ __declspec(dllimport)
-#endif
-
 class ScrollDialPopup;
 class QtBasicDialGauge;
 class QLabel;
 
-class FILTERGUIEXPORT_ QtScrollDial : public QAbstractSlider
+class QtScrollDial : public QAbstractSlider
 {
     Q_OBJECT
     Q_PROPERTY(QString skin READ skin WRITE setSkin)

@@ -49,7 +49,6 @@ void QSimpleOverdrive::update_gain(int value)
 void QSimpleOverdrive::update_gain(float value)
 {
   int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 20);
-  gain_label->setText(QString::number(intValue));
   gain_slider->setValue(intValue);  
 }
 

@@ -5,6 +5,5 @@ env_plugin.Prepend(LIBS = [env_plugin['QWinMigratelib'], "user32"])
 env_plugin.Append(CPPDEFINES = "QT_QTWINMIGRATE_IMPORT")
 env_plugin.Append(CPPPATH = env_plugin["vst"] + r"\public.sdk\source\vst2.x")
 
-libmain = env_plugin.SharedLibrary('QtSimpleOverdrive', Glob("*.cpp") + [r"..\vstplug.def", ], LIBS = env_plugin['LIBS'] + [env_plugin['filter'], env_plugin['filter_gui'][0], env_plugin['vst_lib']])
-env_plugin.Depends(libmain, env_plugin['filter_gui'][1])
+libmain = env_plugin.SharedLibrary('QtSimpleOverdrive', Glob("*.cpp") + env_plugin['filter_gui'] + [r"..\vstplug.def", ], LIBS = env_plugin['LIBS'] + [env_plugin['filter'], env_plugin['vst_lib']])
 libmain = env_plugin.Install('$LIBDIR', libmain)
