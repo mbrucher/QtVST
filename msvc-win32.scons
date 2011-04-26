@@ -14,7 +14,7 @@ if env['profile']:
   env.Append(CPPFLAGS='/EHsc /Ox /Zi /GS- /arch:SSE2 -D_CRT_SECURE_NO_DEPRECATE /MD -DNDEBUG  -DWIN32')
   env.Append(LINKFLAGS='/DEBUG /Profile')
 elif env['optimized']:
-  env.Append(CPPFLAGS='/EHsc /Ox /Oi /Ot /W2 /arch:SSE2 /GS- /MD -D_CRT_SECURE_NO_DEPRECATE -DNDEBUG -DWIN32')
+  env.Append(CPPFLAGS='/EHsc /Ox /W2 /Z7 /arch:SSE2 /MD -D_CRT_SECURE_NO_DEPRECATE -DNDEBUG -DWIN32')
 elif env['debug']:
   env.Append(CPPFLAGS='/EHsc /GS /Wall /Zi /MDd -DWIN32 -D_CRT_SECURE_NO_DEPRECATE /analyze')
   env.Append(LINKFLAGS='/DEBUG')

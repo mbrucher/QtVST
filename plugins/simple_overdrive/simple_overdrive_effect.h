@@ -9,6 +9,7 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
+#include <boost/thread/mutex.hpp>
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
 #include "..\..\blocks\gain_filter.h"
@@ -66,13 +67,15 @@ protected:
   double gain;
   int oversampling;
 
+  boost::mutex mutex;
+
   int size;
   boost::scoped_array<double> gain_array;
   boost::scoped_array<double> in_oversampled_array;
   boost::scoped_array<double> out_oversampled_array;
   
   void resize(int new_size);
-  void create_effects ();
+  void create_effects (int oversampling);
 
 signals:
   void update_gain(float value);

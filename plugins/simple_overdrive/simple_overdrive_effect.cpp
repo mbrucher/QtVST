@@ -4,6 +4,9 @@
 
 #include <QObject>
 
+#include <boost/thread/locks.hpp>
+#include <boost/thread/mutex.hpp>
+
 #include "simple_overdrive_effect.h"
 #include "simple_overdrive_gui.h"
 
@@ -35,14 +38,17 @@ SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
   GUISimpleOverdrive* simple_overdrive = new GUISimpleOverdrive(this);
 
   setEditor(simple_overdrive);
-  connect(this, SIGNAL(update_gain(float)), simple_overdrive, SIGNAL(update_gain(float)));
+  gain_filter.reset(create_gain_filter());
+  connect(this, SIGNAL(update_gain(float)), simple_overdrive, SIGNAL(update_gain(float)), Qt::QueuedConnection);
 
-  create_effects();  
+  create_effects(oversampling);  
 }
 
-void SimpleOverdriveEffect::create_effects ()
+void SimpleOverdriveEffect::create_effects (int oversampling)
 {
-  gain_filter.reset(create_gain_filter());
+  boost::lock_guard<boost::mutex> lock(mutex);
+
+  this->oversampling = oversampling;
   oversampling_filter.reset(create_oversampling_filter());
   overdrive_filter.reset(create_overdrive_filter());
   low_filter.reset(create_low_filter());
@@ -67,7 +73,7 @@ void SimpleOverdriveEffect::getProgramName (char* name)
 void SimpleOverdriveEffect::setSampleRate (float sample_rate)
 {
   this->sample_rate = sample_rate;
-  create_effects();
+  create_effects(oversampling);
 }
 
 float SimpleOverdriveEffect::getSampleRate ()
@@ -152,6 +158,8 @@ VstInt32 SimpleOverdriveEffect::getVendorVersion ()
 
 void SimpleOverdriveEffect::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
 {
+  boost::lock_guard<boost::mutex> lock(mutex);
+
   resize(sampleFrames);
   gain_filter->process(inputs[0], gain_array.get(), sampleFrames);
   oversampling_filter->process(gain_array.get(), in_oversampled_array.get(), sampleFrames);
@@ -162,6 +170,8 @@ void SimpleOverdriveEffect::processReplacing (float** inputs, float** outputs, V
 
 void SimpleOverdriveEffect::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
 {
+  boost::lock_guard<boost::mutex> lock(mutex);
+
   resize(sampleFrames);
   gain_filter->process(inputs[0], gain_array.get(), sampleFrames);
   oversampling_filter->process(gain_array.get(), in_oversampled_array.get(), sampleFrames);
@@ -281,6 +291,5 @@ void SimpleOverdriveEffect::resize(int new_size)
 
 void SimpleOverdriveEffect::set_oversampling(int value)
 {
-  this->oversampling = value;
-  create_effects();
+  create_effects(value);
 }
