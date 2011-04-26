@@ -26,6 +26,7 @@ public slots:
   void update_gain(int value);
   void update_gain(float value);
   void update_oversampling(int value);
+  void update_oversampling_log(int value);
   
 public:
   QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND h_parent = NULL);

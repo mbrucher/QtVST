@@ -2,7 +2,6 @@
  * \file QSimpleOverdrive.cpp
  */
 
-#include <iostream>
 #include <boost/lexical_cast.hpp>
 
 #include <QtGui/QGridLayout>
@@ -38,7 +37,9 @@ QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND
   setLayout(layout);
   
   connect(gain_slider, SIGNAL(valueChanged(int)), this, SLOT(update_gain(int)));
-  connect(type_combo, SIGNAL(activated(int)), this, SLOT(update_oversampling(int)));
+  connect(type_combo, SIGNAL(activated(int)), this, SLOT(update_oversampling_log(int)));
+  
+  update_gain(simple_overdrive->getParameter(0));
 }
 
 void QSimpleOverdrive::update_gain(int value)
@@ -52,7 +53,18 @@ void QSimpleOverdrive::update_gain(float value)
   gain_slider->setValue(intValue);  
 }
 
-void QSimpleOverdrive::update_oversampling(int value)
+void QSimpleOverdrive::update_oversampling_log(int value)
 {
   simple_overdrive->set_oversampling(1 << (value + 1));
+}
+
+void QSimpleOverdrive::update_oversampling(int value)
+{
+  int oversampling = -2;
+  while(value != 0)
+  {
+    value = value >> 1;
+    ++oversampling;
+  }
+  type_combo->setCurrentIndex(oversampling);
 }

@@ -2,6 +2,8 @@
  * \file simple_overdrive_effect.cpp
  */
 
+#include <fstream>
+
 #include <QObject>
 
 #include <boost/thread/locks.hpp>
@@ -24,13 +26,14 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 }
 
 SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
-: AudioEffectX (audioMaster, 1, 1), gain(1), oversampling(2), size(0)	// 1 program, 1 parameter only
+: AudioEffectX (audioMaster, 1, 1), gain(1), oversampling(2), chunk(NULL), size(0)	// 1 program, 1 parameter only
 {
   setNumInputs (1);		// mono in
   setNumOutputs (1);		// mono out
   setUniqueID ('SiOv');	// identify
   canProcessReplacing ();	// supports replacing output
   canDoubleReplacing ();	// supports replacing output
+  programsAreChunks();
   setInitialDelay(3);
 
   vst_strncpy (programName, "Default", kVstMaxProgNameLen);	// default program name
@@ -40,8 +43,66 @@ SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
   setEditor(simple_overdrive);
   gain_filter.reset(create_gain_filter());
   connect(this, SIGNAL(update_gain(float)), simple_overdrive, SIGNAL(update_gain(float)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_oversampling(int)), simple_overdrive, SIGNAL(update_oversampling(int)), Qt::QueuedConnection);
 
   create_effects(oversampling);  
+}
+
+void SimpleOverdriveEffect::resume()
+{
+  if(chunk)
+  {
+    free(chunk);
+	chunk = NULL;
+  }
+  AudioEffectX::resume();
+}
+
+void SimpleOverdriveEffect::suspend()
+{
+  if(chunk)
+  {
+    free(chunk);
+	chunk = NULL;
+  }
+  AudioEffectX::suspend();
+}
+  
+VstInt32 SimpleOverdriveEffect::getChunk (void **data, bool isPreset)
+{
+  chunk = reinterpret_cast<char*>(malloc(sizeof(float) + sizeof(int)));
+  data = reinterpret_cast<void**>(&chunk);
+  std::ofstream test("e:\\log.txt", std::ios_base::app);
+  test << "get" << std::endl;
+  test << isPreset << std::endl;
+  *reinterpret_cast<float*>(chunk) = gain;
+  test << gain << "\t" << *reinterpret_cast<float*>(chunk) << std::endl;
+  *reinterpret_cast<int*>(chunk + sizeof(float)) = oversampling;
+  test << oversampling << "\t" << *reinterpret_cast<int*>(chunk + sizeof(float)) << std::endl;
+
+  test << std::hex << *reinterpret_cast<unsigned long*>(chunk) << "\t" << *(reinterpret_cast<unsigned long*>(chunk)+1) << std::endl;
+  test << std::hex << *(reinterpret_cast<unsigned long*>(chunk)+2) << "\t" << *(reinterpret_cast<unsigned long*>(chunk)+3) << std::endl;
+  
+  return (sizeof(float) + sizeof(int));
+}
+
+VstInt32 SimpleOverdriveEffect::setChunk (void *data, VstInt32 byteSize, bool isPreset)
+{
+  if(byteSize < sizeof(float) + sizeof(int))
+  {
+    return 0;
+  }
+  std::ofstream test("e:\\log.txt", std::ios_base::app);
+  test << "set" << byteSize << std::endl;
+  test << isPreset << std::endl;
+  setParameter(0, *reinterpret_cast<float*>(data));
+  test << *reinterpret_cast<float*>(data) << "\t" << gain << std::endl;
+  //create_effects(*reinterpret_cast<int*>(reinterpret_cast<char*>(data) + sizeof(float)));
+  test << *reinterpret_cast<int*>(reinterpret_cast<char*>(data) + sizeof(float)) << "\t" << oversampling << std::endl;
+
+  test << std::hex << *reinterpret_cast<unsigned long*>(data) << "\t" << *(reinterpret_cast<unsigned long*>(data)+1) << std::endl;
+  test << std::hex << *(reinterpret_cast<unsigned long*>(data)+2) << "\t" << *(reinterpret_cast<unsigned long*>(data)+3) << std::endl;
+  return sizeof(float) + sizeof(int);
 }
 
 void SimpleOverdriveEffect::create_effects (int oversampling)
@@ -293,4 +354,5 @@ void SimpleOverdriveEffect::resize(int new_size)
 void SimpleOverdriveEffect::set_oversampling(int value)
 {
   create_effects(value);
+  emit update_oversampling(value);
 }

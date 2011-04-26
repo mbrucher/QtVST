@@ -47,8 +47,14 @@ public:
   virtual bool getProductString (char* text);
   virtual VstInt32 getVendorVersion ();
 
-  void set_oversampling(int value);
+  virtual void resume();
+  virtual void suspend();
   
+  virtual VstInt32 getChunk (void **data, bool isPreset=false);
+  virtual VstInt32 setChunk (void *data, VstInt32 byteSize, bool isPreset=false);
+
+  void set_oversampling(int value);
+
 protected:
   static const int max_frequency = 22000;
   DSP::GainFilter<double>* create_gain_filter();
@@ -64,8 +70,10 @@ protected:
   boost::scoped_ptr<DSP::MonoFilter<double> > decimation_low_filter;
   char programName[kVstMaxProgNameLen + 1];
   float sample_rate;
-  double gain;
+  float gain;
   int oversampling;
+
+  char* chunk;
 
   boost::mutex mutex;
 
@@ -79,6 +87,7 @@ protected:
 
 signals:
   void update_gain(float value);
+  void update_oversampling(int value);
 };
 
 #endif

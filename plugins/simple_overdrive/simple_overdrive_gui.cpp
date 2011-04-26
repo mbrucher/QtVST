@@ -24,6 +24,7 @@ bool GUISimpleOverdrive::open(void* ptr)
   clientResize(static_cast<HWND>(ptr), widget->width(), widget->height());
 
   connect(this, SIGNAL(update_gain(float)), widget, SLOT(update_gain(float)));
+  connect(this, SIGNAL(update_oversampling(int)), widget, SLOT(update_oversampling(int)));
   return true;
 }
 

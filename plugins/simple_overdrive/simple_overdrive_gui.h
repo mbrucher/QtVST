@@ -4,7 +4,7 @@
 
 #include <qwinwidget.h>
 
-#include "aeffeditor.h"
+#include <aeffeditor.h>
 
 class SimpleOverdriveEffect;
 
@@ -31,6 +31,7 @@ public:
 
 signals:
   void update_gain(float value);
+  void update_oversampling(int oversampling);
 
 protected:
   ERect rectangle;
