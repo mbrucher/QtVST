@@ -2,8 +2,6 @@
  * \file simple_overdrive_effect.cpp
  */
 
-#include <fstream>
-
 #include <QObject>
 
 #include <boost/thread/locks.hpp>
@@ -71,17 +69,9 @@ void SimpleOverdriveEffect::suspend()
 VstInt32 SimpleOverdriveEffect::getChunk (void **data, bool isPreset)
 {
   chunk = reinterpret_cast<char*>(malloc(sizeof(float) + sizeof(int)));
-  data = reinterpret_cast<void**>(&chunk);
-  std::ofstream test("e:\\log.txt", std::ios_base::app);
-  test << "get" << std::endl;
-  test << isPreset << std::endl;
+  *data = reinterpret_cast<void*>(chunk);
   *reinterpret_cast<float*>(chunk) = gain;
-  test << gain << "\t" << *reinterpret_cast<float*>(chunk) << std::endl;
   *reinterpret_cast<int*>(chunk + sizeof(float)) = oversampling;
-  test << oversampling << "\t" << *reinterpret_cast<int*>(chunk + sizeof(float)) << std::endl;
-
-  test << std::hex << *reinterpret_cast<unsigned long*>(chunk) << "\t" << *(reinterpret_cast<unsigned long*>(chunk)+1) << std::endl;
-  test << std::hex << *(reinterpret_cast<unsigned long*>(chunk)+2) << "\t" << *(reinterpret_cast<unsigned long*>(chunk)+3) << std::endl;
   
   return (sizeof(float) + sizeof(int));
 }
@@ -92,16 +82,9 @@ VstInt32 SimpleOverdriveEffect::setChunk (void *data, VstInt32 byteSize, bool is
   {
     return 0;
   }
-  std::ofstream test("e:\\log.txt", std::ios_base::app);
-  test << "set" << byteSize << std::endl;
-  test << isPreset << std::endl;
   setParameter(0, *reinterpret_cast<float*>(data));
-  test << *reinterpret_cast<float*>(data) << "\t" << gain << std::endl;
-  //create_effects(*reinterpret_cast<int*>(reinterpret_cast<char*>(data) + sizeof(float)));
-  test << *reinterpret_cast<int*>(reinterpret_cast<char*>(data) + sizeof(float)) << "\t" << oversampling << std::endl;
+  create_effects(*reinterpret_cast<int*>(reinterpret_cast<char*>(data) + sizeof(float)));
 
-  test << std::hex << *reinterpret_cast<unsigned long*>(data) << "\t" << *(reinterpret_cast<unsigned long*>(data)+1) << std::endl;
-  test << std::hex << *(reinterpret_cast<unsigned long*>(data)+2) << "\t" << *(reinterpret_cast<unsigned long*>(data)+3) << std::endl;
   return sizeof(float) + sizeof(int);
 }
 
