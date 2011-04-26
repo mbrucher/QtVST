@@ -11,8 +11,7 @@
 #include "simple_overdrive.h"
 #include "oversampling_filter.h"
 #include "gain_filter.h"
-#include "first_order_filter.h"
-#include "second_order_filter.h"
+#include "butterworth_filter.h"
 #include "decimation_filter.h"
 
 const unsigned long size = 2000000;
@@ -48,19 +47,9 @@ DSP::MonoFilter<double>* create_overdrive()
   return filter;
 }
 
-DSP::MonoFilter<double>* create_low_filter()
-{
-  DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>* low_filter = new DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>;
-
-  low_filter->set_sampling_frequency(sample_rate * oversampling);
-  low_filter->set_cut_frequency(max_frequency);
-
-  return low_filter;
-}
-
 DSP::MonoFilter<double>* create_decimation_low_filter()
 {
-  DSP::DecimationFilter<oversampling, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>* decimation_low_filter = new DSP::DecimationFilter<oversampling, DSP::SecondOrderFilter<DSP::LowPassCoefficients<double>, double>, double>;
+  DSP::DecimationFilter<oversampling, DSP::ButterworthFilter<double, 8>, double>* decimation_low_filter = new DSP::DecimationFilter<oversampling, DSP::ButterworthFilter<double, 8>, double>;
 
   decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
   decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
@@ -73,7 +62,6 @@ int main(int argc, char** argv)
   boost::scoped_ptr<DSP::MonoFilter<double> > gain_filter(create_gain());
   boost::scoped_ptr<DSP::MonoFilter<double> > oversampling_filter(create_oversampling_filter());
   boost::scoped_ptr<DSP::MonoFilter<double> > filter(create_overdrive());
-  boost::scoped_ptr<DSP::MonoFilter<double> > low_filter(create_low_filter());
   boost::scoped_ptr<DSP::MonoFilter<double> > decimation_low_filter(create_decimation_low_filter());
 
   for(int i = 0; i < size; ++i)
@@ -85,8 +73,7 @@ int main(int argc, char** argv)
   gain_filter->process(in, gain, size);
   oversampling_filter->process(gain, in_oversampled, size);
   filter->process(in_oversampled, out_oversampled, oversampling * size);
-  low_filter->process(out_oversampled, in_oversampled, oversampling * size);
-  decimation_low_filter->process(in_oversampled, out, oversampling * size);
+  decimation_low_filter->process(out_oversampled, out, oversampling * size);
 
   std::ofstream infile("in_overdrive.raw", std::ofstream::binary);
   infile.write(reinterpret_cast<const char*>(in), size * sizeof(double));
