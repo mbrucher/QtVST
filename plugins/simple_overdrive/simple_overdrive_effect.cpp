@@ -49,6 +49,7 @@ void SimpleOverdriveEffect::create_effects (int oversampling)
   boost::lock_guard<boost::mutex> lock(mutex);
 
   this->oversampling = oversampling;
+  size = 0;
   oversampling_filter.reset(create_oversampling_filter());
   overdrive_filter.reset(create_overdrive_filter());
   low_filter.reset(create_low_filter());
