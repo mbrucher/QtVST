@@ -28,6 +28,7 @@ SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
   setUniqueID ('SiOv');	// identify
   canProcessReplacing ();	// supports replacing output
   canDoubleReplacing ();	// supports replacing output
+  setInitialDelay(3);
 
   vst_strncpy (programName, "Default", kVstMaxProgNameLen);	// default program name
 

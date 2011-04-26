@@ -32,8 +32,8 @@ public:
   virtual void setProgramName (char* name);
   virtual void getProgramName (char* name);
 
-  virtual void   setSampleRate (float sampleRate);
-  virtual float   getSampleRate ();
+  virtual void setSampleRate (float sampleRate);
+  virtual float getSampleRate ();
   // Parameters
   virtual void setParameter (VstInt32 index, float value);
   virtual float getParameter (VstInt32 index);

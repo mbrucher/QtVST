@@ -35,6 +35,12 @@ public:
   {
     return is * std::exp(std::abs(x) / vt) / vt;
   }
+
+  std::pair<DataType, DataType> all(DataType x)
+  {
+    DataType expdiode = std::exp(std::abs(x) / vt);
+    return std::make_pair(boost::math::sign(x) * is * (expdiode - 1), is * expdiode / vt);
+  }
 };
 
 }

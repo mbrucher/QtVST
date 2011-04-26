@@ -34,12 +34,12 @@ class NewtonRaphsonOptimizer: public MonoFilter<typename Function::DataType>
 
     for(int i = 0; i < max_iterations; ++i)
     {
-      DataType prime = function.prime(x0, x1, y0, y1);
-      if(std::abs(prime) < std::numeric_limits<DataType>::epsilon() )
+      std::pair<DataType, DataType> all = function.all(x0, x1, y0, y1);
+      if(std::abs(all.second) < std::numeric_limits<DataType>::epsilon() )
       {
         return y1;
       }
-      DataType yk = y1 - function(x0, x1, y0, y1) / function.prime(x0, x1, y0, y1);
+      DataType yk = y1 - all.first / all.second;
       if( std::abs(yk - y1) < precision )
       {
         return yk;
