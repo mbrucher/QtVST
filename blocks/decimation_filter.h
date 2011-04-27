@@ -15,8 +15,8 @@ namespace DSP
 /**
  * A decimation filter based on a low pass filter
  */
-template<int DecimationFactor, class LowPassFilter, class DataType>
-class DecimationFilter: public MonoFilter<DataType>
+template<int DecimationFactor, class LowPassFilter>
+class DecimationFilter: public MonoFilter<typename LowPassFilter::DataType>
 {
 public:
   typedef typename LowPassFilter::DataType DataType;

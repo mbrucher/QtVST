@@ -35,7 +35,7 @@ DSP::MonoFilter<double>* create_gain()
 
 DSP::MonoFilter<double>* create_oversampling_filter()
 {
-  DSP::OversamplingFilter<oversampling, DSP::Oversampling6points5order<double>, double>* oversampling_filter = new DSP::OversamplingFilter<oversampling, DSP::Oversampling6points5order<double>, double>;
+  DSP::OversamplingFilter<oversampling, DSP::Oversampling6points5order<double> >* oversampling_filter = new DSP::OversamplingFilter<oversampling, DSP::Oversampling6points5order<double> >;
 
   return oversampling_filter;
 }
@@ -49,7 +49,7 @@ DSP::MonoFilter<double>* create_overdrive()
 
 DSP::MonoFilter<double>* create_decimation_low_filter()
 {
-  DSP::DecimationFilter<oversampling, DSP::ButterworthFilter<double, 8>, double>* decimation_low_filter = new DSP::DecimationFilter<oversampling, DSP::ButterworthFilter<double, 8>, double>;
+  DSP::DecimationFilter<oversampling, DSP::ButterworthFilter<double, 8> >* decimation_low_filter = new DSP::DecimationFilter<oversampling, DSP::ButterworthFilter<double, 8> >;
 
   decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
   decimation_low_filter->get_filter().set_cut_frequency(max_frequency);

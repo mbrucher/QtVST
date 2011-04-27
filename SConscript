@@ -1,6 +1,8 @@
 
 Import('env')
 
+import sys
+
 env.SConscript([
      "blocks/SConstruct",
          ])
@@ -16,7 +18,8 @@ else:
 
 Export('env_plugin')
 
-env_plugin.SConscript([
+if env_plugin['vst'] is not "" and sys.platform == "win32":
+  env_plugin.SConscript([
      "gui/SConstruct",
      "plugins/SConstruct",
          ])

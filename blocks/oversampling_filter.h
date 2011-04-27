@@ -10,10 +10,12 @@
 namespace DSP
 {
 
-template<class DataType>
+template<class Data_Type>
 class Oversampling6points5order
 {
 public:
+  typedef Data_Type DataType;
+
   static const int points = 6;
   static const int order = 5;
 
@@ -44,9 +46,12 @@ public:
   }
 };
 
-template<int OversamplingFactor, class OversamplingElements, class DataType>
-class OversamplingFilter: public OversamplingElements, public MonoFilter<DataType>
+template<int OversamplingFactor, class OversamplingElements>
+class OversamplingFilter: public OversamplingElements, public MonoFilter<typename OversamplingElements::DataType>
 {
+public:
+  typedef typename OversamplingElements::DataType DataType;
+private:
   DataType buffer[OversamplingElements::points];
 
   using OversamplingElements::coeffs;

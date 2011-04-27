@@ -234,19 +234,19 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_oversampling_filter()
   switch (oversampling)
   {
     case 2:
-      oversampling_filter = new DSP::OversamplingFilter<2, DSP::Oversampling6points5order<double>, double>;
+      oversampling_filter = new DSP::OversamplingFilter<2, DSP::Oversampling6points5order<double> >;
       break;
     case 4:
-      oversampling_filter = new DSP::OversamplingFilter<4, DSP::Oversampling6points5order<double>, double>;
+      oversampling_filter = new DSP::OversamplingFilter<4, DSP::Oversampling6points5order<double> >;
       break;
     case 8:
-      oversampling_filter = new DSP::OversamplingFilter<8, DSP::Oversampling6points5order<double>, double>;
+      oversampling_filter = new DSP::OversamplingFilter<8, DSP::Oversampling6points5order<double> >;
       break;
     case 16:
-      oversampling_filter = new DSP::OversamplingFilter<16, DSP::Oversampling6points5order<double>, double>;
+      oversampling_filter = new DSP::OversamplingFilter<16, DSP::Oversampling6points5order<double> >;
       break;
     case 32:
-      oversampling_filter = new DSP::OversamplingFilter<32, DSP::Oversampling6points5order<double>, double>;
+      oversampling_filter = new DSP::OversamplingFilter<32, DSP::Oversampling6points5order<double> >;
       break;
   }
 
@@ -266,7 +266,7 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_decimation_low_filter()
   {
     case 2:
     {
-      DSP::DecimationFilter<2, DSP::ButterworthFilter<double, 8>, double>* decimation_low_filter = new DSP::DecimationFilter<2, DSP::ButterworthFilter<double, 8>, double>;
+      DSP::DecimationFilter<2, DSP::ButterworthFilter<double, 8> >* decimation_low_filter = new DSP::DecimationFilter<2, DSP::ButterworthFilter<double, 8> >;
 
       decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
       decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
@@ -274,7 +274,7 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_decimation_low_filter()
     }
     case 4:
     {
-      DSP::DecimationFilter<4, DSP::ButterworthFilter<double, 8>, double>* decimation_low_filter = new DSP::DecimationFilter<4, DSP::ButterworthFilter<double, 8>, double>;
+      DSP::DecimationFilter<4, DSP::ButterworthFilter<double, 8> >* decimation_low_filter = new DSP::DecimationFilter<4, DSP::ButterworthFilter<double, 8> >;
 
       decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
       decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
@@ -282,7 +282,7 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_decimation_low_filter()
     }
     case 8:
     {
-      DSP::DecimationFilter<8, DSP::ButterworthFilter<double, 8>, double>* decimation_low_filter = new DSP::DecimationFilter<8, DSP::ButterworthFilter<double, 8>, double>;
+      DSP::DecimationFilter<8, DSP::ButterworthFilter<double, 8> >* decimation_low_filter = new DSP::DecimationFilter<8, DSP::ButterworthFilter<double, 8> >;
 
       decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
       decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
@@ -290,7 +290,7 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_decimation_low_filter()
     }
     case 16:
     {
-      DSP::DecimationFilter<16, DSP::ButterworthFilter<double, 8>, double>* decimation_low_filter = new DSP::DecimationFilter<16, DSP::ButterworthFilter<double, 8>, double>;
+      DSP::DecimationFilter<16, DSP::ButterworthFilter<double, 8> >* decimation_low_filter = new DSP::DecimationFilter<16, DSP::ButterworthFilter<double, 8> >;
 
       decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
       decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
@@ -298,7 +298,7 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_decimation_low_filter()
     }
     case 32:
     {
-      DSP::DecimationFilter<32, DSP::ButterworthFilter<double, 8>, double>* decimation_low_filter = new DSP::DecimationFilter<32, DSP::ButterworthFilter<double, 8>, double>;
+      DSP::DecimationFilter<32, DSP::ButterworthFilter<double, 8> >* decimation_low_filter = new DSP::DecimationFilter<32, DSP::ButterworthFilter<double, 8> >;
 
       decimation_low_filter->get_filter().set_sampling_frequency(sample_rate * oversampling);
       decimation_low_filter->get_filter().set_cut_frequency(max_frequency);
