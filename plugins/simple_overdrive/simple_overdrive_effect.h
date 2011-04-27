@@ -60,13 +60,11 @@ protected:
   DSP::GainFilter<double>* create_gain_filter();
   DSP::MonoFilter<double>* create_oversampling_filter();
   DSP::MonoFilter<double>* create_overdrive_filter();
-  DSP::MonoFilter<double>* create_low_filter();
   DSP::MonoFilter<double>* create_decimation_low_filter();
 
   boost::scoped_ptr<DSP::GainFilter<double> > gain_filter;
   boost::scoped_ptr<DSP::MonoFilter<double> > oversampling_filter;
   boost::scoped_ptr<DSP::MonoFilter<double> > overdrive_filter;
-  boost::scoped_ptr<DSP::MonoFilter<double> > low_filter;
   boost::scoped_ptr<DSP::MonoFilter<double> > decimation_low_filter;
   char programName[kVstMaxProgNameLen + 1];
   float sample_rate;

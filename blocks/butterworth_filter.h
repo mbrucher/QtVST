@@ -7,6 +7,7 @@
 
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/tools/polynomial.hpp>
 
 #include "filter.h"
 
@@ -14,7 +15,7 @@ namespace DSP
 {
 
 /**
- * A first order allpass filter
+ * A Butterworth lowpass filter
  */
 template<class Data_Type, int Order>
 class ButterworthFilter: public MonoFilter<Data_Type>
@@ -32,11 +33,36 @@ private:
 
   void compute_coeffs()
   {
-    DataType coeff = std::pow(sampling_frequency / (boost::math::constants::pi<DataType>() * cut_frequency), Order);
+    DataType coeff = sampling_frequency / (boost::math::constants::pi<DataType>() * cut_frequency);
+    DataType temp1[2] = {1,-1};
+    DataType temp2[2] = {1,+1};
+    boost::math::tools::polynomial<DataType> poly1(temp1, 1);
+    boost::math::tools::polynomial<DataType> poly2(temp2, 1);
+
     for (int i = 0; i < Order+1; ++i)
     {
       c_in[i] = boost::math::binomial_coefficient<DataType>(Order, i);
-      c_out[i] = i==Order?1:0;
+    }
+	
+    boost::math::tools::polynomial<DataType> poly(1);
+	
+    if(Order % 2 != 0)
+    {
+      poly = poly2 + coeff * poly1;
+    }
+
+    for(int i = 1; i <= Order/2; ++i)
+    {
+      boost::math::tools::polynomial<DataType> polytemp = coeff * coeff * poly1 * poly1;
+      polytemp -= 2 * coeff * std::cos((2. * i + Order - 1) / (2 * Order) * boost::math::constants::pi<DataType>()) * poly1 * poly2;
+      polytemp += poly2 * poly2;
+      
+      poly *= polytemp;
+    }
+
+    for (int i = 0; i < poly.size(); ++i)
+    {
+      c_out[Order - i] = poly[i];
     }
   }
 
