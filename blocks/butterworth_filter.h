@@ -62,8 +62,13 @@ private:
 
     for (int i = 0; i < poly.size(); ++i)
     {
-      c_out[Order - i] = poly[i];
+      c_out[Order - i] = poly[i] / poly[0];
     }
+    for (int i = 0; i < Order+1; ++i)
+    {
+      c_in[i] /= poly[0];
+    }
+	
   }
 
 public:
@@ -107,7 +112,7 @@ public:
         xh -= c_out[j] * buffer_out[j];
       }
 
-      out[i] = xh / c_out[Order];
+      out[i] = xh;
       buffer_out[Order] = out[i];
     }
   }
