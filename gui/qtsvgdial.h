@@ -6,25 +6,24 @@
  Agreement.
 */
 
-#ifndef QT_SCROLL_DIAL_H
-#define QT_SCROLL_DIAL_H
+#ifndef QT_SVG_DIAL_H
+#define QT_SVG_DIAL_H
 
 #include <QtGui/QAbstractSlider>
 #include <QPointer>
 #include <QPicture>
 #include <QtCore/QString>
 
-class ScrollDialPopup;
 class QtBasicDialGauge;
 class QLabel;
 
-class QtScrollDial : public QAbstractSlider
+class QtSVGDial : public QAbstractSlider
 {
     Q_OBJECT
     Q_PROPERTY(QString skin READ skin WRITE setSkin)
 public:
-    QtScrollDial(QWidget* parent = NULL);
-    ~QtScrollDial();
+    QtSVGDial(QWidget* parent = NULL);
+    ~QtSVGDial();
 
     void setSkin(const QString& skin);
     QString skin() const;
@@ -39,14 +38,12 @@ protected:
 //    virtual void mousePressEvent(QMouseEvent* ev);
     virtual void paintEvent(QPaintEvent* ev);
 
-    QPoint popupPosition();
     void init();
 
 private:
     int valueFromPoint(const QPoint &p) const;
     inline int bound(int val) const { return qMax(minimum(), qMin(maximum(), val)); }
 
-    ScrollDialPopup* m_popup;
     QPicture m_background;
     QPicture m_hoverBackground;
 
@@ -56,4 +53,4 @@ private:
     QString m_skin;
 };
 
-#endif // QT_SCROLL_DIAL_H
+#endif // QT_SVG_DIAL_H

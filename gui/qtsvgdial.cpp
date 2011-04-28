@@ -6,16 +6,15 @@
  Agreement.
 */
 
-#include "qtscrolldial.h"
-#include "scrolldialpopup.h"
+#include "qtsvgdial.h"
 
 #include <QDesktopWidget>
 #include <QtCore/QDebug>
 #include <QPainter>
 #include <QSvgRenderer>
 #include <qevent.h>
-
 #include "QtBasicDialGauge"
+
 #include <QLabel>
 #include <QVBoxLayout>
 
@@ -23,16 +22,15 @@
 #include <private/qmath_p.h>
 
 /*!
-    \class QtScrollDial qtscrolldial.h
+    \class QtSVGDial QtSVGDial.h
 
-    \brief The QtScrollDial provides a scroll widget with SVG graphics.
+    \brief The QtSVGDial provides a scroll widget with SVG graphics.
 
-    QtScrollDial is a custom widget and behaves like a slider. If clicked a
-    popup window appears where the user can change the value.
+    QtSVGDial is a custom widget and behaves like a slider.
 
     \section1 Example
     \code
-    QtScrollDial * scroll = new QtScrollDial(parent);
+    QtSVGDial * scroll = new QtSVGDial(parent);
     scroll->setSkin("Beryl");
     scroll->setRange(0, 100);
     scroll->setValue(50);
@@ -41,7 +39,7 @@
     The function \a minimum() and \a maximum() are used from the QAbstractSlider.
 
     It is important to call the function \a setSkin() to load a skin. If \a setSkin() is not called
-    the QtScrollDial will not have any visible content.
+    the QtSVGDial will not have any visible content.
     The parameter \p skin has the skin name. The skins are in the resource file defined in the project file.
     The name scheme in the resource file is "Skin Name"/"unique picture name.svg".
 
@@ -58,7 +56,7 @@
     Constructor of the QAbstractSlider with \p parent as
     Parent.
 */
-QtScrollDial::QtScrollDial(QWidget* parent)
+QtSVGDial::QtSVGDial(QWidget* parent)
     : QAbstractSlider(parent)
 {
     init();
@@ -67,7 +65,7 @@ QtScrollDial::QtScrollDial(QWidget* parent)
 /*!
     Destructor
 */
-QtScrollDial::~QtScrollDial()
+QtSVGDial::~QtSVGDial()
 {
 
 }
@@ -76,7 +74,7 @@ QtScrollDial::~QtScrollDial()
     \internal
     Internal initialisation function.
 */
-void QtScrollDial::init()
+void QtSVGDial::init()
 {
     // set hover attribute so a repaint event is triggered on hover
     setAttribute(Qt::WA_Hover, true);
@@ -100,31 +98,26 @@ void QtScrollDial::init()
 
     // make sure the label shows the correct value
     connect(this, SIGNAL(valueChanged(int)), this, SLOT(updateLabelValue()));
-
-    // create the popup
-    m_popup = new ScrollDialPopup(this);
-    m_popup->setWindowFlags(windowFlags() | Qt::Popup);
 }
 
 /*!
     With this function you can set the skin that will be displayed in the widget.
 
     \code
-        QtScrollDial * scroll = new QtScrollDial(this);
+        QtSVGDial * scroll = new QtSVGDial(this);
         scroll->setSkin("Beryl");
     \endcode
 
-    This function has to be called before using the QtScrollDial.
+    This function has to be called before using the QtSVGDial.
 
     \sa skin()
 
 */
-void QtScrollDial::setSkin(const QString& skin)
+void QtSVGDial::setSkin(const QString& skin)
 {
     m_skin = skin;
     const QString base = ":/scrolldial/" + skin + '/';
 
-    m_popup->setSkin(skin);
     m_label->setStyleSheet("color: white; border-width: 2px;"
                            "border-image: url(" + base + "label.svg);");
 
@@ -157,7 +150,7 @@ void QtScrollDial::setSkin(const QString& skin)
     This function returns the actual skin name. If no skin has been set the return value is "".
 
     \code
-        QtScrollDial * scroll = new QtScrollDial(this);
+        QtSVGDial * scroll = new QtSVGDial(this);
         scroll->setSkin("Beryl");
         qDebug() << scroll->skin();
     \endcode
@@ -165,28 +158,13 @@ void QtScrollDial::setSkin(const QString& skin)
     \sa setSkin()
 
 */
-QString QtScrollDial::skin() const
+QString QtSVGDial::skin() const
 {
     return m_skin;
 }
 
-/*!
-    \overload
-    \internal
-    Show the QtScrollDial on mouse press.
-    Event \a ev not used.
-*/
-/*void QtScrollDial::mousePressEvent(QMouseEvent* ev)
+void QtSVGDial::mousePressEvent(QMouseEvent *e)
 {
-    Q_UNUSED(ev);
-    m_popup->move(popupPosition());
-    m_popup->setRange(minimum(), maximum());
-    m_popup->setValue(value());
-    m_popup->show();
-}*/
-void QtScrollDial::mousePressEvent(QMouseEvent *e)
-{
-//    Q_D(QtScrollDial);
     if (maximum() == minimum() ||
         (e->button() != Qt::LeftButton)  ||
         (e->buttons() ^ e->button())) {
@@ -198,11 +176,11 @@ void QtScrollDial::mousePressEvent(QMouseEvent *e)
     // ### This isn't quite right,
     // we should be doing a hit test and only setting this if it's
     // the actual dial thingie (similar to what QSlider does), but we have no
-    // subControls for QtScrollDial.
+    // subControls for QtSVGDial.
     setSliderDown(true);
 }
 
-int QtScrollDial::valueFromPoint(const QPoint &p) const
+int QtSVGDial::valueFromPoint(const QPoint &p) const
 {
     double yy = (double)height()/2.0 - p.y();
     double xx = (double)p.x() - width()/2.0;
@@ -234,9 +212,8 @@ int QtScrollDial::valueFromPoint(const QPoint &p) const
   \reimp
 */
 
-void QtScrollDial::mouseReleaseEvent(QMouseEvent * e)
+void QtSVGDial::mouseReleaseEvent(QMouseEvent * e)
 {
-//    Q_D(QtScrollDial);
     if (e->buttons() & (~e->button()) ||
        (e->button() != Qt::LeftButton)) {
         e->ignore();
@@ -252,9 +229,8 @@ void QtScrollDial::mouseReleaseEvent(QMouseEvent * e)
   \reimp
 */
 
-void QtScrollDial::mouseMoveEvent(QMouseEvent * e)
+void QtSVGDial::mouseMoveEvent(QMouseEvent * e)
 {
-//    Q_D(QtScrollDial);
     if (!(e->buttons() & Qt::LeftButton)) {
         e->ignore();
         return;
@@ -269,13 +245,13 @@ void QtScrollDial::mouseMoveEvent(QMouseEvent * e)
     Draws the background.
     Event \a ev not used.
 */
-void QtScrollDial::paintEvent(QPaintEvent* ev)
+void QtSVGDial::paintEvent(QPaintEvent* ev)
 {
     Q_UNUSED(ev);
     QPainter p(this);
     p.save();
     p.scale(width(), height());
-    if (underMouse() || m_popup->isVisible()) {
+    if (underMouse()) {
         m_hoverBackground.play(&p);
     } else {
         m_background.play(&p);
@@ -283,51 +259,11 @@ void QtScrollDial::paintEvent(QPaintEvent* ev)
     p.restore();
 }
 
-/*!
-    \overload
-    \internal
-    Calculates the position at which the ScrollDial will
-    be shown.
-*/
-QPoint QtScrollDial::popupPosition()
-{
-    // Get information about the users screen size
-    QDesktopWidget desktop;
-    QRect desktopRect = (desktop.rect());
-
-    const int w = m_popup->sizeHint().width();
-    const int h = m_popup->sizeHint().height();
-
-    // 15 pixel is the popup's m_closeButton.height() / 2
-    QPoint popupPosition(rect().right(), -15);
-
-    QPoint globalPos = mapToGlobal(popupPosition);
-
-    // if it does not fit on the right, move to the left
-    if (globalPos.x() + w > desktopRect.right()) {
-        globalPos.setX(globalPos.x() - width() - w);
-    }
-
-    if (globalPos.x() + w > desktopRect.right()) {
-        globalPos.setX(desktopRect.right() - w);
-    }
-    if (globalPos.x() < desktopRect.left()) {
-        globalPos.setX(desktopRect.left());
-    }
-    if (globalPos.y() < desktopRect.top()) {
-        globalPos.setY(desktopRect.top());
-    }
-    if (globalPos.y() + h > desktopRect.bottom()) {
-        globalPos.setY(desktopRect.bottom() - h);
-    }
-
-    return globalPos;
-}
 /**
     \internal
     Updates the label content.
 **/
-void QtScrollDial::updateLabelValue()
+void QtSVGDial::updateLabelValue()
 {
     m_label->setText(QString::number(value()));
 }

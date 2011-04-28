@@ -15,7 +15,7 @@ QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND
   setAttribute(Qt::WA_DeleteOnClose);
 
   QLabel *gain_label = new QLabel("Gain", this);
-  gain_slider = new QtScrollDial(this);
+  gain_slider = new QtSVGDial(this);
   gain_slider->setSkin("Beryl");
   gain_slider->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   gain_slider->setMinimum(-40);
