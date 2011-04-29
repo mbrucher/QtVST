@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
+    <file>VSTLogoAlpha.png</file>
     <file>scrolldial/Beryl/background.svg</file>
     <file>scrolldial/Beryl/background_hover.svg</file>
     <file>scrolldial/Beryl/label.svg</file>

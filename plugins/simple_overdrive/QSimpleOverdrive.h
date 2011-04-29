@@ -27,7 +27,10 @@ public slots:
   void update_gain(float value);
   void update_oversampling(int value);
   void update_oversampling_log(int value);
-  
+
+protected:
+  void mousePressEvent(QMouseEvent *me);
+
 public:
   QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND h_parent = NULL);
 };

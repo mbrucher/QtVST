@@ -1,0 +1,16 @@
+Qt Simple Overdrive 1.0
+
+An overdrive with a Qt GUI. See http://matt.eifelle.com/2011/04/28/announcement-qtsimpleoverdrive-1-0-vst-plugin/ for specific details
+
+Installation
+============
+If you don't have Qt 4.7.1 or Visual C++ runtime 10.0, copy the content of the support folder inside c:\windows\system32 or any folder in the PATH environment variable
+
+Changelog
+=========
+
+1.0
+---
+
+- Oversampling from 2 to 32 using a polyphase filter
+- Using a 8th order Butterworth for undersampling after the overdrive

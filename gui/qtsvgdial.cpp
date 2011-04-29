@@ -265,5 +265,5 @@ void QtSVGDial::paintEvent(QPaintEvent* ev)
 **/
 void QtSVGDial::updateLabelValue()
 {
-    m_label->setText(QString::number(value()));
+    m_label->setText(QString::number(value()/10.));
 }

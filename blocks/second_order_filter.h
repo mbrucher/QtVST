@@ -11,6 +11,9 @@
 
 namespace DSP
 {
+/**
+ * Coefficients for a second order allpass filter
+ */
 template<class DataType>
 class AllPassCoefficients
 {
@@ -54,6 +57,9 @@ public:
   }
 };
 
+/**
+ * Coefficients for a second order lowpass filter
+ */
 template<class DataType>
 class LowPassCoefficients
 {
@@ -90,6 +96,48 @@ public:
   }
 };
 
+/**
+ * Coefficients for a second order highpass filter
+ */
+template<class DataType>
+class HighPassCoefficients
+{
+  DataType sampling_frequency;
+  DataType cut_frequency;
+
+  void compute_coeffs()
+  {
+    DataType c = std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency);
+    DataType d = (1 + std::sqrt(2.) * c + c * c);
+
+    coefficients_in[2] = 1;
+    coefficients_in[1] = -2;
+    coefficients_in[0] = 1;
+    coefficients_out[1] = - 2 * (c * c - 1) / d;
+    coefficients_out[0] = - (1 - std::sqrt(2.) * c + c * c) / d;
+  }
+
+protected:
+  DataType coefficients_in[3];
+  DataType coefficients_out[2];
+
+public:
+  void set_sampling_frequency(DataType sampling_frequency)
+  {
+    this->sampling_frequency = sampling_frequency;
+    compute_coeffs();
+  }
+
+  void set_cut_frequency(DataType cut_frequency)
+  {
+    this->cut_frequency = cut_frequency;
+    compute_coeffs();
+  }
+};
+
+/**
+ * Second order filter template class
+ */
 template<class Coefficients, class DataType>
 class SecondOrderFilter: public Coefficients, public MonoFilter<DataType>
 {
