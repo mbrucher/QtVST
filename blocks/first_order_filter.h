@@ -5,6 +5,7 @@
 #ifndef DSP_FIRST_ORDER_FILTER
 #define DSP_FIRST_ORDER_FILTER
 
+#include <iostream>
 #include <boost/math/constants/constants.hpp>
 
 #include "filter.h"
@@ -30,7 +31,7 @@ private:
 
   void compute_coeffs()
   {
-    if(gain > 1)
+    if(gain >= 1)
     {
       c = (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) - 1) / (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) + 1);
     }
@@ -146,6 +147,105 @@ public:
     for(int i = 0; i < size; ++i)
     {
       out[i] = (out[i] - in[i]) / 2;
+    }
+  }
+};
+
+
+/**
+ * A first order lowpass filter
+ */
+template<class Data_Type>
+class LowPassShelvingFilter: public MonoFilter<Data_Type>
+{
+public:
+  typedef Data_Type DataType;
+private:
+  AllPassFilter<DataType> all_pass_filter;
+  DataType gain;
+
+public:
+  LowPassShelvingFilter()
+  :gain(0)
+  {
+  }
+
+  void set_gain(DataType gain)
+  {
+    all_pass_filter.set_gain(gain);
+    this->gain = gain - 1;
+    std::cout << this->gain << std::endl;
+  }
+
+  void set_sampling_frequency(DataType sampling_frequency)
+  {
+    all_pass_filter.set_sampling_frequency(sampling_frequency);
+  }
+
+  void set_cut_frequency(DataType cut_frequency)
+  {
+    all_pass_filter.set_cut_frequency(cut_frequency);
+  }
+
+  DSP_MONOFILTER_DECLARE()
+
+  template<class DataTypeIn, class DataTypeOut>
+  void process(const DataTypeIn* RESTRICT in, DataTypeOut* RESTRICT out, unsigned long size)
+  {
+    all_pass_filter.process(in, out, size);
+
+    for(int i = 0; i < size; ++i)
+    {
+      out[i] = in[i] + gain * (out[i] + in[i]) / 2;
+    }
+  }
+};
+
+/**
+ * A first order highpass filter
+ */
+template<class Data_Type>
+class HighPassShelvingFilter: public MonoFilter<Data_Type>
+{
+public:
+  typedef Data_Type DataType;
+private:
+  AllPassFilter<DataType> all_pass_filter;
+
+  DataType gain;
+
+public:
+  HighPassShelvingFilter()
+  :gain(0)
+  {
+  }
+
+  void set_gain(DataType gain)
+  {
+    all_pass_filter.set_gain(1/gain);
+    this->gain = gain - 1;
+  }
+
+  void set_sampling_frequency(DataType sampling_frequency)
+  {
+    all_pass_filter.set_sampling_frequency(sampling_frequency);
+  }
+
+  void set_cut_frequency(DataType cut_frequency)
+  {
+    all_pass_filter.set_cut_frequency(cut_frequency);
+  }
+
+  DSP_MONOFILTER_DECLARE()
+
+  template<class DataTypeIn, class DataTypeOut>
+  void process(const DataTypeIn* RESTRICT in, DataTypeOut* RESTRICT out, unsigned long size)
+  {
+    all_pass_filter.process(in, out, size);
+
+    for(int i = 0; i < size; ++i)
+    {
+      out[i] = in[i] + gain * (in[i] - out[i]) / 2;
     }
   }
 };

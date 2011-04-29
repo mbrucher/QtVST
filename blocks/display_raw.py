@@ -9,8 +9,10 @@ def plot(x, y):
   pyplot.plot(x)
   pyplot.plot(y)
 
+i=0
+  
 x = np.fromfile(sys.argv[1], dtype=np.float64)
 y = np.fromfile(sys.argv[2], dtype=np.float64)
-plot(x[10*100000:11*100000], y[10*100000:11*100000])
+plot(x[i*100000:(i+1)*100000], y[i*100000:(i+1)*100000])
 print y
 pyplot.show()
