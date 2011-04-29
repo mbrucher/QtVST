@@ -26,15 +26,23 @@ private:
   DataType sampling_frequency;
   DataType cut_frequency;
   DataType c;
+  DataType gain;
 
   void compute_coeffs()
   {
-    c = (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) - 1) / (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) + 1);
+    if(gain > 1)
+    {
+      c = (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) - 1) / (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) + 1);
+    }
+    else
+    {
+      c = (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) - gain) / (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) + gain);
+    }
   }
 
 public:
   AllPassFilter()
-  :buffer_in(0)
+  :buffer_in(0), gain(1)
   {
   }
 
@@ -47,6 +55,12 @@ public:
   void set_cut_frequency(DataType cut_frequency)
   {
     this->cut_frequency = cut_frequency;
+    compute_coeffs();
+  }
+
+  void set_gain(DataType gain)
+  {
+    this->gain = gain;
     compute_coeffs();
   }
 
