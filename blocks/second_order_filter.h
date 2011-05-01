@@ -202,13 +202,14 @@ private:
     DataType c = std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency);
     if(gain <= 1)
     {
-      DataType d = (1 + std::sqrt(2. * gain) * c + gain * c * c);
+      DataType V0 = 1 / gain;
+      DataType d = (1 + std::sqrt(2. * V0) * c + V0 * c * c);
 
       coefficients_in[2] = (1 + std::sqrt(2.) * c + c * c) / d;
       coefficients_in[1] = 2 * (c * c - 1) / d;
       coefficients_in[0] = (1 - std::sqrt(2.) * c + c * c) / d;
-      coefficients_out[1] = - 2 * (gain * c * c - 1) / d;
-      coefficients_out[0] = - (1 - std::sqrt(2. * gain) * c + gain * c * c) / d;
+      coefficients_out[1] = - 2 * (V0 * c * c - 1) / d;
+      coefficients_out[0] = - (1 - std::sqrt(2. * V0) * c + V0 * c * c) / d;
     }
     else
     {
@@ -264,13 +265,14 @@ private:
     DataType c = std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency);
     if(gain <= 1)
     {
-      DataType d = (gain + std::sqrt(2. * gain) * c + c * c);
+      DataType V0 = 1 / gain;
+      DataType d = (V0 + std::sqrt(2. * V0) * c + c * c);
 
       coefficients_in[2] = -(1 + std::sqrt(2.) * c + c * c) / d;
       coefficients_in[1] = -2 * (c * c - 1) / d;
       coefficients_in[0] = -(1 - std::sqrt(2.) * c + c * c) / d;
-      coefficients_out[1] = - 2 * (c * c - gain) / d;
-      coefficients_out[0] = - (gain - std::sqrt(2. * gain) * c + c * c) / d;
+      coefficients_out[1] = - 2 * (c * c - V0) / d;
+      coefficients_out[0] = - (V0 - std::sqrt(2. * V0) * c + c * c) / d;
     }
     else
     {
@@ -347,7 +349,7 @@ public:
       buffer_out[0] = buffer_out[1];
       buffer_out[1] = out[i];
       
-      out[i] = (gain - 1) * (in[i] + out[i]) / 2 + in[i];
+      //out[i] = (gain - 1) * (in[i] + out[i]) / 2 + in[i];
     }
   }
 

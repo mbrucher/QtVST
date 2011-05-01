@@ -10,6 +10,9 @@ def plot(x, y):
   pyplot.plot(y)
 
 i=0
+
+if len(sys.argv) > 3:
+  i = int(sys.argv[3])
   
 x = np.fromfile(sys.argv[1], dtype=np.float64)
 y = np.fromfile(sys.argv[2], dtype=np.float64)

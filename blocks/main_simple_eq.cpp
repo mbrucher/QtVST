@@ -21,7 +21,7 @@ DSP::MonoFilter<double>* create_low_shelving()
   DSP::SecondOrderShelvingFilter<DSP::HighPassShelvingCoefficients<double> >* filter = new DSP::SecondOrderShelvingFilter<DSP::HighPassShelvingCoefficients<double> >;
 //  DSP::HighPassShelvingFilter<double >* filter = new DSP::HighPassShelvingFilter<double>;
   filter->set_sampling_frequency(sample_rate);
-  filter->set_cut_frequency(1000);
+  filter->set_cut_frequency(100);
   filter->set_gain(.1);
 
   return filter;
