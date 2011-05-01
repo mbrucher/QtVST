@@ -31,13 +31,17 @@ private:
 
   void compute_coeffs()
   {
-    if(gain >= 1)
+    if(gain >= 1 || gain <= -1)
     {
       c = (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) - 1) / (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) + 1);
     }
-    else
+    else if (gain >= 0)
     {
       c = (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) - gain) / (std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) + gain);
+    }
+    else
+    {
+      c = (-gain * std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) - 1) / (-gain * std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency) + 1);
     }
   }
 
@@ -174,7 +178,6 @@ public:
   {
     all_pass_filter.set_gain(gain);
     this->gain = gain - 1;
-    std::cout << this->gain << std::endl;
   }
 
   void set_sampling_frequency(DataType sampling_frequency)
@@ -222,7 +225,7 @@ public:
 
   void set_gain(DataType gain)
   {
-    all_pass_filter.set_gain(1/gain);
+    all_pass_filter.set_gain(-gain);
     this->gain = gain - 1;
   }
 

@@ -11,11 +11,11 @@ else:
   env.Tool('msvc')
 
 if env['profile']:
-  env.Append(CPPFLAGS='/EHsc /Ox /Zi /GS- /arch:SSE2 -D_CRT_SECURE_NO_DEPRECATE /MD -DNDEBUG  -DWIN32')
+  env.Append(CPPFLAGS='/EHsc /Ox /Zi /GS- /fp:fast /arch:SSE2 -D_CRT_SECURE_NO_DEPRECATE /MD -DNDEBUG  -DWIN32')
   env.Append(LINKFLAGS='/DEBUG /Profile')
 elif env['optimized']:
   env.Append(CPPDEFINES = {'USE_RESTRICT' : '__restrict'})
-  env.Append(CPPFLAGS='/EHsc /Ox /W2 /Z7 /LD /arch:SSE2 /MD -D_CRT_SECURE_NO_DEPRECATE -DNDEBUG -DWIN32')
+  env.Append(CPPFLAGS='/EHsc /Ox /W2 /Z7 /LD /fp:fast /arch:SSE2 /MD -D_CRT_SECURE_NO_DEPRECATE -DNDEBUG -DWIN32')
 elif env['debug']:
   env.Append(CPPFLAGS='/EHsc /GS /Wall /Zi /MDd -DWIN32 -D_CRT_SECURE_NO_DEPRECATE /analyze')
   env.Append(LINKFLAGS='/DEBUG')
