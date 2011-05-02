@@ -32,7 +32,7 @@ DSP::MonoFilter<double>* create_low_peak()
   DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
   filter->set_cut_frequency(1000);
-  filter->set_gain(1);
+  filter->set_gain(10);
   filter->set_Q(10);
 
   return filter;
@@ -43,7 +43,7 @@ DSP::MonoFilter<double>* create_high_peak()
   DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
   filter->set_cut_frequency(10000);
-  filter->set_gain(1);
+  filter->set_gain(10);
   filter->set_Q(10);
 
   return filter;
