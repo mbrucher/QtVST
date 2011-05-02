@@ -19,20 +19,42 @@ double out[size];
 
 DSP::MonoFilter<double>* create_low_shelving()
 {
-  DSP::SecondOrderShelvingFilter<DSP::LowPassShelvingCoefficients<double> >* filter = new DSP::SecondOrderShelvingFilter<DSP::LowPassShelvingCoefficients<double> >;
+  DSP::SecondOrderFilter<DSP::LowPassShelvingCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::LowPassShelvingCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
   filter->set_cut_frequency(100);
-  filter->set_gain(.01);
+  filter->set_gain(.1);
+
+  return filter;
+}
+
+DSP::MonoFilter<double>* create_low_peak()
+{
+  DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >;
+  filter->set_sampling_frequency(sample_rate);
+  filter->set_cut_frequency(1000);
+  filter->set_gain(1);
+  filter->set_Q(10);
+
+  return filter;
+}
+
+DSP::MonoFilter<double>* create_high_peak()
+{
+  DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >;
+  filter->set_sampling_frequency(sample_rate);
+  filter->set_cut_frequency(10000);
+  filter->set_gain(1);
+  filter->set_Q(10);
 
   return filter;
 }
 
 DSP::MonoFilter<double>* create_high_shelving()
 {
-  DSP::SecondOrderShelvingFilter<DSP::HighPassShelvingCoefficients<double> >* filter = new DSP::SecondOrderShelvingFilter<DSP::HighPassShelvingCoefficients<double> >;
+  DSP::SecondOrderFilter<DSP::HighPassShelvingCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::HighPassShelvingCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
   filter->set_cut_frequency(15000);
-  filter->set_gain(.01);
+  filter->set_gain(.1);
 
   return filter;
 }
@@ -40,6 +62,8 @@ DSP::MonoFilter<double>* create_high_shelving()
 int main(int argc, char** argv)
 {
   boost::scoped_ptr<DSP::MonoFilter<double> > low_shelving_filter(create_low_shelving());
+  boost::scoped_ptr<DSP::MonoFilter<double> > low_peak_filter(create_low_peak());
+  boost::scoped_ptr<DSP::MonoFilter<double> > high_peak_filter(create_high_peak());
   boost::scoped_ptr<DSP::MonoFilter<double> > high_shelving_filter(create_high_shelving());
 
   for(int i = 0; i < size; ++i)
@@ -49,6 +73,8 @@ int main(int argc, char** argv)
   }
 
   low_shelving_filter->process(in, temp, size);
+  low_peak_filter->process(temp, out, size);
+  high_peak_filter->process(out, temp, size);
   high_shelving_filter->process(temp, out, size);
 
   std::ofstream infile("in_eq.raw", std::ofstream::binary);

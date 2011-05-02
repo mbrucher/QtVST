@@ -12,28 +12,29 @@
 namespace DSP
 {
 /**
- * Coefficients for a second order allpass filter
+ * Coefficients for a second order bandpass filter
  */
 template<class Data_Type>
-class AllPassCoefficients
+class BandPassCoefficients
 {
 public:
   typedef Data_Type DataType;
 private:
   DataType sampling_frequency;
   DataType cut_frequency;
-  DataType bandwidth_frequency;
+  DataType Q;
 
   void compute_coeffs()
   {
-    DataType c = (std::tan(boost::math::constants::pi<DataType>() * bandwidth_frequency / sampling_frequency) - 1) / (std::tan(boost::math::constants::pi<DataType>() * bandwidth_frequency / sampling_frequency) + 1);
-    DataType d = - std::cos(2 * boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency);
+    DataType c = std::tan(boost::math::constants::pi<DataType>() * bandwidth_frequency / sampling_frequency);
+    DataType d = (1 + std::sqrt(2.) * c + c * c);
+    DataType Q_inv = 1 / Q;
 
-    coefficients_in[2] = -c;
-    coefficients_in[1] = d * (1 - c);
-    coefficients_in[0] = 1;
-    coefficients_out[1] = - d * (1 - c);
-    coefficients_out[0] = c;
+    coefficients_in[2] = Q_inv * c / d;
+    coefficients_in[1] = 0;
+    coefficients_in[0] = -Q_inv * c / d;
+    coefficients_out[1] = - 2 * (c * c - 1) / d;
+    coefficients_out[0] = - (1 - std::sqrt(2.) * c + c * c) / d;
   }
 
 protected:
@@ -53,9 +54,9 @@ public:
     compute_coeffs();
   }
 
-  void set_bandwidth_frequency(DataType bandwidth_frequency)
+  void set_Q(DataType Q)
   {
-    this->bandwidth_frequency = bandwidth_frequency;
+    this->Q = Q;
     compute_coeffs();
   }
 };
@@ -145,43 +146,74 @@ public:
 };
 
 /**
- * Second order filter template class
+ * Coefficients for a second order allpass peak filter
  */
-template<class Coefficients>
-class SecondOrderFilter: public Coefficients, public MonoFilter<typename Coefficients::DataType>
+template<class Data_Type>
+class AllPassPeakCoefficients
 {
-  typedef typename Coefficients::DataType DataType;
-  DataType buffer_in[2];
-  DataType buffer_out[2];
-
-  using Coefficients::coefficients_in;
-  using Coefficients::coefficients_out;
-
 public:
-  SecondOrderFilter()
-  :Coefficients()
+  typedef Data_Type DataType;
+private:
+  DataType sampling_frequency;
+  DataType cut_frequency;
+  DataType Q;
+
+  void compute_coeffs()
   {
-    for(int i = 0; i < 2; ++i)
+    DataType c = std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency);
+    DataType Q_inv = 1 / Q;
+    if(gain <= 1)
     {
-      buffer_in[i] = 0;
-      buffer_out[i] = 0;
+      DataType V0 = 1 / gain;
+      DataType d = 1 + V0 * Q_inv * c + c * c;
+
+      coefficients_in[2] = (1 + Q_inv * c + c * c) / d;
+      coefficients_in[1] = 2 * (c * c - 1) / d;
+      coefficients_in[0] = (1 - Q_inv * c + c * c) / d;
+      coefficients_out[1] = -2 * (c * c - 1) / d;
+      coefficients_out[0] = -(1 - V0 * Q_inv * c + c * c) / d;
+    }
+    else
+    {
+      DataType V0 = gain;
+      DataType d = 1 + Q_inv * c + c * c;
+
+      coefficients_in[2] = (1 + V0 * Q_inv * c + c * c) / d;
+      coefficients_in[1] = 2 * (c * c - 1) / d;
+      coefficients_in[0] = (1 - V0 * Q_inv * c + c * c) / d;
+      coefficients_out[1] = -2 * (c * c - 1) / d;
+      coefficients_out[0] = -(1 - Q_inv * c + c * c) / d;
     }
   }
 
-  DSP_MONOFILTER_DECLARE()
+protected:
+  DataType coefficients_in[3];
+  DataType coefficients_out[2];
+  DataType gain;
 
-  template<class DataTypeIn, class DataTypeOut>
-  void process(const DataTypeIn* RESTRICT in, DataTypeOut* RESTRICT out, unsigned long size)
+public:
+  void set_sampling_frequency(DataType sampling_frequency)
   {
-    for(int i = 0; i < size; ++i)
-    {
-      out[i] = coefficients_in[2] * in[i] + coefficients_in[1] * buffer_in[1] + coefficients_in[0] * buffer_in[0] + coefficients_out[1] * buffer_out[1] + coefficients_out[0] * buffer_out[0];
+    this->sampling_frequency = sampling_frequency;
+    compute_coeffs();
+  }
 
-      buffer_in[0] = buffer_in[1];
-      buffer_in[1] = in[i];
-      buffer_out[0] = buffer_out[1];
-      buffer_out[1] = out[i];
-    }
+  void set_cut_frequency(DataType cut_frequency)
+  {
+    this->cut_frequency = cut_frequency;
+    compute_coeffs();
+  }
+
+  void set_Q(DataType Q)
+  {
+    this->Q = Q;
+    compute_coeffs();
+  }
+
+  void set_gain(DataType gain)
+  {
+    this->gain = gain;
+    compute_coeffs();
   }
 };
 
@@ -312,10 +344,10 @@ public:
 };
 
 /**
- * Second order shelving filter template class
+ * Second order filter template class
  */
 template<class Coefficients>
-class SecondOrderShelvingFilter: public Coefficients, public MonoFilter<typename Coefficients::DataType>
+class SecondOrderFilter: public Coefficients, public MonoFilter<typename Coefficients::DataType>
 {
   typedef typename Coefficients::DataType DataType;
   DataType buffer_in[2];
@@ -323,9 +355,9 @@ class SecondOrderShelvingFilter: public Coefficients, public MonoFilter<typename
 
   using Coefficients::coefficients_in;
   using Coefficients::coefficients_out;
-  using Coefficients::gain;
+
 public:
-  SecondOrderShelvingFilter()
+  SecondOrderFilter()
   :Coefficients()
   {
     for(int i = 0; i < 2; ++i)
@@ -334,7 +366,7 @@ public:
       buffer_out[i] = 0;
     }
   }
-  
+
   DSP_MONOFILTER_DECLARE()
 
   template<class DataTypeIn, class DataTypeOut>
@@ -348,12 +380,10 @@ public:
       buffer_in[1] = in[i];
       buffer_out[0] = buffer_out[1];
       buffer_out[1] = out[i];
-      
-      //out[i] = (gain - 1) * (in[i] + out[i]) / 2 + in[i];
     }
   }
-
 };
+
 }
 
 #endif
