@@ -149,7 +149,7 @@ public:
  * Coefficients for a second order allpass peak filter
  */
 template<class Data_Type>
-class AllPassPeakCoefficients
+class BandPassPeakCoefficients
 {
 public:
   typedef Data_Type DataType;
@@ -221,7 +221,7 @@ public:
  * Coefficients for a second order lowpass filter
  */
 template<class Data_Type>
-class LowPassShelvingCoefficients
+class LowShelvingCoefficients
 {
 public:
   typedef Data_Type DataType;
@@ -284,7 +284,7 @@ public:
  * Coefficients for a second order high pass shelving filter
  */
 template<class Data_Type>
-class HighPassShelvingCoefficients
+class HighShelvingCoefficients
 {
 public:
   typedef Data_Type DataType;

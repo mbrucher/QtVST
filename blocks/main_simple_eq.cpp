@@ -19,7 +19,7 @@ double out[size];
 
 DSP::MonoFilter<double>* create_low_shelving()
 {
-  DSP::SecondOrderFilter<DSP::LowPassShelvingCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::LowPassShelvingCoefficients<double> >;
+  DSP::SecondOrderFilter<DSP::LowShelvingCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::LowShelvingCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
   filter->set_cut_frequency(100);
   filter->set_gain(.1);
@@ -29,7 +29,7 @@ DSP::MonoFilter<double>* create_low_shelving()
 
 DSP::MonoFilter<double>* create_low_peak()
 {
-  DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >;
+  DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
   filter->set_cut_frequency(1000);
   filter->set_gain(10);
@@ -40,7 +40,7 @@ DSP::MonoFilter<double>* create_low_peak()
 
 DSP::MonoFilter<double>* create_high_peak()
 {
-  DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::AllPassPeakCoefficients<double> >;
+  DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
   filter->set_cut_frequency(10000);
   filter->set_gain(10);
@@ -51,7 +51,7 @@ DSP::MonoFilter<double>* create_high_peak()
 
 DSP::MonoFilter<double>* create_high_shelving()
 {
-  DSP::SecondOrderFilter<DSP::HighPassShelvingCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::HighPassShelvingCoefficients<double> >;
+  DSP::SecondOrderFilter<DSP::HighShelvingCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::HighShelvingCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
   filter->set_cut_frequency(15000);
   filter->set_gain(.1);

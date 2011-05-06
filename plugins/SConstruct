@@ -1,7 +1,7 @@
 
 Import('env_plugin')
 
-env_plugin['vst_lib'] = env_plugin.StaticLibrary('vst', [env_plugin["vst"] + r"\public.sdk\source\vst2.x\audioeffect.cpp", env_plugin["vst"] + r"\public.sdk\source\vst2.x\audioeffectx.cpp", ])
+env_plugin['vst_lib'] = env_plugin.StaticLibrary('vst', [env_plugin["vstdir"] + r"\public.sdk\source\vst2.x\audioeffect.cpp", env_plugin["vstdir"] + r"\public.sdk\source\vst2.x\audioeffectx.cpp", ])
 
 env_plugin.SConscript([
    "variable_filter/SConstruct",

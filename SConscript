@@ -18,7 +18,7 @@ else:
 
 Export('env_plugin')
 
-if env_plugin['vst'] is not "" and sys.platform == "win32":
+if env_plugin['vstdir'] is not "" and sys.platform == "win32":
   env_plugin.SConscript([
      "gui/SConstruct",
      "plugins/SConstruct",
