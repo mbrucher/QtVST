@@ -1,30 +1,30 @@
 /**
- * \file simple_overdrive_gui.h
+ * \file simple_eq_gui.h
  */
 
-#ifndef __SIMPLEOVERDRIVEGUI__
-#define __SIMPLEOVERDRIVEGUI__
+#ifndef __SIMPLEEQGUI__
+#define __SIMPLEEQGUI__
 
 #include <qwinwidget.h>
 
 #include <aeffeditor.h>
 
-class SimpleOverdriveEffect;
+class SimpleEQEffect;
 
-class GUISimpleOverdrive : public QObject, public AEffEditor
+class GUISimpleEQ : public QObject, public AEffEditor
 {
   Q_OBJECT
   
   QWinWidget* widget;
-  SimpleOverdriveEffect* effect;
+  SimpleEQEffect* effect;
 
 public:
-  GUISimpleOverdrive(SimpleOverdriveEffect* effect)
+  GUISimpleEQ(SimpleEQEffect* effect)
     :widget(NULL), effect(effect)
   {
   }
 
-  ~GUISimpleOverdrive()
+  ~GUISimpleEQ()
   {
   }
 

@@ -1,9 +1,9 @@
 /**
- * \file simple_overdrive_effect.h
+ * \file simple_eq_effect.h
  */
 
-#ifndef __simpleoverdrive__
-#define __simpleoverdrive__
+#ifndef __simpleeq__
+#define __simpleeq__
 
 #include <QObject>
 
@@ -18,12 +18,12 @@
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster);
 
 //-------------------------------------------------------------------------------------------------------
-class SimpleOverdriveEffect : public QObject, public AudioEffectX
+class SimpleEQEffect : public QObject, public AudioEffectX
 {
 Q_OBJECT
 public:
-  SimpleOverdriveEffect (audioMasterCallback audioMaster);
-  ~SimpleOverdriveEffect ();
+  SimpleEQEffect (audioMasterCallback audioMaster);
+  ~SimpleEQEffect ();
 
   // Processing
   virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);

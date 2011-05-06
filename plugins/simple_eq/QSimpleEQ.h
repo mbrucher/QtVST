@@ -2,8 +2,8 @@
  * \file QSimpleOverdrive.h
  */
 
-#ifndef __QSIMPLEOVERDRIVE__
-#define __QSIMPLEOVERDRIVE__
+#ifndef __QSIMPLEEQ__
+#define __QSIMPLEEQ__
 
 #include <qwinwidget.h>
 #include <QtGui/QComboBox>
@@ -11,14 +11,14 @@
 #include <QtGui/QLabel>
 #include "../../gui/QtSVGDial"
 
-class SimpleOverdriveEffect;
+class SimpleEQEffect;
 
-class QSimpleOverdrive : public QWinWidget
+class QSimpleEQ : public QWinWidget
 {
   Q_OBJECT
   
   HWND h_parent;
-  SimpleOverdriveEffect* simple_overdrive;
+  SimpleEQEffect* simple_eq;
   QtSVGDial* gain_slider;
   QComboBox* type_combo;
   float sample_rate;
@@ -35,7 +35,7 @@ protected:
   void mousePressEvent(QMouseEvent *me);
 
 public:
-  QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND h_parent = NULL);
+  QSimpleEQ(SimpleEQEffect* simple_eq, HWND h_parent = NULL);
 };
 
 #endif
