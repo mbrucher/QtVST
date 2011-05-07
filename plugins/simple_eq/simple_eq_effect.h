@@ -53,8 +53,6 @@ public:
   virtual VstInt32 getChunk (void **data, bool isPreset=false);
   virtual VstInt32 setChunk (void *data, VstInt32 byteSize, bool isPreset=false);
 
-  void set_oversampling(int value);
-
 protected:
   static const int max_frequency = 22000;
   DSP::GainFilter<double>* create_gain_filter();
@@ -84,8 +82,21 @@ protected:
   void create_effects (int oversampling);
 
 signals:
-  void update_gain(float value);
-  void update_oversampling(int value);
+  void update_gain_lf(float value);
+  void update_gain_lmf(float value);
+  void update_gain_hmf(float value);
+  void update_gain_hf(float value);
+
+  void update_cut_lf(float value);
+  void update_cut_lmf(float value);
+  void update_cut_hmf(float value);
+  void update_cut_hf(float value);
+
+  void update_Q_lmf(float value);
+  void update_Q_hmf(float value);
+
+  void update_setshelf_lf(bool shelf);
+  void update_setshelf_hf(bool shelf);
 };
 
 #endif

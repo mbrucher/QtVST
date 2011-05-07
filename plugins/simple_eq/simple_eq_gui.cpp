@@ -23,14 +23,39 @@ bool GUISimpleEQ::open(void* ptr)
   widget->show();
   clientResize(static_cast<HWND>(ptr), widget->width(), widget->height());
 
-  connect(this, SIGNAL(update_gain(float)), widget, SLOT(update_gain(float)));
-  connect(this, SIGNAL(update_oversampling(int)), widget, SLOT(update_oversampling(int)));
+  connect(this, SIGNAL(update_gain_lf(float)), widget, SLOT(update_gain_lf(float)));
+  connect(this, SIGNAL(update_gain_lmf(float)), widget, SLOT(update_gain_lmf(float)));
+  connect(this, SIGNAL(update_gain_hmf(float)), widget, SLOT(update_gain_hmf(float)));
+  connect(this, SIGNAL(update_gain_hf(float)), widget, SLOT(update_gain_hf(float)));
+
+  connect(this, SIGNAL(update_cut_lf(float)), widget, SLOT(update_cut_lf(float)));
+  connect(this, SIGNAL(update_cut_lmf(float)), widget, SLOT(update_cut_lmf(float)));
+  connect(this, SIGNAL(update_cut_hmf(float)), widget, SLOT(update_cut_hmf(float)));
+  connect(this, SIGNAL(update_cut_hf(float)), widget, SLOT(update_cut_hf(float)));
+
+  connect(this, SIGNAL(update_setshelf_hf(float)), widget, SLOT(update_setshelf_hf(float)));
+  connect(this, SIGNAL(update_setshelf_lf(float)), widget, SLOT(update_setshelf_lf(float)));
+  connect(this, SIGNAL(update_Q_lmf(float)), widget, SLOT(update_Q_lmf(float)));
+  connect(this, SIGNAL(update_Q_hmf(float)), widget, SLOT(update_Q_hmf(float)));
   return true;
 }
 
 void GUISimpleEQ::close()
 {
-  disconnect(this, SIGNAL(update_gain(float)), widget, SLOT(update_gain(float)));
+  disconnect(this, SIGNAL(update_gain_lf(float)), widget, SLOT(update_gain_lf(float)));
+  disconnect(this, SIGNAL(update_gain_lmf(float)), widget, SLOT(update_gain_lmf(float)));
+  disconnect(this, SIGNAL(update_gain_hmf(float)), widget, SLOT(update_gain_hmf(float)));
+  disconnect(this, SIGNAL(update_gain_hf(float)), widget, SLOT(update_gain_hf(float)));
+
+  disconnect(this, SIGNAL(update_cut_lf(float)), widget, SLOT(update_cut_lf(float)));
+  disconnect(this, SIGNAL(update_cut_lmf(float)), widget, SLOT(update_cut_lmf(float)));
+  disconnect(this, SIGNAL(update_cut_hmf(float)), widget, SLOT(update_cut_hmf(float)));
+  disconnect(this, SIGNAL(update_cut_hf(float)), widget, SLOT(update_cut_hf(float)));
+
+  disconnect(this, SIGNAL(update_setshelf_hf(bool)), widget, SLOT(update_setshelf_hf(bool)));
+  disconnect(this, SIGNAL(update_setshelf_lf(bool)), widget, SLOT(update_setshelf_lf(bool)));
+  disconnect(this, SIGNAL(update_Q_lmf(float)), widget, SLOT(update_Q_lmf(float)));
+  disconnect(this, SIGNAL(update_Q_hmf(float)), widget, SLOT(update_Q_hmf(float)));
   delete widget;
 }
 

@@ -131,7 +131,7 @@ void SimpleEQEffect::setParameter (VstInt32 index, float value)
     {
       gain_filter->set_gain(value);
       gain = value;
-      emit update_gain(value);
+      emit update_gain_lf(value);
       break;
     }
   }
@@ -320,8 +320,3 @@ void SimpleEQEffect::resize(int new_size)
   }
 }
 
-void SimpleEQEffect::set_oversampling(int value)
-{
-  create_effects(value);
-  emit update_oversampling(value);
-}

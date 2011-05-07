@@ -33,8 +33,21 @@ public:
   virtual void close();
 
 signals:
-  void update_gain(float value);
-  void update_oversampling(int oversampling);
+  void update_gain_lf(float value);
+  void update_gain_lmf(float value);
+  void update_gain_hmf(float value);
+  void update_gain_hf(float value);
+
+  void update_cut_lf(float value);
+  void update_cut_lmf(float value);
+  void update_cut_hmf(float value);
+  void update_cut_hf(float value);
+
+  void update_Q_lmf(float value);
+  void update_Q_hmf(float value);
+
+  void update_setshelf_lf(bool shelf);
+  void update_setshelf_hf(bool shelf);
 
 protected:
   ERect rectangle;
