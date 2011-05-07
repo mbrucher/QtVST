@@ -65,7 +65,11 @@ QWidget* QSimpleEQ::create_LF()
   cut_slider_lf->setMaximum(200);
 
   QGridLayout *layout = new QGridLayout(box);
+  QLabel* label_gain = new QLabel("Gain");
+  layout->addWidget(label_gain, 2, 1, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(gain_slider_lf, 0, 1, 2, 1);
+  QLabel* label_cut = new QLabel("Cut (Hz)");
+  layout->addWidget(label_cut, 0, 2, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(cut_slider_lf, 1, 2, 2, 1);
 
   box->setLayout(layout);
@@ -96,8 +100,14 @@ QWidget* QSimpleEQ::create_LMF()
   cut_slider_lmf->setMaximum(200);
 
   QGridLayout *layout = new QGridLayout(box);
+  QLabel* label_Q = new QLabel("Q");
+  layout->addWidget(label_Q, 0, 0, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(Q_slider_lmf, 1, 0, 2, 1);
+  QLabel* label_gain = new QLabel("Gain");
+  layout->addWidget(label_gain, 2, 1, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(gain_slider_lmf, 0, 1, 2, 1);
+  QLabel* label_cut = new QLabel("Cut (Hz)");
+  layout->addWidget(label_cut, 0, 2, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(cut_slider_lmf, 1, 2, 2, 1);
 
   box->setLayout(layout);
@@ -128,8 +138,14 @@ QWidget* QSimpleEQ::create_HMF()
   cut_slider_hmf->setMaximum(200);
 
   QGridLayout *layout = new QGridLayout(box);
+  QLabel* label_Q = new QLabel("Q");
+  layout->addWidget(label_Q, 0, 0, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(Q_slider_hmf, 1, 0, 2, 1);
+  QLabel* label_gain = new QLabel("Gain");
+  layout->addWidget(label_gain, 2, 1, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(gain_slider_hmf, 0, 1, 2, 1);
+  QLabel* label_cut = new QLabel("Cut (Hz)");
+  layout->addWidget(label_cut, 0, 2, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(cut_slider_hmf, 1, 2, 2, 1);
 
   box->setLayout(layout);
@@ -154,7 +170,11 @@ QWidget* QSimpleEQ::create_HF()
   cut_slider_hf->setMaximum(200);
 
   QGridLayout *layout = new QGridLayout(box);
+  QLabel* label_gain = new QLabel("Gain");
+  layout->addWidget(label_gain, 2, 1, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(gain_slider_hf, 0, 1, 2, 1);
+  QLabel* label_cut = new QLabel("Cut (Hz)");
+  layout->addWidget(label_cut, 0, 2, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(cut_slider_hf, 1, 2, 2, 1);
 
   box->setLayout(layout);
