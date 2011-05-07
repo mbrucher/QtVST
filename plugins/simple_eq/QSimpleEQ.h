@@ -19,7 +19,18 @@ class QSimpleEQ : public QWinWidget
   
   HWND h_parent;
   SimpleEQEffect* simple_eq;
-  QtSVGDial* gain_slider;
+  QtSVGDial* gain_slider_lf;
+  QtSVGDial* gain_slider_lmf;
+  QtSVGDial* gain_slider_hmf;
+  QtSVGDial* gain_slider_hf;
+
+  QtSVGDial* cut_slider_lf;
+  QtSVGDial* cut_slider_lmf;
+  QtSVGDial* cut_slider_hmf;
+  QtSVGDial* cut_slider_hf;
+
+  QtSVGDial* Q_slider_lmf;
+  QtSVGDial* Q_slider_hmf;
 
 public slots:
   void update_gain_lf(float value);
@@ -53,6 +64,11 @@ public slots:
 
 protected:
   void mousePressEvent(QMouseEvent *me);
+
+  QWidget* create_LF();
+  QWidget* create_LMF();
+  QWidget* create_HMF();
+  QWidget* create_HF();
 
 public:
   QSimpleEQ(SimpleEQEffect* simple_eq, HWND h_parent = NULL);

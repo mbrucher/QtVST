@@ -33,8 +33,8 @@ bool GUISimpleEQ::open(void* ptr)
   connect(this, SIGNAL(update_cut_hmf(float)), widget, SLOT(update_cut_hmf(float)));
   connect(this, SIGNAL(update_cut_hf(float)), widget, SLOT(update_cut_hf(float)));
 
-  connect(this, SIGNAL(update_setshelf_hf(float)), widget, SLOT(update_setshelf_hf(float)));
-  connect(this, SIGNAL(update_setshelf_lf(float)), widget, SLOT(update_setshelf_lf(float)));
+  connect(this, SIGNAL(update_setshelf_hf(bool)), widget, SLOT(update_setshelf_hf(bool)));
+  connect(this, SIGNAL(update_setshelf_lf(bool)), widget, SLOT(update_setshelf_lf(bool)));
   connect(this, SIGNAL(update_Q_lmf(float)), widget, SLOT(update_Q_lmf(float)));
   connect(this, SIGNAL(update_Q_hmf(float)), widget, SLOT(update_Q_hmf(float)));
   return true;

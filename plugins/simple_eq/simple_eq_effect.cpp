@@ -39,8 +39,7 @@ SimpleEQEffect::SimpleEQEffect (audioMasterCallback audioMaster)
 
   setEditor(simple_eq);
   gain_filter.reset(create_gain_filter());
-  connect(this, SIGNAL(update_gain(float)), simple_eq, SIGNAL(update_gain(float)), Qt::QueuedConnection);
-  connect(this, SIGNAL(update_oversampling(int)), simple_eq, SIGNAL(update_oversampling(int)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_gain_lf(float)), simple_eq, SIGNAL(update_gain_lf(float)), Qt::QueuedConnection);
 
   create_effects(oversampling);  
 }
