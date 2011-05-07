@@ -20,11 +20,7 @@ class QSimpleEQ : public QWinWidget
   HWND h_parent;
   SimpleEQEffect* simple_eq;
   QtSVGDial* gain_slider;
-  QComboBox* type_combo;
-  float sample_rate;
 
-  void clientResize(int width, int height);
-  
 public slots:
   void update_gain_lf(float value);
   void update_gain_lmf(float value);

@@ -13,7 +13,7 @@
 #include "simple_eq_effect.h"
 
 QSimpleEQ::QSimpleEQ(SimpleEQEffect* simple_eq, HWND h_parent)
-:QWinWidget(h_parent, NULL), simple_eq(simple_eq), h_parent(h_parent), sample_rate(simple_eq->getSampleRate())
+:QWinWidget(h_parent, NULL), simple_eq(simple_eq), h_parent(h_parent)
 {
   setAttribute(Qt::WA_DeleteOnClose);
 
@@ -24,18 +24,11 @@ QSimpleEQ::QSimpleEQ(SimpleEQEffect* simple_eq, HWND h_parent)
   gain_slider->setMinimum(-400);
   gain_slider->setMaximum(400);
   QLabel* type_label = new QLabel("Oversampling", this);
-  type_combo = new QComboBox(this);
-  type_combo->addItem("2");
-  type_combo->addItem("4");
-  type_combo->addItem("8");
-  type_combo->addItem("16");
-  type_combo->addItem("32");
 
   QGridLayout *layout = new QGridLayout(this);
   layout->addWidget(gain_label, 0, 0);
   layout->addWidget(gain_slider, 0, 1);
   layout->addWidget(type_label, 1, 0);
-  layout->addWidget(type_combo, 1, 1);
 
   setLayout(layout);
   
@@ -52,14 +45,14 @@ QSimpleEQ::QSimpleEQ(SimpleEQEffect* simple_eq, HWND h_parent)
   setStyleSheet(css);
 
   connect(gain_slider, SIGNAL(valueChanged(int)), this, SLOT(update_gain(int)));
-  connect(type_combo, SIGNAL(activated(int)), this, SLOT(update_oversampling_log(int)));
-  
+
   update_gain_lf(simple_eq->getParameter(0));
 }
 
 void QSimpleEQ::update_gain_lf(float value)
 {
-  simple_eq->setParameter(0, std::pow(10, value / 100.));
+  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  gain_slider->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_lmf(float value)
@@ -70,34 +63,50 @@ void QSimpleEQ::update_gain_lmf(float value)
 
 void QSimpleEQ::update_gain_hmf(float value)
 {
+  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  gain_slider->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hf(float value)
 {
+  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  gain_slider->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_lf(float value)
 {
+  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  gain_slider->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_lmf(float value)
 {
+  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  gain_slider->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_hmf(float value)
 {
+  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  gain_slider->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_hf(float value)
 {
+  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  gain_slider->setValue(intValue);  
 }
 
 void QSimpleEQ::update_Q_lmf(float value)
 {
+  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  gain_slider->setValue(intValue);  
 }
 
 void QSimpleEQ::update_Q_hmf(float value)
 {
+  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  gain_slider->setValue(intValue);  
 }
 
 void QSimpleEQ::update_setshelf_lf(bool shelf)
@@ -110,42 +119,52 @@ void QSimpleEQ::update_setshelf_hf(bool shelf)
 
 void QSimpleEQ::update_gain_lf(int value)
 {
+  simple_eq->setParameter(0, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::update_gain_lmf(int value)
 {
+  simple_eq->setParameter(1, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::update_gain_hmf(int value)
 {
+  simple_eq->setParameter(2, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::update_gain_hf(int value)
 {
+  simple_eq->setParameter(3, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::update_cut_lf(int value)
 {
+  simple_eq->setParameter(4, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::update_cut_lmf(int value)
 {
+  simple_eq->setParameter(5, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::update_cut_hmf(int value)
 {
+  simple_eq->setParameter(6, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::update_cut_hf(int value)
 {
+  simple_eq->setParameter(7, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::update_Q_lmf(int value)
 {
+  simple_eq->setParameter(8, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::update_Q_hmf(int value)
 {
+  simple_eq->setParameter(9, std::pow(10, value / 100.));
 }
 
 void QSimpleEQ::mousePressEvent(QMouseEvent *e)

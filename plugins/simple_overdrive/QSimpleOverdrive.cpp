@@ -13,7 +13,7 @@
 #include "simple_overdrive_effect.h"
 
 QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND h_parent)
-:QWinWidget(h_parent, NULL), simple_overdrive(simple_overdrive), h_parent(h_parent), sample_rate(simple_overdrive->getSampleRate())
+:QWinWidget(h_parent, NULL), simple_overdrive(simple_overdrive), h_parent(h_parent)
 {
   setAttribute(Qt::WA_DeleteOnClose);
 

@@ -21,7 +21,6 @@ class QSimpleOverdrive : public QWinWidget
   SimpleOverdriveEffect* simple_overdrive;
   QtSVGDial* gain_slider;
   QComboBox* type_combo;
-  float sample_rate;
 
   void clientResize(int width, int height);
   
