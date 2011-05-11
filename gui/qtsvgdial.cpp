@@ -57,7 +57,7 @@
     Parent.
 */
 QtSVGDial::QtSVGDial(QWidget* parent)
-    : QAbstractSlider(parent)
+    : QAbstractSlider(parent), function(NULL)
 {
     init();
 }
@@ -265,5 +265,17 @@ void QtSVGDial::paintEvent(QPaintEvent* ev)
 **/
 void QtSVGDial::updateLabelValue()
 {
-    m_label->setText(QString::number(value()/10.));
+    if(function == NULL)
+	{
+      m_label->setText(QString::number(value()));
+	}
+	else
+	{
+	  m_label->setText(QString::number((*function)(value())));
+	}
+}
+
+void QtSVGDial::setDisplayFunction(DisplayFunction function)
+{
+    this->function = function;
 }
