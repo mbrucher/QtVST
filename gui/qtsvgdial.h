@@ -32,7 +32,7 @@ public:
 
 	void setDisplayFunction(DisplayFunction function);
 	
-private Q_SLOTS:
+public Q_SLOTS:
     void updateLabelValue();
 
 protected:

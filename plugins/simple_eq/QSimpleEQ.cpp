@@ -14,6 +14,17 @@
 #include "QSimpleEQ.h"
 #include "simple_eq_effect.h"
 
+float convertGain(int value)
+{
+  return value / 10.;
+}
+
+float convertFrequency(int value)
+{
+  return 20 * std::pow(10.f, value / 100.f);
+
+}
+
 QSimpleEQ::QSimpleEQ(SimpleEQEffect* simple_eq, HWND h_parent)
 :QWinWidget(h_parent, NULL), simple_eq(simple_eq), h_parent(h_parent)
 {
@@ -54,16 +65,20 @@ QWidget* QSimpleEQ::create_LF()
   QGroupBox* box = new QGroupBox(this);
   box->setTitle("Low frequency");
   gain_slider_lf = new QtSVGDial;
+  gain_slider_lf->setDisplayFunction(convertGain);
   gain_slider_lf->setSkin("Beryl");
   gain_slider_lf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   gain_slider_lf->setMinimum(-200);
   gain_slider_lf->setMaximum(200);
+  gain_slider_lf->updateLabelValue();
 
   cut_slider_lf = new QtSVGDial;
+  cut_slider_lf->setDisplayFunction(convertFrequency);
   cut_slider_lf->setSkin("Beryl");
   cut_slider_lf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  cut_slider_lf->setMinimum(-200);
-  cut_slider_lf->setMaximum(200);
+  cut_slider_lf->setMinimum(0);
+  cut_slider_lf->setMaximum(300);
+  cut_slider_lf->updateLabelValue();
 
   QGridLayout *layout = new QGridLayout(box);
   QLabel* label_gain = new QLabel("Gain");
@@ -84,22 +99,28 @@ QWidget* QSimpleEQ::create_LMF()
   QGroupBox* box = new QGroupBox(this);
   box->setTitle("Medium-low frequency");
   Q_slider_lmf = new QtSVGDial;
+  Q_slider_lmf->setDisplayFunction(convertGain);
   Q_slider_lmf->setSkin("Beryl");
   Q_slider_lmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   Q_slider_lmf->setMinimum(1);
-  Q_slider_lmf->setMaximum(20);
+  Q_slider_lmf->setMaximum(100);
+  Q_slider_lmf->updateLabelValue();
 
   gain_slider_lmf = new QtSVGDial;
+  gain_slider_lmf->setDisplayFunction(convertGain);
   gain_slider_lmf->setSkin("Beryl");
   gain_slider_lmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   gain_slider_lmf->setMinimum(-200);
   gain_slider_lmf->setMaximum(200);
+  gain_slider_lmf->updateLabelValue();
 
   cut_slider_lmf = new QtSVGDial;
+  cut_slider_lmf->setDisplayFunction(convertFrequency);
   cut_slider_lmf->setSkin("Beryl");
   cut_slider_lmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  cut_slider_lmf->setMinimum(-200);
-  cut_slider_lmf->setMaximum(200);
+  cut_slider_lmf->setMinimum(0);
+  cut_slider_lmf->setMaximum(300);
+  cut_slider_lmf->updateLabelValue();
 
   QGridLayout *layout = new QGridLayout(box);
   QLabel* label_Q = new QLabel("Q");
@@ -122,22 +143,28 @@ QWidget* QSimpleEQ::create_HMF()
   QGroupBox* box = new QGroupBox(this);
   box->setTitle("Medium-high frequency");
   Q_slider_hmf = new QtSVGDial;
+  Q_slider_hmf->setDisplayFunction(convertGain);
   Q_slider_hmf->setSkin("Beryl");
   Q_slider_hmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   Q_slider_hmf->setMinimum(1);
-  Q_slider_hmf->setMaximum(20);
+  Q_slider_hmf->setMaximum(100);
+  Q_slider_hmf->updateLabelValue();
 
   gain_slider_hmf = new QtSVGDial;
+  gain_slider_hmf->setDisplayFunction(convertGain);
   gain_slider_hmf->setSkin("Beryl");
   gain_slider_hmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   gain_slider_hmf->setMinimum(-200);
   gain_slider_hmf->setMaximum(200);
+  gain_slider_hmf->updateLabelValue();
 
   cut_slider_hmf = new QtSVGDial;
+  cut_slider_hmf->setDisplayFunction(convertFrequency);
   cut_slider_hmf->setSkin("Beryl");
   cut_slider_hmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  cut_slider_hmf->setMinimum(-200);
-  cut_slider_hmf->setMaximum(200);
+  cut_slider_hmf->setMinimum(0);
+  cut_slider_hmf->setMaximum(300);
+  cut_slider_hmf->updateLabelValue();
 
   QGridLayout *layout = new QGridLayout(box);
   QLabel* label_Q = new QLabel("Q");
@@ -160,16 +187,20 @@ QWidget* QSimpleEQ::create_HF()
   QGroupBox* box = new QGroupBox(this);
   box->setTitle("High frequency");
   gain_slider_hf = new QtSVGDial;
+  gain_slider_hf->setDisplayFunction(convertGain);
   gain_slider_hf->setSkin("Beryl");
   gain_slider_hf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   gain_slider_hf->setMinimum(-200);
   gain_slider_hf->setMaximum(200);
+  gain_slider_hf->updateLabelValue();
 
   cut_slider_hf = new QtSVGDial;
+  cut_slider_hf->setDisplayFunction(convertFrequency);
   cut_slider_hf->setSkin("Beryl");
   cut_slider_hf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  cut_slider_hf->setMinimum(-200);
-  cut_slider_hf->setMaximum(200);
+  cut_slider_hf->setMinimum(0);
+  cut_slider_hf->setMaximum(300);
+  cut_slider_hf->updateLabelValue();
 
   QGridLayout *layout = new QGridLayout(box);
   QLabel* label_gain = new QLabel("Gain");
