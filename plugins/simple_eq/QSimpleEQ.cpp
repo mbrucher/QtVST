@@ -5,6 +5,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include <QtGui/QGridLayout>
+#include <QtGui/QSpacerItem>
 #include <QtGui/QMessageBox>
 #include <QtGui/QGroupBox>
 
@@ -71,6 +72,7 @@ QWidget* QSimpleEQ::create_LF()
   QLabel* label_cut = new QLabel("Cut (Hz)");
   layout->addWidget(label_cut, 0, 2, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(cut_slider_lf, 1, 2, 2, 1);
+  layout->setColumnStretch(0, 1);
 
   box->setLayout(layout);
   
@@ -176,6 +178,7 @@ QWidget* QSimpleEQ::create_HF()
   QLabel* label_cut = new QLabel("Cut (Hz)");
   layout->addWidget(label_cut, 0, 2, Qt::AlignHCenter|Qt::AlignVCenter);
   layout->addWidget(cut_slider_hf, 1, 2, 2, 1);
+  layout->setColumnStretch(0, 1);
 
   box->setLayout(layout);
   
