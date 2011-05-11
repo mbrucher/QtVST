@@ -9,6 +9,10 @@ If you don't have Qt 4.7.1 or Visual C++ runtime 10.0, copy the content of the s
 Changelog
 =========
 
+1.2
+---
+- Fixed a computation mistake for the gain
+
 1.1
 ---
 - Added the mandatory About VST message box

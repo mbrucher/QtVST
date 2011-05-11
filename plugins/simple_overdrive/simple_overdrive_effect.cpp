@@ -129,8 +129,10 @@ void SimpleOverdriveEffect::setParameter (VstInt32 index, float value)
   {
     case 0:
     {
+	  value = value * 400 - 200;
+	  float valuebis = std::pow(10, valuebis / 100.);
       gain_filter->set_gain(value);
-      gain = value;
+      gain = valuebis;
       emit update_gain(value);
       break;
     }
@@ -142,7 +144,8 @@ float SimpleOverdriveEffect::getParameter (VstInt32 index)
   switch(index)
   {
     case 0:
-      return gain;
+	  float value = static_cast<int>(std::log(gain) / std::log(10.f) * 100);
+      return (value + 200) / 400;
   }
 }
 
