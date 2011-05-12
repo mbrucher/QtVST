@@ -26,7 +26,7 @@ class NewtonRaphsonOptimizer: public MonoFilter<typename Function::DataType>
   Function function;
 
   DataType x0, y0;
-  Datatype precision;
+  DataType precision;
 
   DataType optimize(DataType x1)
   {
