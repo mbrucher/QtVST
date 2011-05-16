@@ -12,6 +12,7 @@ Changelog
 1.2
 ---
 - Fixed a computation mistake for the gain
+- Added better oversampling filter paratemers
 
 1.1
 ---

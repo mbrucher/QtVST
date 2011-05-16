@@ -46,10 +46,12 @@ public:
   }
 };
 
-template<class DataType>
+template<class Data_Type>
 class Oversampling6points5order_4
 {
 public:
+  typedef Data_Type DataType;
+
   static const int points = 6;
   static const int order = 5;
 
@@ -80,10 +82,12 @@ public:
   }
 };
 
-template<class DataType>
+template<class Data_Type>
 class Oversampling6points5order_8
 {
 public:
+  typedef Data_Type DataType;
+
   static const int points = 6;
   static const int order = 5;
 
@@ -114,10 +118,12 @@ public:
   }
 };
 
-template<class DataType>
+template<class Data_Type>
 class Oversampling6points5order_16
 {
 public:
+  typedef Data_Type DataType;
+
   static const int points = 6;
   static const int order = 5;
 
@@ -148,10 +154,12 @@ public:
   }
 };
 
-template<class DataType>
+template<class Data_Type>
 class Oversampling6points5order_32
 {
 public:
+  typedef Data_Type DataType;
+
   static const int points = 6;
   static const int order = 5;
 

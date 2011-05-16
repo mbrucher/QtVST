@@ -240,16 +240,16 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_oversampling_filter()
       oversampling_filter = new DSP::OversamplingFilter<2, DSP::Oversampling6points5order<double> >;
       break;
     case 4:
-      oversampling_filter = new DSP::OversamplingFilter<4, DSP::Oversampling6points5order<double> >;
+      oversampling_filter = new DSP::OversamplingFilter<4, DSP::Oversampling6points5order_4<double> >;
       break;
     case 8:
-      oversampling_filter = new DSP::OversamplingFilter<8, DSP::Oversampling6points5order<double> >;
+      oversampling_filter = new DSP::OversamplingFilter<8, DSP::Oversampling6points5order_8<double> >;
       break;
     case 16:
-      oversampling_filter = new DSP::OversamplingFilter<16, DSP::Oversampling6points5order<double> >;
+      oversampling_filter = new DSP::OversamplingFilter<16, DSP::Oversampling6points5order_16<double> >;
       break;
     case 32:
-      oversampling_filter = new DSP::OversamplingFilter<32, DSP::Oversampling6points5order<double> >;
+      oversampling_filter = new DSP::OversamplingFilter<32, DSP::Oversampling6points5order_32<double> >;
       break;
   }
 
