@@ -13,7 +13,7 @@ opts.Add('qwinmigrate_suffix', 'Set the QWinMigrate suffix', 'head')
 opts.Add('boostdir', 'Set the Boost path', '.')
 opts.Add('tools', 'Set the tool set to use', '')
 opts.Add('topdir', 'Set the location of the tool set', '')
-opts.Add('vst', 'Set the VST path', '.')
+opts.Add('vstdir', 'Set the VST path', '.')
 opts.Add('optlevel', 'Optimization level (1, 2 or 3', '1')
 
 env = Environment(options = opts,
@@ -41,7 +41,7 @@ env.Tool("nsis", toolpath=["."])
 Help(opts.GenerateHelpText(env))
 
 env.Append(CPPPATH=os.getcwd())
-env.Append(CPPPATH=env['vst'])
+env.Append(CPPPATH=env['vstdir'])
 env.Append(CPPPATH=env['qwinmigrate'] + os.sep + 'src')
 env.Append(LIBPATH=env['qwinmigrate'] + os.sep + 'lib')
 env.Append(CPPPATH=env['boostdir'])

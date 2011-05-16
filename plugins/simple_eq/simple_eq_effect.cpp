@@ -1,5 +1,5 @@
 /**
- * \file simple_overdrive_effect.cpp
+ * \file simple_eq_effect.cpp
  */
 
 #include <QObject>
@@ -7,8 +7,8 @@
 #include <boost/thread/locks.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include "simple_overdrive_effect.h"
-#include "simple_overdrive_gui.h"
+#include "simple_eq_effect.h"
+#include "simple_eq_gui.h"
 
 #include "..\..\blocks\newton_raphson_optimizer.h"
 #include "..\..\blocks\simple_overdrive.h"
@@ -19,15 +19,15 @@
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 {
-	return new SimpleOverdriveEffect (audioMaster);
+	return new SimpleEQEffect (audioMaster);
 }
 
-SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
+SimpleEQEffect::SimpleEQEffect (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, 1, 1), gain(1), oversampling(2), chunk(NULL), size(0)	// 1 program, 1 parameter only
 {
   setNumInputs (1);		// mono in
   setNumOutputs (1);		// mono out
-  setUniqueID ('SiOv');	// identify
+  setUniqueID ('SiEQ');	// identify
   canProcessReplacing ();	// supports replacing output
   canDoubleReplacing ();	// supports replacing output
   programsAreChunks();
@@ -35,17 +35,16 @@ SimpleOverdriveEffect::SimpleOverdriveEffect (audioMasterCallback audioMaster)
 
   vst_strncpy (programName, "Default", kVstMaxProgNameLen);	// default program name
 
-  GUISimpleOverdrive* simple_overdrive = new GUISimpleOverdrive(this);
+  GUISimpleEQ* simple_eq = new GUISimpleEQ(this);
 
-  setEditor(simple_overdrive);
+  setEditor(simple_eq);
   gain_filter.reset(create_gain_filter());
-  connect(this, SIGNAL(update_gain(float)), simple_overdrive, SIGNAL(update_gain(float)), Qt::QueuedConnection);
-  connect(this, SIGNAL(update_oversampling(int)), simple_overdrive, SIGNAL(update_oversampling(int)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_gain_lf(float)), simple_eq, SIGNAL(update_gain_lf(float)), Qt::QueuedConnection);
 
   create_effects(oversampling);  
 }
 
-void SimpleOverdriveEffect::resume()
+void SimpleEQEffect::resume()
 {
   if(chunk)
   {
@@ -55,7 +54,7 @@ void SimpleOverdriveEffect::resume()
   AudioEffectX::resume();
 }
 
-void SimpleOverdriveEffect::suspend()
+void SimpleEQEffect::suspend()
 {
   if(chunk)
   {
@@ -65,7 +64,7 @@ void SimpleOverdriveEffect::suspend()
   AudioEffectX::suspend();
 }
   
-VstInt32 SimpleOverdriveEffect::getChunk (void **data, bool isPreset)
+VstInt32 SimpleEQEffect::getChunk (void **data, bool isPreset)
 {
   chunk = reinterpret_cast<char*>(malloc(sizeof(float) + sizeof(int)));
   *data = reinterpret_cast<void*>(chunk);
@@ -75,7 +74,7 @@ VstInt32 SimpleOverdriveEffect::getChunk (void **data, bool isPreset)
   return (sizeof(float) + sizeof(int));
 }
 
-VstInt32 SimpleOverdriveEffect::setChunk (void *data, VstInt32 byteSize, bool isPreset)
+VstInt32 SimpleEQEffect::setChunk (void *data, VstInt32 byteSize, bool isPreset)
 {
   if(byteSize < sizeof(float) + sizeof(int))
   {
@@ -87,7 +86,7 @@ VstInt32 SimpleOverdriveEffect::setChunk (void *data, VstInt32 byteSize, bool is
   return sizeof(float) + sizeof(int);
 }
 
-void SimpleOverdriveEffect::create_effects (int oversampling)
+void SimpleEQEffect::create_effects (int oversampling)
 {
   boost::lock_guard<boost::mutex> lock(mutex);
 
@@ -98,58 +97,55 @@ void SimpleOverdriveEffect::create_effects (int oversampling)
   decimation_low_filter.reset(create_decimation_low_filter());
 }
 
-SimpleOverdriveEffect::~SimpleOverdriveEffect ()
+SimpleEQEffect::~SimpleEQEffect ()
 {
 	// nothing to do here
 }
 
-void SimpleOverdriveEffect::setProgramName (char* name)
+void SimpleEQEffect::setProgramName (char* name)
 {
 	vst_strncpy (programName, name, kVstMaxProgNameLen);
 }
 
-void SimpleOverdriveEffect::getProgramName (char* name)
+void SimpleEQEffect::getProgramName (char* name)
 {
 	vst_strncpy (name, programName, kVstMaxProgNameLen);
 }
 
-void SimpleOverdriveEffect::setSampleRate (float sample_rate)
+void SimpleEQEffect::setSampleRate (float sample_rate)
 {
   this->sample_rate = sample_rate;
   create_effects(oversampling);
 }
 
-float SimpleOverdriveEffect::getSampleRate ()
+float SimpleEQEffect::getSampleRate ()
 {
   return sample_rate;;
 }
-void SimpleOverdriveEffect::setParameter (VstInt32 index, float value)
+void SimpleEQEffect::setParameter (VstInt32 index, float value)
 {
   switch(index)
   {
     case 0:
     {
-	  value = value * 400 - 200;
-	  float valuebis = std::pow(10, valuebis / 100.);
       gain_filter->set_gain(value);
-      gain = valuebis;
-      emit update_gain(value);
+      gain = value;
+      emit update_gain_lf(value);
       break;
     }
   }
 }
 
-float SimpleOverdriveEffect::getParameter (VstInt32 index)
+float SimpleEQEffect::getParameter (VstInt32 index)
 {
   switch(index)
   {
     case 0:
-	  float value = static_cast<int>(std::log(gain) / std::log(10.f) * 100);
-      return (value + 200) / 400;
+      return gain;
   }
 }
 
-void SimpleOverdriveEffect::getParameterName (VstInt32 index, char* label)
+void SimpleEQEffect::getParameterName (VstInt32 index, char* label)
 {
   switch(index)
   {
@@ -159,7 +155,7 @@ void SimpleOverdriveEffect::getParameterName (VstInt32 index, char* label)
   }
 }
 
-void SimpleOverdriveEffect::getParameterDisplay (VstInt32 index, char* text)
+void SimpleEQEffect::getParameterDisplay (VstInt32 index, char* text)
 {
   switch(index)
   {
@@ -169,7 +165,7 @@ void SimpleOverdriveEffect::getParameterDisplay (VstInt32 index, char* text)
   }
 }
 
-void SimpleOverdriveEffect::getParameterLabel (VstInt32 index, char* label)
+void SimpleEQEffect::getParameterLabel (VstInt32 index, char* label)
 {
   switch(index)
   {
@@ -179,30 +175,30 @@ void SimpleOverdriveEffect::getParameterLabel (VstInt32 index, char* label)
   }
 }
 
-bool SimpleOverdriveEffect::getEffectName (char* name)
+bool SimpleEQEffect::getEffectName (char* name)
 {
-	vst_strncpy (name, "SimpleOverdrive", kVstMaxEffectNameLen);
+	vst_strncpy (name, "SimpleEQ", kVstMaxEffectNameLen);
 	return true;
 }
 
-bool SimpleOverdriveEffect::getProductString (char* text)
+bool SimpleEQEffect::getProductString (char* text)
 {
-	vst_strncpy (text, "SimpleOverdrive", kVstMaxProductStrLen);
+	vst_strncpy (text, "SimpleEQ", kVstMaxProductStrLen);
 	return true;
 }
 
-bool SimpleOverdriveEffect::getVendorString (char* text)
+bool SimpleEQEffect::getVendorString (char* text)
 {
 	vst_strncpy (text, "Matthieu Brucher", kVstMaxVendorStrLen);
 	return true;
 }
 
-VstInt32 SimpleOverdriveEffect::getVendorVersion ()
+VstInt32 SimpleEQEffect::getVendorVersion ()
 { 
 	return 1000; 
 }
 
-void SimpleOverdriveEffect::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
+void SimpleEQEffect::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
 {
   boost::lock_guard<boost::mutex> lock(mutex);
 
@@ -213,7 +209,7 @@ void SimpleOverdriveEffect::processReplacing (float** inputs, float** outputs, V
   decimation_low_filter->process(in_oversampled_array.get(), outputs[0], sampleFrames * oversampling);
 }
 
-void SimpleOverdriveEffect::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
+void SimpleEQEffect::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
 {
   boost::lock_guard<boost::mutex> lock(mutex);
 
@@ -224,14 +220,14 @@ void SimpleOverdriveEffect::processDoubleReplacing (double** inputs, double** ou
   decimation_low_filter->process(out_oversampled_array.get(), outputs[0], sampleFrames * oversampling);
 }
 
-DSP::GainFilter<double>* SimpleOverdriveEffect::create_gain_filter()
+DSP::GainFilter<double>* SimpleEQEffect::create_gain_filter()
 {
   DSP::GainFilter<double>* gain_filter = new DSP::GainFilter<double>;
   gain_filter->set_gain(gain);
   return gain_filter;
 }
 
-DSP::MonoFilter<double>* SimpleOverdriveEffect::create_oversampling_filter()
+DSP::MonoFilter<double>* SimpleEQEffect::create_oversampling_filter()
 {
   DSP::MonoFilter<double>* oversampling_filter;
   switch (oversampling)
@@ -256,14 +252,14 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_oversampling_filter()
   return oversampling_filter;
 }
 
-DSP::MonoFilter<double>* SimpleOverdriveEffect::create_overdrive_filter()
+DSP::MonoFilter<double>* SimpleEQEffect::create_overdrive_filter()
 {
   DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> >* filter = new DSP::NewtonRaphsonOptimizer<DSP::SimpleOverdrive<double> >(DSP::SimpleOverdrive<double>(1./sample_rate / oversampling, 10000, 22e-9, 1e-12, 26e-3));
 
   return filter;
 }
 
-DSP::MonoFilter<double>* SimpleOverdriveEffect::create_decimation_low_filter()
+DSP::MonoFilter<double>* SimpleEQEffect::create_decimation_low_filter()
 {
   switch(oversampling)
   {
@@ -312,7 +308,7 @@ DSP::MonoFilter<double>* SimpleOverdriveEffect::create_decimation_low_filter()
   return NULL;
 }
 
-void SimpleOverdriveEffect::resize(int new_size)
+void SimpleEQEffect::resize(int new_size)
 {
   if(size < new_size)
   {
@@ -323,8 +319,3 @@ void SimpleOverdriveEffect::resize(int new_size)
   }
 }
 
-void SimpleOverdriveEffect::set_oversampling(int value)
-{
-  create_effects(value);
-  emit update_oversampling(value);
-}

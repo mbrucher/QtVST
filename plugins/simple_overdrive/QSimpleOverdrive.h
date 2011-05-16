@@ -2,6 +2,9 @@
  * \file QSimpleOverdrive.h
  */
 
+#ifndef __QSIMPLEOVERDRIVE__
+#define __QSIMPLEOVERDRIVE__
+
 #include <qwinwidget.h>
 #include <QtGui/QComboBox>
 #include <QtGui/QFrame>
@@ -18,7 +21,6 @@ class QSimpleOverdrive : public QWinWidget
   SimpleOverdriveEffect* simple_overdrive;
   QtSVGDial* gain_slider;
   QComboBox* type_combo;
-  float sample_rate;
 
   void clientResize(int width, int height);
   
@@ -34,3 +36,5 @@ protected:
 public:
   QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND h_parent = NULL);
 };
+
+#endif

@@ -2,6 +2,9 @@
  * \file simple_overdrive_gui.h
  */
 
+#ifndef __SIMPLEOVERDRIVEGUI__
+#define __SIMPLEOVERDRIVEGUI__
+
 #include <qwinwidget.h>
 
 #include <aeffeditor.h>
@@ -38,3 +41,5 @@ protected:
 };
 
 void clientResize(HWND h_parent, int width, int height);
+
+#endif

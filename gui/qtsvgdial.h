@@ -27,8 +27,12 @@ public:
 
     void setSkin(const QString& skin);
     QString skin() const;
+	
+	typedef float (*DisplayFunction)(int value);
 
-private Q_SLOTS:
+	void setDisplayFunction(DisplayFunction function);
+	
+public Q_SLOTS:
     void updateLabelValue();
 
 protected:
@@ -40,6 +44,8 @@ protected:
 
     void init();
 
+	DisplayFunction function;
+	
 private:
     int valueFromPoint(const QPoint &p) const;
     inline int bound(int val) const { return qMax(minimum(), qMin(maximum(), val)); }

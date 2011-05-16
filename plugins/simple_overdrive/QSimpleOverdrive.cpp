@@ -12,17 +12,23 @@
 #include "QSimpleOverdrive.h"
 #include "simple_overdrive_effect.h"
 
+float convertOverdrive(int value)
+{
+  return value / 10.;
+}
+
 QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND h_parent)
-:QWinWidget(h_parent, NULL), simple_overdrive(simple_overdrive), h_parent(h_parent), sample_rate(simple_overdrive->getSampleRate())
+:QWinWidget(h_parent, NULL), simple_overdrive(simple_overdrive), h_parent(h_parent)
 {
   setAttribute(Qt::WA_DeleteOnClose);
 
   QLabel *gain_label = new QLabel("Gain", this);
   gain_slider = new QtSVGDial(this);
+  gain_slider->setDisplayFunction(convertOverdrive);
   gain_slider->setSkin("Beryl");
   gain_slider->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  gain_slider->setMinimum(-400);
-  gain_slider->setMaximum(400);
+  gain_slider->setMinimum(-200);
+  gain_slider->setMaximum(200);
   QLabel* type_label = new QLabel("Oversampling", this);
   type_combo = new QComboBox(this);
   type_combo->addItem("2");
@@ -59,12 +65,12 @@ QSimpleOverdrive::QSimpleOverdrive(SimpleOverdriveEffect* simple_overdrive, HWND
 
 void QSimpleOverdrive::update_gain(int value)
 {
-  simple_overdrive->setParameter(0, std::pow(10, value / 200.));
+  simple_overdrive->setParameter(0, (value + 200.f) / 400);
 }
 
 void QSimpleOverdrive::update_gain(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 200);
+  int intValue = value;
   gain_slider->setValue(intValue);  
 }
 
