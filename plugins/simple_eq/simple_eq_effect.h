@@ -11,7 +11,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include "public.sdk/source/vst2.x/audioeffectx.h"
+#include <audioeffectx.h>
 #include "..\..\blocks\gain_filter.h"
 #include "..\..\blocks\filter.h"
 
