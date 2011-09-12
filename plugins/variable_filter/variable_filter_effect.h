@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-#include "public.sdk/source/vst2.x/audioeffectx.h"
+#include <audioeffectx.h>
 #include "..\..\blocks\variable_filter.h"
 
 

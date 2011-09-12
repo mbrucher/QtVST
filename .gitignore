@@ -4,8 +4,9 @@
 /bin
 /lib
 *.pyc
-*.png
 .scon*
 *.wav
 *.db
 *.pdb
+*~
+*.suo

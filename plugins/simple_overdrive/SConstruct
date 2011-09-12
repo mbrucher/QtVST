@@ -1,0 +1,5 @@
+
+Import('env_plugin')
+
+libmain = env_plugin.SharedLibrary('QtSimpleOverdrive', Glob("*.cpp") + env_plugin['filter_gui'] + [r"..\vstplug.def", ], LIBS = env_plugin['LIBS'] + [env_plugin['filter'], env_plugin['vst_lib']])
+libmain = env_plugin.Install('$LIBDIR', libmain)

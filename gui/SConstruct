@@ -1,0 +1,7 @@
+
+Import('env_plugin')
+
+libs = env_plugin.Object(Glob("*.cpp") + env_plugin.Qrc(Glob("*.qrc")))
+env_plugin['filter_gui'] = libs
+
+Export('env_plugin')
