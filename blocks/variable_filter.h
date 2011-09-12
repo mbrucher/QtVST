@@ -12,11 +12,13 @@
 #define M_PI 3.14159265
 #endif
 
+#include "filter.h"
+
 namespace DSP
 {
 
 template<class Data_Type>
-class VariableFilter
+class VariableFilter: public MonoFilter<Data_Type>
 {
 public:
   typedef Data_Type DataType;
@@ -26,9 +28,12 @@ public:
   {
   }
 
-  void process(const DataType* in, DataType* out, unsigned long nb_samples)
+  DSP_MONOFILTER_DECLARE()
+
+  template<class DataTypeIn, class DataTypeOut>
+  void process(const DataTypeIn* RESTRICT in, DataTypeOut* RESTRICT out, unsigned long size)
   {
-    for(unsigned long i = 0; i < nb_samples; ++i)
+    for(unsigned long i = 0; i < size; ++i)
     {
       yh = in[i] - yl - numerical_attenuation * yb;
       yb = numerical_frequency * yh + yb;

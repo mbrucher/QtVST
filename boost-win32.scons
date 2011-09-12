@@ -7,14 +7,14 @@ Import('env')
 env['boost_suffix'] = ''
 for libpath in os.environ['PATH'].split(';'):
   if env['debug']:
-    l = list(glob.glob(libpath + '\\boost_thread-%s*-mt-gd*.dll' % env['boost']))
+    l = list(glob.glob(libpath + '\\libboost_thread-%s*-mt-gd*.lib' % env['boost']))
   else:
-    l = list(glob.glob(libpath + '\\boost_thread-%s*-mt*.dll' % env['boost']))
+    l = list(glob.glob(libpath + '\\libboost_thread-%s*-mt*.lib' % env['boost']))
   if len(l) > 0:
     env['boost_suffix'] = l[0][len(libpath) + 13:-4]
     env.Append(LIBPATH=[libpath])
     break
-  if os.path.exists(libpath + '/boost_thread.dll') and env['boost_suffix'] != '':
+  if os.path.exists(libpath + '/boost_thread.lib') and env['boost_suffix'] != '':
     env.Append(LIBPATH=[libpath])
     break
 

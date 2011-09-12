@@ -10,6 +10,7 @@ if env['debug']:
     env.Append(CFLAGS='-g -Wall')
     env.Append(CXXFLAGS='-g -Wall')
 if env['optimized']:
+    env.Append(CPPDEFINES = {'USE_RESTRICT' : '__restrict__'})
     env.Append(CFLAGS='-O3')
     env.Append(CXXFLAGS='-O3')
 

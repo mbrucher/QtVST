@@ -60,7 +60,7 @@ if __name__ == "__main__":
   import numpy as np
   import scipy.fftpack as fft
   import scipy.io.wavfile as wav
-  
+
   fs = 44100
   fsin = 200
   n_samples = fs + fs/fsin

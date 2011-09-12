@@ -45,7 +45,7 @@ def oversample2_6point_5_order(signal):
   c5 = odd1 * 0.04317950185225609 - odd2 * 0.01802814255926417 + odd3 * 0.00152170021558204
 
   z = np.array((-1./2, 0), dtype = np.float32)[None,None,:]
-  
+
   return (((((c5 * z + c4) * z + c3) * z + c2) * z + c1) * z + c0).reshape(2, -1)
 
 if __name__ == "__main__":

@@ -1,2 +1,9 @@
 QtVST is a set of VST plugins with a Qt interface.
 Additional blocks for building new plugins are provided
+
+Compilation
+-----------
+
+Boost folder must be given to scons with the option *boostdir*.
+
+On Windows, compilation of the VST plugins is done by setting the VST SDK folder with the scons option vstdir.
