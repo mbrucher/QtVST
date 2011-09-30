@@ -1,13 +1,14 @@
 Qt Simple EQ
 
-An EQ with a Qt GUI. See http://matt.eifelle.com/2011/04/28/announcement-qtsimpleoverdrive-1-0-vst-plugin/ for specific details
+An EQ with a Qt GUI. See http://matt.eifelle.com/2011/10/04/announcement-qtsimpleeq-1-0-vst-plugin/ for specific details
 
 Installation
 ============
-If you don't have Qt 4.7.1 or Visual C++ runtime 10.0, copy the content of the support folder inside c:\windows\system32 or any folder in the PATH environment variable
+If you don't have Qt 4.7.4 or Visual C++ runtime 10.0, copy the content of the support folder inside c:\windows\system32 or any folder in the PATH environment variable
 
 Changelog
 =========
 
 1.0
 ---
+- Original version
