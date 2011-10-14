@@ -16,6 +16,9 @@
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster);
 
+float convert_db_from_ui(int value);
+int convert_db_to_ui(float gain);
+
 //-------------------------------------------------------------------------------------------------------
 class SimpleEQEffect : public QObject, public AudioEffectX
 {

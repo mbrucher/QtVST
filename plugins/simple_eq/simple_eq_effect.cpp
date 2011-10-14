@@ -12,16 +12,62 @@
 
 #include "..\..\blocks\second_order_filter.h"
 
+template<int minimum, int range>
+float convert_VST_from_ui(int gain)
+{
+  return (gain + static_cast<float>(minimum)) / range;
+}
+
+template<int minimum, int range>
+int convert_VST_to_ui(float value)
+{
+  return value * range - minimum;
+}
+
+float convert_db_from_ui(int value)
+{
+  return std::pow(10, value / 100.);
+}
+
+int convert_db_to_ui(float gain)
+{
+  return (std::log(gain) / std::log(10.f) * 100);
+}
+
 static float convert_from_gain(float gain)
 {
-  float value = static_cast<int>(std::log(gain) / std::log(10.f) * 100);
-  return (value + 200) / 400;
+  float value = convert_db_to_ui(gain);
+  return convert_VST_from_ui<200, 400>(value);
 }
 
 static float convert_to_gain(float value)
 {
-  value = value * 400 - 200;
-  return std::pow(10, value / 100.);
+  value = convert_VST_to_ui<200, 400>(value);
+  return convert_db_from_ui(value);
+}
+
+static float convert_from_cut(float cut)
+{
+  float value = convert_db_to_ui(cut);
+  return convert_VST_from_ui<0, 300>(value);
+}
+
+static float convert_to_cut(float cut)
+{
+  cut = convert_VST_to_ui<0, 300>(cut);
+  return convert_db_from_ui(cut);
+}
+
+static float convert_from_Q(float Q)
+{
+  float value = convert_db_to_ui(Q);
+  return convert_VST_from_ui<1, 100>(value);
+}
+
+static float convert_to_Q(float Q)
+{
+  Q = convert_VST_to_ui<1, 100>(Q);
+  return convert_db_from_ui(Q);
 }
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
@@ -175,6 +221,30 @@ void SimpleEQEffect::setParameter (VstInt32 index, float value)
 	  gain_hf = convert_to_gain(value);
       emit update_gain_hf(value);
       break;
+    case 4:
+	  cut_lf = convert_to_cut(value);
+      emit update_cut_lf(value);
+      break;
+    case 5:
+	  cut_lmf = convert_to_cut(value);
+      emit update_cut_lmf(value);
+      break;
+    case 6:
+	  cut_hmf = convert_to_cut(value);
+      emit update_Q_hmf(value);
+      break;
+    case 7:
+	  cut_hf = convert_to_cut(value);
+      emit update_cut_hf(value);
+      break;
+    case 8:
+	  Q_lmf = convert_to_Q(value);
+      emit update_Q_lmf(value);
+      break;
+    case 9:
+	  Q_hmf = convert_to_Q(value);
+      emit update_Q_hmf(value);
+      break;
   }
   update_effects();
 }
@@ -191,6 +261,18 @@ float SimpleEQEffect::getParameter (VstInt32 index)
 	  return convert_from_gain(gain_hmf);
     case 3:
 	  return convert_from_gain(gain_hf);
+    case 4:
+	  return convert_from_cut(cut_lf);
+    case 5:
+	  return convert_from_cut(cut_lmf);
+    case 6:
+	  return convert_from_cut(cut_hmf);
+    case 7:
+	  return convert_from_cut(cut_hf);
+    case 8:
+	  return convert_from_Q(Q_lmf);
+    case 9:
+	  return convert_from_Q(Q_hmf);
   }
 }
 

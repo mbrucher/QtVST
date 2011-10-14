@@ -64,6 +64,14 @@ QSimpleEQ::QSimpleEQ(SimpleEQEffect* simple_eq, HWND h_parent)
   update_gain_lmf(simple_eq->getParameter(1));
   update_gain_hmf(simple_eq->getParameter(2));
   update_gain_hf(simple_eq->getParameter(3));
+
+  update_cut_lf(simple_eq->getParameter(4));
+  update_cut_lmf(simple_eq->getParameter(5));
+  update_cut_hmf(simple_eq->getParameter(6));
+  update_cut_hf(simple_eq->getParameter(7));
+
+  update_Q_lmf(simple_eq->getParameter(8));
+  update_Q_hmf(simple_eq->getParameter(9));
 }
 
 QWidget* QSimpleEQ::create_LF()
@@ -224,61 +232,61 @@ QWidget* QSimpleEQ::create_HF()
 
 void QSimpleEQ::update_gain_lf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   gain_slider_lf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_lmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   gain_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   gain_slider_hmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   gain_slider_hf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_lf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   cut_slider_lf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_lmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   cut_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_hmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   cut_slider_hmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_hf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   cut_slider_hf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_Q_lmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   Q_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_Q_hmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = convert_db_to_ui(value);
   Q_slider_hmf->setValue(intValue);  
 }
 
@@ -292,52 +300,52 @@ void QSimpleEQ::update_setshelf_hf(bool shelf)
 
 void QSimpleEQ::update_gain_lf(int value)
 {
-  simple_eq->setParameter(0, std::pow(10, value / 100.));
+  simple_eq->setParameter(0, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::update_gain_lmf(int value)
 {
-  simple_eq->setParameter(1, std::pow(10, value / 100.));
+  simple_eq->setParameter(1, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::update_gain_hmf(int value)
 {
-  simple_eq->setParameter(2, std::pow(10, value / 100.));
+  simple_eq->setParameter(2, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::update_gain_hf(int value)
 {
-  simple_eq->setParameter(3, std::pow(10, value / 100.));
+  simple_eq->setParameter(3, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::update_cut_lf(int value)
 {
-  simple_eq->setParameter(4, std::pow(10, value / 100.));
+  simple_eq->setParameter(4, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::update_cut_lmf(int value)
 {
-  simple_eq->setParameter(5, std::pow(10, value / 100.));
+  simple_eq->setParameter(5, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::update_cut_hmf(int value)
 {
-  simple_eq->setParameter(6, std::pow(10, value / 100.));
+  simple_eq->setParameter(6, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::update_cut_hf(int value)
 {
-  simple_eq->setParameter(7, std::pow(10, value / 100.));
+  simple_eq->setParameter(7, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::update_Q_lmf(int value)
 {
-  simple_eq->setParameter(8, std::pow(10, value / 100.));
+  simple_eq->setParameter(8, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::update_Q_hmf(int value)
 {
-  simple_eq->setParameter(9, std::pow(10, value / 100.));
+  simple_eq->setParameter(9, convert_db_from_ui(value));
 }
 
 void QSimpleEQ::mousePressEvent(QMouseEvent *e)
