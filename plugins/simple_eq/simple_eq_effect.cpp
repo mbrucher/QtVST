@@ -34,40 +34,60 @@ int convert_db_to_ui(float gain)
   return (std::log(gain) / std::log(10.f) * 100);
 }
 
+float convert_hz_from_ui(int value)
+{
+  return 20 * std::pow(10, value / 100.);
+}
+
+int convert_hz_to_ui(float gain)
+{
+  return (std::log(gain / 20) / std::log(10.f) * 100);
+}
+
+float convert_deci_from_ui(int value)
+{
+  return value / 10.f;
+}
+
+int convert_deci_to_ui(float gain)
+{
+  return gain * 10;
+}
+
 static float convert_from_gain(float gain)
 {
-  float value = convert_db_to_ui(gain);
+  int value = convert_db_to_ui(gain);
   return convert_VST_from_ui<200, 400>(value);
 }
 
 static float convert_to_gain(float value)
 {
-  value = convert_VST_to_ui<200, 400>(value);
-  return convert_db_from_ui(value);
+  int gain = convert_VST_to_ui<200, 400>(value);
+  return convert_db_from_ui(gain);
 }
 
 static float convert_from_cut(float cut)
 {
-  float value = convert_db_to_ui(cut);
+  int value = convert_hz_to_ui(cut);
   return convert_VST_from_ui<0, 300>(value);
 }
 
-static float convert_to_cut(float cut)
+static float convert_to_cut(float value)
 {
-  cut = convert_VST_to_ui<0, 300>(cut);
-  return convert_db_from_ui(cut);
+  int cut = convert_VST_to_ui<0, 300>(value);
+  return convert_hz_from_ui(cut);
 }
 
 static float convert_from_Q(float Q)
 {
-  float value = convert_db_to_ui(Q);
-  return convert_VST_from_ui<1, 100>(value);
+  int value = convert_deci_to_ui(Q);
+  return convert_VST_from_ui<0, 100>(value);
 }
 
-static float convert_to_Q(float Q)
+static float convert_to_Q(float value)
 {
-  Q = convert_VST_to_ui<1, 100>(Q);
-  return convert_db_from_ui(Q);
+  int Q = convert_VST_to_ui<0, 100>(value);
+  return convert_deci_from_ui(Q);
 }
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
@@ -193,7 +213,7 @@ void SimpleEQEffect::update_effects ()
   high_peak_filter->set_Q(Q_hmf);
 
   high_shelving_filter->set_sampling_frequency(sample_rate);
-  high_shelving_filter->set_cut_frequency(gain_hf);
+  high_shelving_filter->set_cut_frequency(cut_hf);
   high_shelving_filter->set_gain(gain_hf);
 }
 
@@ -207,19 +227,19 @@ void SimpleEQEffect::setParameter (VstInt32 index, float value)
   {
     case 0:
 	  gain_lf = convert_to_gain(value);
-      emit update_gain_lf(value);
+      emit update_gain_lf(gain_lf);
       break;
     case 1:
 	  gain_lmf = convert_to_gain(value);
-      emit update_gain_lmf(value);
+      emit update_gain_lmf(gain_lmf);
       break;
     case 2:
 	  gain_hmf = convert_to_gain(value);
-      emit update_gain_hmf(value);
+      emit update_gain_hmf(gain_hmf);
       break;
     case 3:
 	  gain_hf = convert_to_gain(value);
-      emit update_gain_hf(value);
+      emit update_gain_hf(gain_hf);
       break;
     case 4:
 	  cut_lf = convert_to_cut(value);
@@ -231,7 +251,7 @@ void SimpleEQEffect::setParameter (VstInt32 index, float value)
       break;
     case 6:
 	  cut_hmf = convert_to_cut(value);
-      emit update_Q_hmf(value);
+      emit update_cut_hmf(value);
       break;
     case 7:
 	  cut_hf = convert_to_cut(value);
@@ -367,16 +387,16 @@ void SimpleEQEffect::getParameterLabel (VstInt32 index, char* label)
 	    vst_strncpy (label, "", kVstMaxParamStrLen);
       break;
     case 4:
-	    vst_strncpy (label, "", kVstMaxParamStrLen);
+	    vst_strncpy (label, "Hz", kVstMaxParamStrLen);
       break;
     case 5:
-	    vst_strncpy (label, "", kVstMaxParamStrLen);
+	    vst_strncpy (label, "Hz", kVstMaxParamStrLen);
       break;
     case 6:
-	    vst_strncpy (label, "", kVstMaxParamStrLen);
+	    vst_strncpy (label, "Hz", kVstMaxParamStrLen);
       break;
     case 7:
-	    vst_strncpy (label, "", kVstMaxParamStrLen);
+	    vst_strncpy (label, "Hz", kVstMaxParamStrLen);
       break;
     case 8:
 	    vst_strncpy (label, "", kVstMaxParamStrLen);

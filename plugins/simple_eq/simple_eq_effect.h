@@ -18,6 +18,10 @@ AudioEffect* createEffectInstance (audioMasterCallback audioMaster);
 
 float convert_db_from_ui(int value);
 int convert_db_to_ui(float gain);
+float convert_hz_from_ui(int value);
+int convert_hz_to_ui(float gain);
+float convert_deci_from_ui(int value);
+int convert_deci_to_ui(float gain);
 
 //-------------------------------------------------------------------------------------------------------
 class SimpleEQEffect : public QObject, public AudioEffectX
