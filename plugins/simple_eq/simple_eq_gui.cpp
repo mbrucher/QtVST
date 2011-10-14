@@ -23,20 +23,20 @@ bool GUISimpleEQ::open(void* ptr)
   widget->show();
   clientResize(static_cast<HWND>(ptr), widget->width(), widget->height());
 
-  connect(this, SIGNAL(update_gain_lf(float)), widget, SLOT(update_gain_lf(float)));
-  connect(this, SIGNAL(update_gain_lmf(float)), widget, SLOT(update_gain_lmf(float)));
-  connect(this, SIGNAL(update_gain_hmf(float)), widget, SLOT(update_gain_hmf(float)));
-  connect(this, SIGNAL(update_gain_hf(float)), widget, SLOT(update_gain_hf(float)));
+  connect(this, SIGNAL(update_gain_lf(float)), widget, SLOT(update_gain_lf(float)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_gain_lmf(float)), widget, SLOT(update_gain_lmf(float)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_gain_hmf(float)), widget, SLOT(update_gain_hmf(float)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_gain_hf(float)), widget, SLOT(update_gain_hf(float)), Qt::QueuedConnection);
 
-  connect(this, SIGNAL(update_cut_lf(float)), widget, SLOT(update_cut_lf(float)));
-  connect(this, SIGNAL(update_cut_lmf(float)), widget, SLOT(update_cut_lmf(float)));
-  connect(this, SIGNAL(update_cut_hmf(float)), widget, SLOT(update_cut_hmf(float)));
-  connect(this, SIGNAL(update_cut_hf(float)), widget, SLOT(update_cut_hf(float)));
+  connect(this, SIGNAL(update_cut_lf(float)), widget, SLOT(update_cut_lf(float)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_cut_lmf(float)), widget, SLOT(update_cut_lmf(float)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_cut_hmf(float)), widget, SLOT(update_cut_hmf(float)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_cut_hf(float)), widget, SLOT(update_cut_hf(float)), Qt::QueuedConnection);
 
-  connect(this, SIGNAL(update_setshelf_hf(bool)), widget, SLOT(update_setshelf_hf(bool)));
-  connect(this, SIGNAL(update_setshelf_lf(bool)), widget, SLOT(update_setshelf_lf(bool)));
-  connect(this, SIGNAL(update_Q_lmf(float)), widget, SLOT(update_Q_lmf(float)));
-  connect(this, SIGNAL(update_Q_hmf(float)), widget, SLOT(update_Q_hmf(float)));
+  connect(this, SIGNAL(update_setshelf_hf(bool)), widget, SLOT(update_setshelf_hf(bool)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_setshelf_lf(bool)), widget, SLOT(update_setshelf_lf(bool)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_Q_lmf(float)), widget, SLOT(update_Q_lmf(float)), Qt::QueuedConnection);
+  connect(this, SIGNAL(update_Q_hmf(float)), widget, SLOT(update_Q_hmf(float)), Qt::QueuedConnection);
   return true;
 }
 

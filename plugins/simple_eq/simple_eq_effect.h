@@ -12,8 +12,7 @@
 #include <boost/thread/mutex.hpp>
 
 #include <audioeffectx.h>
-#include "..\..\blocks\gain_filter.h"
-#include "..\..\blocks\filter.h"
+#include "..\..\blocks\second_order_filter.h"
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster);
 
@@ -55,15 +54,15 @@ public:
 
 protected:
   static const int max_frequency = 22000;
-  DSP::MonoFilter<double>* create_low_shelving();
-  DSP::MonoFilter<double>* create_low_peak();
-  DSP::MonoFilter<double>* create_high_peak();
-  DSP::MonoFilter<double>* create_high_shelving();
+  DSP::SecondOrderFilter<DSP::LowShelvingCoefficients<double> >* create_low_shelving();
+  DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* create_low_peak();
+  DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* create_high_peak();
+  DSP::SecondOrderFilter<DSP::HighShelvingCoefficients<double> >* create_high_shelving();
 
-  boost::scoped_ptr<DSP::MonoFilter<double> > low_shelving_filter;
-  boost::scoped_ptr<DSP::MonoFilter<double> > low_peak_filter;
-  boost::scoped_ptr<DSP::MonoFilter<double> > high_peak_filter;
-  boost::scoped_ptr<DSP::MonoFilter<double> > high_shelving_filter;
+  boost::scoped_ptr<DSP::SecondOrderFilter<DSP::LowShelvingCoefficients<double> > > low_shelving_filter;
+  boost::scoped_ptr<DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> > > low_peak_filter;
+  boost::scoped_ptr<DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> > > high_peak_filter;
+  boost::scoped_ptr<DSP::SecondOrderFilter<DSP::HighShelvingCoefficients<double> > > high_shelving_filter;
   char programName[kVstMaxProgNameLen + 1];
   float sample_rate;
   float gain_lf;
@@ -89,6 +88,7 @@ protected:
   
   void resize(int new_size);
   void create_effects ();
+  void update_effects ();
 
 signals:
   void update_gain_lf(float value);

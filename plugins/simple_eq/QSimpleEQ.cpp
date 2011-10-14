@@ -56,8 +56,14 @@ QSimpleEQ::QSimpleEQ(SimpleEQEffect* simple_eq, HWND h_parent)
   setStyleSheet(css);
 
   connect(gain_slider_lf, SIGNAL(valueChanged(int)), this, SLOT(update_gain_lf(int)));
+  connect(gain_slider_lmf, SIGNAL(valueChanged(int)), this, SLOT(update_gain_lmf(int)));
+  connect(gain_slider_hmf, SIGNAL(valueChanged(int)), this, SLOT(update_gain_hmf(int)));
+  connect(gain_slider_hf, SIGNAL(valueChanged(int)), this, SLOT(update_gain_hf(int)));
 
   update_gain_lf(simple_eq->getParameter(0));
+  update_gain_lmf(simple_eq->getParameter(1));
+  update_gain_hmf(simple_eq->getParameter(2));
+  update_gain_hf(simple_eq->getParameter(3));
 }
 
 QWidget* QSimpleEQ::create_LF()

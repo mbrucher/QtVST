@@ -12,13 +12,25 @@
 
 #include "..\..\blocks\second_order_filter.h"
 
+static float convert_from_gain(float gain)
+{
+  float value = static_cast<int>(std::log(gain) / std::log(10.f) * 100);
+  return (value + 200) / 400;
+}
+
+static float convert_to_gain(float value)
+{
+  value = value * 400 - 200;
+  return std::pow(10, value / 100.);
+}
+
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 {
 	return new SimpleEQEffect (audioMaster);
 }
 
 SimpleEQEffect::SimpleEQEffect (audioMasterCallback audioMaster)
-: AudioEffectX (audioMaster, 1, 1), gain_lf(1), gain_lmf(1), gain_hmf(1), gain_hf(1), cut_lf(100), cut_lmf(1000), cut_hmf(5000), cut_hf(10000), Q_lmf(1), Q_hmf(1), chunk(NULL), size(0)	// 1 program, 1 parameter only
+: AudioEffectX (audioMaster, 1, 10), gain_lf(1), gain_lmf(1), gain_hmf(1), gain_hf(1), cut_lf(100), cut_lmf(1000), cut_hmf(5000), cut_hf(10000), Q_lmf(1), Q_hmf(1), chunk(NULL), size(0)	// 1 program, 1 parameter only
 {
   setNumInputs (1);		// mono in
   setNumOutputs (1);		// mono out
@@ -115,25 +127,56 @@ void SimpleEQEffect::getProgramName (char* name)
 void SimpleEQEffect::setSampleRate (float sample_rate)
 {
   this->sample_rate = sample_rate;
-  create_effects();
+  update_effects();
+}
+
+void SimpleEQEffect::update_effects ()
+{
+  low_shelving_filter->set_sampling_frequency(sample_rate);
+  low_shelving_filter->set_cut_frequency(cut_lf);
+  low_shelving_filter->set_gain(gain_lf);
+
+  low_peak_filter->set_sampling_frequency(sample_rate);
+  low_peak_filter->set_cut_frequency(cut_lmf);
+  low_peak_filter->set_gain(gain_lmf);
+  low_peak_filter->set_Q(Q_lmf);
+
+  high_peak_filter->set_sampling_frequency(sample_rate);
+  high_peak_filter->set_cut_frequency(cut_hmf);
+  high_peak_filter->set_gain(gain_hmf);
+  high_peak_filter->set_Q(Q_hmf);
+
+  high_shelving_filter->set_sampling_frequency(sample_rate);
+  high_shelving_filter->set_cut_frequency(gain_hf);
+  high_shelving_filter->set_gain(gain_hf);
 }
 
 float SimpleEQEffect::getSampleRate ()
 {
-  return sample_rate;;
+  return sample_rate;
 }
 void SimpleEQEffect::setParameter (VstInt32 index, float value)
 {
   switch(index)
   {
     case 0:
-    {
-//      gain_filter->set_gain(value);
-//      gain = value;
+	  gain_lf = convert_to_gain(value);
       emit update_gain_lf(value);
       break;
-    }
+    case 1:
+	  gain_lmf = convert_to_gain(value);
+      emit update_gain_lmf(value);
+      break;
+    case 2:
+	  gain_hmf = convert_to_gain(value);
+      emit update_gain_hmf(value);
+      break;
+    case 3:
+	  gain_hf = convert_to_gain(value);
+      emit update_gain_hf(value);
+      break;
   }
+  update_effects();
 }
 
 float SimpleEQEffect::getParameter (VstInt32 index)
@@ -141,8 +184,13 @@ float SimpleEQEffect::getParameter (VstInt32 index)
   switch(index)
   {
     case 0:
-	  return 0;
-//      return gain;
+	  return convert_from_gain(gain_lf);
+    case 1:
+	  return convert_from_gain(gain_lmf);
+    case 2:
+	  return convert_from_gain(gain_hmf);
+    case 3:
+	  return convert_from_gain(gain_hf);
   }
 }
 
@@ -151,7 +199,34 @@ void SimpleEQEffect::getParameterName (VstInt32 index, char* label)
   switch(index)
   {
     case 0:
-	    vst_strncpy (label, "Gain", kVstMaxParamStrLen);
+	    vst_strncpy (label, "Gain LF", kVstMaxParamStrLen);
+      break;
+    case 1:
+	    vst_strncpy (label, "Gain LMF", kVstMaxParamStrLen);
+      break;
+    case 2:
+	    vst_strncpy (label, "Gain HMF", kVstMaxParamStrLen);
+      break;
+    case 3:
+	    vst_strncpy (label, "Gain HF", kVstMaxParamStrLen);
+      break;
+    case 4:
+	    vst_strncpy (label, "Cut LF", kVstMaxParamStrLen);
+      break;
+    case 5:
+	    vst_strncpy (label, "Cut LMF", kVstMaxParamStrLen);
+      break;
+    case 6:
+	    vst_strncpy (label, "Cut HMF", kVstMaxParamStrLen);
+      break;
+    case 7:
+	    vst_strncpy (label, "Cut HF", kVstMaxParamStrLen);
+      break;
+    case 8:
+	    vst_strncpy (label, "Q LMF", kVstMaxParamStrLen);
+      break;
+    case 9:
+	    vst_strncpy (label, "Q HMF", kVstMaxParamStrLen);
       break;
   }
 }
@@ -163,6 +238,33 @@ void SimpleEQEffect::getParameterDisplay (VstInt32 index, char* text)
     case 0:
       float2string (gain_lf, text, kVstMaxParamStrLen);
       break;
+    case 1:
+      float2string (gain_lmf, text, kVstMaxParamStrLen);
+      break;
+    case 2:
+      float2string (gain_hmf, text, kVstMaxParamStrLen);
+      break;
+    case 3:
+      float2string (gain_hf, text, kVstMaxParamStrLen);
+      break;
+    case 4:
+      float2string (cut_lf, text, kVstMaxParamStrLen);
+      break;
+    case 5:
+      float2string (cut_lmf, text, kVstMaxParamStrLen);
+      break;
+    case 6:
+      float2string (cut_hmf, text, kVstMaxParamStrLen);
+      break;
+    case 7:
+      float2string (cut_hf, text, kVstMaxParamStrLen);
+      break;
+    case 8:
+      float2string (Q_lmf, text, kVstMaxParamStrLen);
+      break;
+    case 9:
+      float2string (Q_hmf, text, kVstMaxParamStrLen);
+      break;
   }
 }
 
@@ -171,6 +273,33 @@ void SimpleEQEffect::getParameterLabel (VstInt32 index, char* label)
   switch(index)
   {
     case 0:
+	    vst_strncpy (label, "", kVstMaxParamStrLen);
+      break;
+    case 1:
+	    vst_strncpy (label, "", kVstMaxParamStrLen);
+      break;
+    case 2:
+	    vst_strncpy (label, "", kVstMaxParamStrLen);
+      break;
+    case 3:
+	    vst_strncpy (label, "", kVstMaxParamStrLen);
+      break;
+    case 4:
+	    vst_strncpy (label, "", kVstMaxParamStrLen);
+      break;
+    case 5:
+	    vst_strncpy (label, "", kVstMaxParamStrLen);
+      break;
+    case 6:
+	    vst_strncpy (label, "", kVstMaxParamStrLen);
+      break;
+    case 7:
+	    vst_strncpy (label, "", kVstMaxParamStrLen);
+      break;
+    case 8:
+	    vst_strncpy (label, "", kVstMaxParamStrLen);
+      break;
+    case 9:
 	    vst_strncpy (label, "", kVstMaxParamStrLen);
       break;
   }
@@ -221,7 +350,7 @@ void SimpleEQEffect::processDoubleReplacing (double** inputs, double** outputs, 
   high_shelving_filter->process(temp_array.get(), outputs[0], sampleFrames);
 }
 
-DSP::MonoFilter<double>* SimpleEQEffect::create_low_shelving()
+DSP::SecondOrderFilter<DSP::LowShelvingCoefficients<double> >* SimpleEQEffect::create_low_shelving()
 {
   DSP::SecondOrderFilter<DSP::LowShelvingCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::LowShelvingCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
@@ -231,7 +360,7 @@ DSP::MonoFilter<double>* SimpleEQEffect::create_low_shelving()
   return filter;
 }
 
-DSP::MonoFilter<double>* SimpleEQEffect::create_low_peak()
+DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* SimpleEQEffect::create_low_peak()
 {
   DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
@@ -242,7 +371,7 @@ DSP::MonoFilter<double>* SimpleEQEffect::create_low_peak()
   return filter;
 }
 
-DSP::MonoFilter<double>* SimpleEQEffect::create_high_peak()
+DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* SimpleEQEffect::create_high_peak()
 {
   DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
@@ -253,7 +382,7 @@ DSP::MonoFilter<double>* SimpleEQEffect::create_high_peak()
   return filter;
 }
 
-DSP::MonoFilter<double>* SimpleEQEffect::create_high_shelving()
+DSP::SecondOrderFilter<DSP::HighShelvingCoefficients<double> >* SimpleEQEffect::create_high_shelving()
 {
   DSP::SecondOrderFilter<DSP::HighShelvingCoefficients<double> >* filter = new DSP::SecondOrderFilter<DSP::HighShelvingCoefficients<double> >;
   filter->set_sampling_frequency(sample_rate);
