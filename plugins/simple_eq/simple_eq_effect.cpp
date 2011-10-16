@@ -227,19 +227,19 @@ void SimpleEQEffect::setParameter (VstInt32 index, float value)
   {
     case 0:
 	  gain_lf = convert_to_gain(value);
-      emit update_gain_lf(gain_lf);
+      emit update_gain_lf(value);
       break;
     case 1:
 	  gain_lmf = convert_to_gain(value);
-      emit update_gain_lmf(gain_lmf);
+      emit update_gain_lmf(value);
       break;
     case 2:
 	  gain_hmf = convert_to_gain(value);
-      emit update_gain_hmf(gain_hmf);
+      emit update_gain_hmf(value);
       break;
     case 3:
 	  gain_hf = convert_to_gain(value);
-      emit update_gain_hf(gain_hf);
+      emit update_gain_hf(value);
       break;
     case 4:
 	  cut_lf = convert_to_cut(value);

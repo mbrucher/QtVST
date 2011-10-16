@@ -240,25 +240,25 @@ QWidget* QSimpleEQ::create_HF()
 
 void QSimpleEQ::update_gain_lf(float value)
 {
-  int intValue = value * 400 - 200 + .5;
+  int intValue = value * 400 - 200;
   gain_slider_lf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_lmf(float value)
 {
-  int intValue = value * 400 - 200 + .5;
+  int intValue = value * 400 - 200;
   gain_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hmf(float value)
 {
-  int intValue = value * 400 - 200 + .5;
+  int intValue = value * 400 - 200;
   gain_slider_hmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hf(float value)
 {
-  int intValue = value * 400 - 200 + .5;
+  int intValue = value * 400 - 200;
   gain_slider_hf->setValue(intValue);  
 }
 
