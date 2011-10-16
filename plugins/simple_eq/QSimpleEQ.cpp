@@ -90,8 +90,8 @@ QWidget* QSimpleEQ::create_LF()
   gain_slider_lf->setDisplayFunction(convertGain);
   gain_slider_lf->setSkin("Beryl");
   gain_slider_lf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  gain_slider_lf->setMinimum(-200);
-  gain_slider_lf->setMaximum(200);
+  gain_slider_lf->setMinimum(-gainMin);
+  gain_slider_lf->setMaximum(-gainMin + gainRange);
   gain_slider_lf->updateLabelValue();
 
   cut_slider_lf = new QtSVGDial;
@@ -132,8 +132,8 @@ QWidget* QSimpleEQ::create_LMF()
   gain_slider_lmf->setDisplayFunction(convertGain);
   gain_slider_lmf->setSkin("Beryl");
   gain_slider_lmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  gain_slider_lmf->setMinimum(-200);
-  gain_slider_lmf->setMaximum(200);
+  gain_slider_lmf->setMinimum(-gainMin);
+  gain_slider_lmf->setMaximum(-gainMin + gainRange);
   gain_slider_lmf->updateLabelValue();
 
   cut_slider_lmf = new QtSVGDial;
@@ -176,8 +176,8 @@ QWidget* QSimpleEQ::create_HMF()
   gain_slider_hmf->setDisplayFunction(convertGain);
   gain_slider_hmf->setSkin("Beryl");
   gain_slider_hmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  gain_slider_hmf->setMinimum(-200);
-  gain_slider_hmf->setMaximum(200);
+  gain_slider_hmf->setMinimum(-gainMin);
+  gain_slider_hmf->setMaximum(-gainMin + gainRange);
   gain_slider_hmf->updateLabelValue();
 
   cut_slider_hmf = new QtSVGDial;
@@ -212,8 +212,8 @@ QWidget* QSimpleEQ::create_HF()
   gain_slider_hf->setDisplayFunction(convertGain);
   gain_slider_hf->setSkin("Beryl");
   gain_slider_hf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  gain_slider_hf->setMinimum(-200);
-  gain_slider_hf->setMaximum(200);
+  gain_slider_hf->setMinimum(-gainMin);
+  gain_slider_hf->setMaximum(-gainMin + gainRange);
   gain_slider_hf->updateLabelValue();
 
   cut_slider_hf = new QtSVGDial;
@@ -240,25 +240,25 @@ QWidget* QSimpleEQ::create_HF()
 
 void QSimpleEQ::update_gain_lf(float value)
 {
-  int intValue = value * 400 - 200;
+  int intValue = value * gainRange - gainMin;
   gain_slider_lf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_lmf(float value)
 {
-  int intValue = value * 400 - 200;
+  int intValue = value * gainRange - gainMin;
   gain_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hmf(float value)
 {
-  int intValue = value * 400 - 200;
+  int intValue = value * gainRange - gainMin;
   gain_slider_hmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hf(float value)
 {
-  int intValue = value * 400 - 200;
+  int intValue = value * gainRange - gainMin;
   gain_slider_hf->setValue(intValue);  
 }
 
@@ -308,22 +308,22 @@ void QSimpleEQ::update_setshelf_hf(bool shelf)
 
 void QSimpleEQ::update_gain_lf(int value)
 {
-  simple_eq->setParameter(0, (value + 200.) / 400);
+  simple_eq->setParameter(0, (value + static_cast<float>(gainMin)) / gainRange);
 }
 
 void QSimpleEQ::update_gain_lmf(int value)
 {
-  simple_eq->setParameter(1, (value + 200.) / 400);
+  simple_eq->setParameter(1, (value + static_cast<float>(gainMin)) / gainRange);
 }
 
 void QSimpleEQ::update_gain_hmf(int value)
 {
-  simple_eq->setParameter(2, (value + 200.) / 400);
+  simple_eq->setParameter(2, (value + static_cast<float>(gainMin)) / gainRange);
 }
 
 void QSimpleEQ::update_gain_hf(int value)
 {
-  simple_eq->setParameter(3, (value + 200.) / 400);
+  simple_eq->setParameter(3, (value + static_cast<float>(gainMin)) / gainRange);
 }
 
 void QSimpleEQ::update_cut_lf(int value)

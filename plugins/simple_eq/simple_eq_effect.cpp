@@ -57,12 +57,12 @@ int convert_deci_to_ui(float gain)
 static float convert_from_gain(float gain)
 {
   int value = convert_db_to_ui(gain);
-  return convert_VST_from_ui<200, 400>(value);
+  return convert_VST_from_ui<gainMin, gainRange>(value);
 }
 
 static float convert_to_gain(float value)
 {
-  int gain = convert_VST_to_ui<200, 400>(value);
+  int gain = convert_VST_to_ui<gainMin, gainRange>(value);
   return convert_db_from_ui(gain);
 }
 

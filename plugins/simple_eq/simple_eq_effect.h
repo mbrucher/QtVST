@@ -23,6 +23,9 @@ int convert_hz_to_ui(float gain);
 float convert_deci_from_ui(int value);
 int convert_deci_to_ui(float gain);
 
+const int gainMin = 200;
+const int gainRange = 400;
+
 //-------------------------------------------------------------------------------------------------------
 class SimpleEQEffect : public QObject, public AudioEffectX
 {
