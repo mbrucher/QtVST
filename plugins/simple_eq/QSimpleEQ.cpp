@@ -240,49 +240,49 @@ QWidget* QSimpleEQ::create_HF()
 
 void QSimpleEQ::update_gain_lf(float value)
 {
-  int intValue = convert_db_to_ui(value);
+  int intValue = value * 400 - 200 + .5;
   gain_slider_lf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_lmf(float value)
 {
-  int intValue = convert_db_to_ui(value);
+  int intValue = value * 400 - 200 + .5;
   gain_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hmf(float value)
 {
-  int intValue = convert_db_to_ui(value);
+  int intValue = value * 400 - 200 + .5;
   gain_slider_hmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hf(float value)
 {
-  int intValue = convert_db_to_ui(value);
+  int intValue = value * 400 - 200 + .5;
   gain_slider_hf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_lf(float value)
 {
-  int intValue = convert_hz_to_ui(value);
+  int intValue = value * 300 + .5;
   cut_slider_lf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_lmf(float value)
 {
-  int intValue = convert_hz_to_ui(value);
+  int intValue = value * 300 + .5;
   cut_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_hmf(float value)
 {
-  int intValue = convert_hz_to_ui(value);
+  int intValue = value * 300 + .5;
   cut_slider_hmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_hf(float value)
 {
-  int intValue = convert_hz_to_ui(value);
+  int intValue = value * 300 + .5;
   cut_slider_hf->setValue(intValue);  
 }
 
@@ -308,42 +308,42 @@ void QSimpleEQ::update_setshelf_hf(bool shelf)
 
 void QSimpleEQ::update_gain_lf(int value)
 {
-  simple_eq->setParameter(0, (value + 200. / 400));
+  simple_eq->setParameter(0, (value + 200.) / 400);
 }
 
 void QSimpleEQ::update_gain_lmf(int value)
 {
-  simple_eq->setParameter(1, (value + 200. / 400));
+  simple_eq->setParameter(1, (value + 200.) / 400);
 }
 
 void QSimpleEQ::update_gain_hmf(int value)
 {
-  simple_eq->setParameter(2, (value + 200. / 400));
+  simple_eq->setParameter(2, (value + 200.) / 400);
 }
 
 void QSimpleEQ::update_gain_hf(int value)
 {
-  simple_eq->setParameter(3, (value + 200. / 400));
+  simple_eq->setParameter(3, (value + 200.) / 400);
 }
 
 void QSimpleEQ::update_cut_lf(int value)
 {
-  simple_eq->setParameter(4, convert_hz_from_ui(value));
+  simple_eq->setParameter(4, value / 300.f);
 }
 
 void QSimpleEQ::update_cut_lmf(int value)
 {
-  simple_eq->setParameter(5, convert_hz_from_ui(value));
+  simple_eq->setParameter(5, value / 300.f);
 }
 
 void QSimpleEQ::update_cut_hmf(int value)
 {
-  simple_eq->setParameter(6, convert_hz_from_ui(value));
+  simple_eq->setParameter(6, value / 300.f);
 }
 
 void QSimpleEQ::update_cut_hf(int value)
 {
-  simple_eq->setParameter(7, convert_hz_from_ui(value));
+  simple_eq->setParameter(7, value / 300.f);
 }
 
 void QSimpleEQ::update_Q_lmf(int value)
