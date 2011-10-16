@@ -58,9 +58,6 @@ public:
 
   virtual void resume();
   virtual void suspend();
-  
-  virtual VstInt32 getChunk (void **data, bool isPreset=false);
-  virtual VstInt32 setChunk (void *data, VstInt32 byteSize, bool isPreset=false);
 
 protected:
   static const int max_frequency = 22000;

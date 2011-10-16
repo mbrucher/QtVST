@@ -144,26 +144,7 @@ void SimpleEQEffect::suspend()
   }
   AudioEffectX::suspend();
 }
-  
-VstInt32 SimpleEQEffect::getChunk (void **data, bool isPreset)
-{
-  chunk = reinterpret_cast<char*>(malloc(10 * sizeof(float)));
-  *data = reinterpret_cast<void*>(chunk);
-  
-  return (10 * sizeof(float));
-}
 
-VstInt32 SimpleEQEffect::setChunk (void *data, VstInt32 byteSize, bool isPreset)
-{
-  if(byteSize < sizeof(float) + sizeof(int))
-  {
-    return 0;
-  }
-  setParameter(0, *reinterpret_cast<float*>(data));
-  create_effects();
-
-  return 10 * sizeof(float);
-}
 
 void SimpleEQEffect::create_effects ()
 {
