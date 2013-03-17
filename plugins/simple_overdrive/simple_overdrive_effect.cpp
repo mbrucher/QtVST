@@ -174,7 +174,7 @@ void SimpleOverdriveEffect::getParameterLabel (VstInt32 index, char* label)
   switch(index)
   {
     case 0:
-	    vst_strncpy (label, "", kVstMaxParamStrLen);
+	    vst_strncpy (label, "dB", kVstMaxParamStrLen);
       break;
   }
 }
