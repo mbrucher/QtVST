@@ -26,7 +26,7 @@ private:
 
   void compute_coeffs()
   {
-    DataType c = std::tan(boost::math::constants::pi<DataType>() * bandwidth_frequency / sampling_frequency);
+    DataType c = std::tan(boost::math::constants::pi<DataType>() * cut_frequency / sampling_frequency);
     DataType d = (1 + std::sqrt(2.) * c + c * c);
     DataType Q_inv = 1 / Q;
 

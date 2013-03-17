@@ -56,8 +56,30 @@ QSimpleEQ::QSimpleEQ(SimpleEQEffect* simple_eq, HWND h_parent)
   setStyleSheet(css);
 
   connect(gain_slider_lf, SIGNAL(valueChanged(int)), this, SLOT(update_gain_lf(int)));
+  connect(gain_slider_lmf, SIGNAL(valueChanged(int)), this, SLOT(update_gain_lmf(int)));
+  connect(gain_slider_hmf, SIGNAL(valueChanged(int)), this, SLOT(update_gain_hmf(int)));
+  connect(gain_slider_hf, SIGNAL(valueChanged(int)), this, SLOT(update_gain_hf(int)));
+
+  connect(cut_slider_lf, SIGNAL(valueChanged(int)), this, SLOT(update_cut_lf(int)));
+  connect(cut_slider_lmf, SIGNAL(valueChanged(int)), this, SLOT(update_cut_lmf(int)));
+  connect(cut_slider_hmf, SIGNAL(valueChanged(int)), this, SLOT(update_cut_hmf(int)));
+  connect(cut_slider_hf, SIGNAL(valueChanged(int)), this, SLOT(update_cut_hf(int)));
+
+  connect(Q_slider_lmf, SIGNAL(valueChanged(int)), this, SLOT(update_Q_lmf(int)));
+  connect(Q_slider_hmf, SIGNAL(valueChanged(int)), this, SLOT(update_Q_hmf(int)));
 
   update_gain_lf(simple_eq->getParameter(0));
+  update_gain_lmf(simple_eq->getParameter(1));
+  update_gain_hmf(simple_eq->getParameter(2));
+  update_gain_hf(simple_eq->getParameter(3));
+
+  update_cut_lf(simple_eq->getParameter(4));
+  update_cut_lmf(simple_eq->getParameter(5));
+  update_cut_hmf(simple_eq->getParameter(6));
+  update_cut_hf(simple_eq->getParameter(7));
+
+  update_Q_lmf(simple_eq->getParameter(8));
+  update_Q_hmf(simple_eq->getParameter(9));
 }
 
 QWidget* QSimpleEQ::create_LF()
@@ -68,8 +90,8 @@ QWidget* QSimpleEQ::create_LF()
   gain_slider_lf->setDisplayFunction(convertGain);
   gain_slider_lf->setSkin("Beryl");
   gain_slider_lf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  gain_slider_lf->setMinimum(-200);
-  gain_slider_lf->setMaximum(200);
+  gain_slider_lf->setMinimum(-gainMin);
+  gain_slider_lf->setMaximum(-gainMin + gainRange);
   gain_slider_lf->updateLabelValue();
 
   cut_slider_lf = new QtSVGDial;
@@ -110,8 +132,8 @@ QWidget* QSimpleEQ::create_LMF()
   gain_slider_lmf->setDisplayFunction(convertGain);
   gain_slider_lmf->setSkin("Beryl");
   gain_slider_lmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  gain_slider_lmf->setMinimum(-200);
-  gain_slider_lmf->setMaximum(200);
+  gain_slider_lmf->setMinimum(-gainMin);
+  gain_slider_lmf->setMaximum(-gainMin + gainRange);
   gain_slider_lmf->updateLabelValue();
 
   cut_slider_lmf = new QtSVGDial;
@@ -154,8 +176,8 @@ QWidget* QSimpleEQ::create_HMF()
   gain_slider_hmf->setDisplayFunction(convertGain);
   gain_slider_hmf->setSkin("Beryl");
   gain_slider_hmf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  gain_slider_hmf->setMinimum(-200);
-  gain_slider_hmf->setMaximum(200);
+  gain_slider_hmf->setMinimum(-gainMin);
+  gain_slider_hmf->setMaximum(-gainMin + gainRange);
   gain_slider_hmf->updateLabelValue();
 
   cut_slider_hmf = new QtSVGDial;
@@ -190,8 +212,8 @@ QWidget* QSimpleEQ::create_HF()
   gain_slider_hf->setDisplayFunction(convertGain);
   gain_slider_hf->setSkin("Beryl");
   gain_slider_hf->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  gain_slider_hf->setMinimum(-200);
-  gain_slider_hf->setMaximum(200);
+  gain_slider_hf->setMinimum(-gainMin);
+  gain_slider_hf->setMaximum(-gainMin + gainRange);
   gain_slider_hf->updateLabelValue();
 
   cut_slider_hf = new QtSVGDial;
@@ -218,61 +240,61 @@ QWidget* QSimpleEQ::create_HF()
 
 void QSimpleEQ::update_gain_lf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * gainRange - gainMin;
   gain_slider_lf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_lmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * gainRange - gainMin;
   gain_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * gainRange - gainMin;
   gain_slider_hmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_gain_hf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * gainRange - gainMin;
   gain_slider_hf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_lf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * 300 + .5;
   cut_slider_lf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_lmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * 300 + .5;
   cut_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_hmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * 300 + .5;
   cut_slider_hmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_cut_hf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * 300 + .5;
   cut_slider_hf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_Q_lmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * 100 + .5;
   Q_slider_lmf->setValue(intValue);  
 }
 
 void QSimpleEQ::update_Q_hmf(float value)
 {
-  int intValue = static_cast<int>(std::log(value) / std::log(10.f) * 100);
+  int intValue = value * 100 + .5;
   Q_slider_hmf->setValue(intValue);  
 }
 
@@ -286,52 +308,52 @@ void QSimpleEQ::update_setshelf_hf(bool shelf)
 
 void QSimpleEQ::update_gain_lf(int value)
 {
-  simple_eq->setParameter(0, std::pow(10, value / 100.));
+  simple_eq->setParameter(0, (value + static_cast<float>(gainMin)) / gainRange);
 }
 
 void QSimpleEQ::update_gain_lmf(int value)
 {
-  simple_eq->setParameter(1, std::pow(10, value / 100.));
+  simple_eq->setParameter(1, (value + static_cast<float>(gainMin)) / gainRange);
 }
 
 void QSimpleEQ::update_gain_hmf(int value)
 {
-  simple_eq->setParameter(2, std::pow(10, value / 100.));
+  simple_eq->setParameter(2, (value + static_cast<float>(gainMin)) / gainRange);
 }
 
 void QSimpleEQ::update_gain_hf(int value)
 {
-  simple_eq->setParameter(3, std::pow(10, value / 100.));
+  simple_eq->setParameter(3, (value + static_cast<float>(gainMin)) / gainRange);
 }
 
 void QSimpleEQ::update_cut_lf(int value)
 {
-  simple_eq->setParameter(4, std::pow(10, value / 100.));
+  simple_eq->setParameter(4, value / 300.f);
 }
 
 void QSimpleEQ::update_cut_lmf(int value)
 {
-  simple_eq->setParameter(5, std::pow(10, value / 100.));
+  simple_eq->setParameter(5, value / 300.f);
 }
 
 void QSimpleEQ::update_cut_hmf(int value)
 {
-  simple_eq->setParameter(6, std::pow(10, value / 100.));
+  simple_eq->setParameter(6, value / 300.f);
 }
 
 void QSimpleEQ::update_cut_hf(int value)
 {
-  simple_eq->setParameter(7, std::pow(10, value / 100.));
+  simple_eq->setParameter(7, value / 300.f);
 }
 
 void QSimpleEQ::update_Q_lmf(int value)
 {
-  simple_eq->setParameter(8, std::pow(10, value / 100.));
+  simple_eq->setParameter(8, value / 100.f);
 }
 
 void QSimpleEQ::update_Q_hmf(int value)
 {
-  simple_eq->setParameter(9, std::pow(10, value / 100.));
+  simple_eq->setParameter(9, value / 100.f);
 }
 
 void QSimpleEQ::mousePressEvent(QMouseEvent *e)

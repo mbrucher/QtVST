@@ -9,6 +9,9 @@ main_variable_filter = env.Install('$BINDIR', main_variable_filter)
 main_simple_eq = env.Program('simple_eq', "main_simple_eq.cpp", LIBS=env['filter'])
 main_simple_eq = env.Install('$BINDIR', main_simple_eq)
 
+main_time_varying_filter = env.Program('time_varying_filter', "main_time_varying_filter.cpp", LIBS=env['filter'])
+main_time_varying_filter = env.Install('$BINDIR', main_time_varying_filter)
+
 main_simple_overdrive = env.Program('simple_overdrive', "main_simple_overdrive.cpp", LIBS=env['filter'])
 main_simple_overdrive = env.Install('$BINDIR', main_simple_overdrive)
 

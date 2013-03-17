@@ -11,11 +11,20 @@
 #include <boost/scoped_array.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include "public.sdk/source/vst2.x/audioeffectx.h"
-#include "..\..\blocks\gain_filter.h"
-#include "..\..\blocks\filter.h"
+#include <audioeffectx.h>
+#include "..\..\blocks\second_order_filter.h"
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster);
+
+float convert_db_from_ui(int value);
+int convert_db_to_ui(float gain);
+float convert_hz_from_ui(int value);
+int convert_hz_to_ui(float gain);
+float convert_deci_from_ui(int value);
+int convert_deci_to_ui(float gain);
+
+const int gainMin = 200;
+const int gainRange = 400;
 
 //-------------------------------------------------------------------------------------------------------
 class SimpleEQEffect : public QObject, public AudioEffectX
@@ -49,37 +58,44 @@ public:
 
   virtual void resume();
   virtual void suspend();
-  
-  virtual VstInt32 getChunk (void **data, bool isPreset=false);
-  virtual VstInt32 setChunk (void *data, VstInt32 byteSize, bool isPreset=false);
 
 protected:
   static const int max_frequency = 22000;
-  DSP::GainFilter<double>* create_gain_filter();
-  DSP::MonoFilter<double>* create_oversampling_filter();
-  DSP::MonoFilter<double>* create_overdrive_filter();
-  DSP::MonoFilter<double>* create_decimation_low_filter();
+  DSP::SecondOrderFilter<DSP::LowShelvingCoefficients<double> >* create_low_shelving();
+  DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* create_low_peak();
+  DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> >* create_high_peak();
+  DSP::SecondOrderFilter<DSP::HighShelvingCoefficients<double> >* create_high_shelving();
 
-  boost::scoped_ptr<DSP::GainFilter<double> > gain_filter;
-  boost::scoped_ptr<DSP::MonoFilter<double> > oversampling_filter;
-  boost::scoped_ptr<DSP::MonoFilter<double> > overdrive_filter;
-  boost::scoped_ptr<DSP::MonoFilter<double> > decimation_low_filter;
+  boost::scoped_ptr<DSP::SecondOrderFilter<DSP::LowShelvingCoefficients<double> > > low_shelving_filter;
+  boost::scoped_ptr<DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> > > low_peak_filter;
+  boost::scoped_ptr<DSP::SecondOrderFilter<DSP::BandPassPeakCoefficients<double> > > high_peak_filter;
+  boost::scoped_ptr<DSP::SecondOrderFilter<DSP::HighShelvingCoefficients<double> > > high_shelving_filter;
   char programName[kVstMaxProgNameLen + 1];
   float sample_rate;
-  float gain;
-  int oversampling;
+  float gain_lf;
+  float gain_lmf;
+  float gain_hmf;
+  float gain_hf;
+
+  float cut_lf;
+  float cut_lmf;
+  float cut_hmf;
+  float cut_hf;
+
+  float Q_lmf;
+  float Q_hmf;
 
   char* chunk;
 
   boost::mutex mutex;
 
   int size;
-  boost::scoped_array<double> gain_array;
-  boost::scoped_array<double> in_oversampled_array;
-  boost::scoped_array<double> out_oversampled_array;
+  boost::scoped_array<double> temp_array;
+  boost::scoped_array<double> temp_array2;
   
   void resize(int new_size);
-  void create_effects (int oversampling);
+  void create_effects ();
+  void update_effects ();
 
 signals:
   void update_gain_lf(float value);
@@ -94,9 +110,6 @@ signals:
 
   void update_Q_lmf(float value);
   void update_Q_hmf(float value);
-
-  void update_setshelf_lf(bool shelf);
-  void update_setshelf_hf(bool shelf);
 };
 
 #endif
