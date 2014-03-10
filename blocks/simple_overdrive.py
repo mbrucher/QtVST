@@ -3,6 +3,8 @@
 from __future__ import division
 
 comp = 0
+import math
+import numpy as np
 
 class Function(object):
   def __init__(self, dt, R, C):
@@ -10,10 +12,10 @@ class Function(object):
     self.B = dt / (2 * C) - R
 
   def f(self, x):
-    return np.sign(x) * 1e-12 * (np.exp(np.abs(x) / 26e-3) - 1)
+    return np.sign(x) * 1e-12 * (math.exp(abs(x) / 26e-3) - 1)
 
   def fprime(self, x):
-    return 1e-12 * np.exp(np.abs(x) / 26e-3) / 26e-3
+    return 1e-12 * math.exp(abs(x) / 26e-3) / 26e-3
 
   def __call__(self, x0, x1, y0, y1):
     return self.f(y1) + 1/self.A * (y1 + (x0 - x1 + self.B * self.f(y0) - y0))
@@ -27,12 +29,12 @@ class Function2(object):
     self.B = dt / (2 * C) - R
 
   def f(self, x):
-    e = np.exp(x / 26e-3)
+    e = math.exp(x * 38.46153846153846)
     return 1e-12 * (e - 1/e)
 
   def fprime(self, x):
-    e = np.exp(x / 26e-3)
-    return 1e-12 * (e + 1/e) / 26e-3
+    e = math.exp(x  * 38.46153846153846)
+    return 3.846153846153846e-11 * (e + 1/e)
 
   def __call__(self, x0, x1, y0, y1):
     return self.f(y1) + 1/self.A * (y1 + (x0 - x1 + self.B * self.f(y0) - y0))
@@ -129,7 +131,7 @@ if __name__ == "__main__":
   plt.figure()
   plt.plot(y2 - y)
 
-  wav.write("sin.wav", fs, (x / 20 * 2**15).astype(np.int16))
-  wav.write("sin_overdrive.wav", fs, (y * 2**15).astype(np.int16))
+  wav.write("sin.wav", fs, x)
+  wav.write("sin_overdrive.wav", fs, y)
   
   plt.show()
