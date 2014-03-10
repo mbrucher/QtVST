@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
+from __future__ import division
+
 import numpy as np
+
+comp = 0
 
 class Function(object):
   def __init__(self, dt, R, C):
@@ -20,19 +24,22 @@ class Function(object):
     return self.fprime(y1) + 1/self.A
     
 def optimize(fun, x0, x1, y0):
+  global comp
   y1 = y0
   yk = y1 - fun(x0, x1, y0, y1) / fun.gradient(x0, x1, y0, y1)
+  comp += 1
   
   while(abs(y1 - yk) > 0.00001):
     y1 = yk
     yk = y1 - fun(x0, x1, y0, y1) / fun.gradient(x0, x1, y0, y1)
+    comp += 1
 
   return y1
 
 def plot_fft(x, fs):
   n = len(x)
   x = x[-fs:] / (fs / 2)
-  x_fft = fft.fft(x)[:fs/10]
+  x_fft = fft.fft(x)[:fs/2]
   plt.subplot(211)
   plt.semilogy(np.abs(x_fft))
   plt.subplot(212)
@@ -60,14 +67,15 @@ if __name__ == "__main__":
   import numpy as np
   import scipy.fftpack as fft
   import scipy.io.wavfile as wav
-
-  fs = 44100
-  fsin = 200
+  
+  fs = 48000
+  fsin = 1000
   n_samples = fs + fs/fsin
   
 
   x = 20 * np.sin(2 * np.pi * np.arange(n_samples)*fsin/fs)
   y = overdrive(x, fs = fs)
+  print "Mean iterations: ", comp/n_samples
 
   plt.plot(x)
   plt.plot(y)
