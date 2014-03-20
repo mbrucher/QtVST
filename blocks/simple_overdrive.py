@@ -6,13 +6,14 @@ comp = 0
 import math
 import numpy as np
 
+
 class Function(object):
   def __init__(self, dt, R, C):
     self.A = dt / (2 * C) + R
     self.B = dt / (2 * C) - R
 
   def f(self, x):
-    return np.sign(x) * 1e-12 * (math.exp(abs(x) / 26e-3) - 1)
+    return math.copysign(1e-12 * (math.exp(abs(x) / 26e-3) - 1), x)
 
   def fprime(self, x):
     return 1e-12 * math.exp(abs(x) / 26e-3) / 26e-3
